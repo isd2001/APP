@@ -13,8 +13,9 @@
 #### 소스 내에서 응답코드 정의된 곳
   - ResCodeEnum.java
 
-#### 임시 개발서버 (배프로컴)
-  - http://codegurus.iptime.org:9020/rcms/swagger-ui.html
+#### swagger ui
+  - http://localhost:8080/app_api/swagger-ui.html (로컬)
+  - http://211.62.106.225/app_api/swagger-ui.html (개발)  
 
 
 
