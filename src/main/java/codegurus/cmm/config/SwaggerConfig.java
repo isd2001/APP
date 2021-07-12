@@ -60,8 +60,8 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
 
         return new ApiInfoBuilder()
-                .title("한솔 플라톤RC RCMS")
-                .description("RCMS 화면 개발 및 테스트를 위한 페이지")
+                .title("한솔 플라톤RC 사용자앱")
+                .description("사용자앱 화면 개발 및 테스트를 위한 페이지")
 //                .termsOfServiceUrl("https://www.egovframe.go.kr/wiki/doku.php?id=egovframework:hyb:gate_page")
 //                .license("Apache License Version 2.0")
 //                .licenseUrl("https://www.egovframe.go.kr")
