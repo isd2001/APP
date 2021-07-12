@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- 다른 형태의 validator를 써 보기 위해 일단 주석처리 (2021.06 이프로) -->
+
+<!--	&lt;!&ndash; Integration Apache Commons Validator by Spring Modules &ndash;&gt;				-->
+<!--	<bean id="beanValidator" class="org.springmodules.validation.commons.DefaultBeanValidator">-->
+<!--		<property name="validatorFactory" ref="validatorFactory"/>-->
+<!--	</bean>-->
+<!--	-->
+<!--	<bean id="validatorFactory" class="org.springmodules.validation.commons.DefaultValidatorFactory">-->
+<!--		<property name="validationConfigLocations">-->
+<!--			<list>-->
+<!--				&lt;!&ndash; 공통기술 &ndash;&gt;-->
+<!--				<value>classpath:/egovframework/validator/com-rules.xml</value>-->
+<!--		        <value>classpath:/egovframework/validator/validator-rules.xml</value>-->
+<!--		        <value>classpath:/egovframework/validator/**/*.xml</value>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
+	
+</beans>

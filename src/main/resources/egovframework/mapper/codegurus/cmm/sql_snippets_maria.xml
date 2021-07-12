@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    공통으로 사용하는 sql 코드 조각들을 정의하기 위해 생성한 파일
+-->
+<mapper namespace="sqlSnippets">
+
+    <!-- 페이징 header -->
+	<sql id="pagingHeader">
+        SELECT
+            pg_wrap.*
+        FROM(
+    </sql>
+
+    <!-- 페이징 footer 상부 -->
+    <sql id="pagingFooterTop">
+        ) pg_wrap
+    </sql>
+
+    <!-- 이 중간에 order by 가 끼어야 제대로 정렬되기 때문에 굳이 top/bottom 으로 분리하였다. -->
+    <!-- https://mariadb.com/kb/en/why-is-order-by-in-a-from-subquery-ignored/ -->
+
+    <!-- 페이징 footer 하부 -->
+    <sql id="pagingFooterBottom">
+        LIMIT #{rowsPerPage} OFFSET #{offset}
+    </sql>
+
+</mapper>

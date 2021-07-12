@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" monitorInterval="5">
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+<!--                        <PatternLayout pattern="%d %5p [%c] %m%n" />-->
+            <PatternLayout  pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%.6thread] %-30logger{0}\t%msg%n" />
+            <RegexFilter regex=".*==>\s*(Preparing|Parameters).*" onMatch="DENY" onMismatch="ACCEPT"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="java.sql" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="javax.validation" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="org.hibernate.validator" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="jdbc.sqltiming" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="org.springframework" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="org.springframework.jdbc" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="org.springframework.transaction" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="org.springframework.security" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="org.springframework.validation" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="egovframework" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="codegurus" level="debug" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+<!--        <Logger name="codegurus.book.*DAO" level="error" additivity="false">-->
+<!--            <AppenderRef ref="console"/>-->
+<!--        </Logger>-->
+        <!-- junit 테스트용 패키지 -->
+        <Logger name="twopro" level="debug" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+
+        <Root level="error">
+            <AppenderRef ref="console"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

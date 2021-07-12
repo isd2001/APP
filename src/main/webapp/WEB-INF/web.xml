@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+
+    <!--
+        기존 전자정부프레임워크가 WebApplicationInitializer 기반 동적 설정으로 되어 있었으나,
+        해당 설정으로 서버 기동시 springfox가 ServletContext 를 찾을 수 없다는 오류를 발생시켜 정적 설정으로 전환함. (20210607 이프로)
+        TODO: 동적설정 -> 정적설정 변경으로 인한 오류 가능성 확인
+    -->
+
+    <listener>
+        <listener-class>egovframework.com.cmm.context.EgovWebServletContextListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
+    <context-param>
+        <!-- Root ApplicationContext -->
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:egovframework/spring/com/**/context-*.xml
+        </param-value>
+    </context-param>
+
+    <!-- CharacterEncodingFilter -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- CORSFilter -->
+<!--    <filter>-->
+<!--        <filter-name>CORSFilter</filter-name>-->
+<!--        <filter-class>egovframework.com.cmm.util.CORSFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>CORSFilter</filter-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--    </filter-mapping>-->
+
+    <!-- Spring Security Filter -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!--
+        수정일          수성자                          수정내용
+       ==========      ========      =================================================
+       2011.9.19        이기하         filter 정리
+       2013.5.31        이기하         미사용 filter 정리(.mdo, .action)
+       2016.6.34        장동한         WebApplicationInitializer 방식으로 변경
+    -->
+
+    <!-- 기본 Dispatcher Servlet -->
+    <servlet>
+        <servlet-name>appServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <!-- ApplicationContext for Spring MVC -->
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/config/egovframework/springmvc/egov-com-*.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>appServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!--
+        swagger 전용의 별도 서블릿 구축을 시도했으나, springfox의 정적 웹 자원들의 404 문제로 사용하지 않기로 함 (20210607 이프로)
+    -->
+    <!--
+    <servlet>
+        <servlet-name>swagger</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/config/egovframework/springmvc/swagger-servlet.xml</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>swagger</servlet-name>
+        <url-pattern>/swagger-ui.html</url-pattern>
+        <url-pattern>/webjars/*</url-pattern>
+    </servlet-mapping>
+    -->
+
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>egovDevIndex.jsp</welcome-file>
+    </welcome-file-list>
+
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
+
+    <session-config>
+        <session-timeout>600</session-timeout>
+    </session-config>
+
+    <error-page>
+      <error-code>404</error-code>
+      <location>/code404.jsp</location>
+    </error-page>
+
+    <error-page>
+      <error-code>500</error-code>
+      <location>/code500.jsp</location>
+    </error-page>
+
+</web-app>

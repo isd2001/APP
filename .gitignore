@@ -1,0 +1,7 @@
+/target/
+/.idea/artifacts
+/.idea/libraries
+/.idea/misc.xml
+/.idea/hotswap_agent.xml
+/.idea/workspace.xml
+/.idea/saveactions_settings.xml

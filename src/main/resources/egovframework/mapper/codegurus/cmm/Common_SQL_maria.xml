@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    공통 DAO
+-->
+<mapper namespace="codegurus.cmm.CommonDAO">
+
+	<!-- 사용자정보 select 대상 칼럼 -->
+	<sql id="userSelectCols">
+		user_manage_id,
+		user_id,
+		user_id as username,
+		password,
+		user_photo,
+		name,
+		name_past,
+		birth,
+		gender,
+		cellphone,
+		email,
+		zipcode,
+		address,
+		address_detail,
+		user_group_id,
+		auth_id,
+		<!-- rcms 에서는 필요 없지 싶다 -->
+		<!--
+		termofuse_agree,
+		personalinfo_agree,
+		promotion_agree,
+		locationinfo_agree,
+		termofuse_agree_date,
+		personalinfo_agree_date,
+		promotion_agree_date,
+		locationinfo_agree_date,
+		-->
+		<!--// rcms 에서는 필요 없지 싶다 -->
+		last_password,
+		last_login_date,
+		login_fail_count,
+		login_fail_date,
+		`lock`,
+		user_status,
+		<!-- user_active, --> <!-- 정체 불명 -->
+		modify_date,
+		reg_date,
+		delete_ornot
+	</sql>
+
+	<!-- 사용자관리ID로 사용자정보 획득 -->
+	<select id="selectUserByUserManageId" resultType="UserVO">
+		select /* selectUserByUserManageId */
+		<include refid="userSelectCols" />
+		from user_manage
+ 		where user_manage_id = #{value}
+		and delete_ornot <![CDATA[ <> ]]> 'Y'
+	</select>
+
+	<!-- 사용자ID로 사용자정보 획득 -->
+	<select id="selectUserByUserId" resultType="UserVO">
+		select /* selectUserByUserId */
+		<include refid="userSelectCols" />
+		from user_manage
+ 		where user_id = #{value}
+		and delete_ornot <![CDATA[ <> ]]> 'Y'
+	</select>
+
+	<!-- atchFileId의 목록을 받아서 FileVO list를 리턴한다. -->
+	<select id="selectFileListByFileId" resultType="FileVO">
+		SELECT /* selectFileListByFileId */
+			a.atch_file_id,
+			b.file_cn,
+			b.file_sn,
+			b.file_stre_cours,
+			b.stre_file_nm,
+			b.file_extsn,
+			b.orignl_file_nm,
+			b.file_size,
+			DF14(a.creat_dt) as creat_dt
+		FROM
+			comtnfile a,
+			comtnfiledetail b
+		WHERE
+			a.atch_file_id in (<foreach collection="fileIdList" item="fileId" separator=", ">#{fileId}</foreach>)
+			AND a.atch_file_id = b.atch_file_id
+			AND a.use_at = 'y'
+		ORDER BY b.file_sn
+	</select>
+
+</mapper>

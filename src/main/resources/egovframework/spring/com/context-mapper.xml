@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 로컬 개발환경(개발자PC)일 경우 -->
+	<beans profile="local">
+		<!-- Mybatis setup for Mybatis Database Layer -->
+		<bean id="egov.sqlSession" class="codegurus.cmm.config.RefreshableSqlSessionFactoryBean">
+			<property name="dataSource" ref="egov.dataSource"/>
+			<property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
+			<property name="mapperLocations">
+				<list>
+					<value>classpath:/egovframework/mapper/com/**/*_${Globals.DbType}.xml</value>
+					<value>classpath:/egovframework/mapper/codegurus/**/*_${Globals.DbType}.xml</value>
+				</list>
+			</property>
+		</bean>
+	</beans>
+
+	<!-- 로컬 개발환경이 아닐 경우 (개발서버, 운영서버) -->
+	<beans profile="!local">
+		<!-- Mybatis setup for Mybatis Database Layer -->
+		<bean id="egov.sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+			<property name="dataSource" ref="egov.dataSource"/>
+			<property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
+			<property name="mapperLocations">
+				<list>
+					<value>classpath:/egovframework/mapper/com/**/*_${Globals.DbType}.xml</value>
+					<value>classpath:/egovframework/mapper/codegurus/**/*_${Globals.DbType}.xml</value>
+				</list>
+			</property>
+		</bean>
+	</beans>
+
+	<beans>
+		<!-- 실행환경에서 빈이름 참조(EgovAbstractDAO) -->
+		<bean id="egov.lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true" />
+
+		<!-- Mybatis Session Template -->
+		<bean id="egov.sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+			<constructor-arg ref="egov.sqlSession"/>
+		</bean>
+
+		<!-- mybatis mapper interface scan -->
+		<mybatis:scan base-package="codegurus.sample" />
+		<mybatis:scan base-package="codegurus.cmm" />
+		<mybatis:scan base-package="codegurus.auth" />
+	</beans>
+
+</beans>
