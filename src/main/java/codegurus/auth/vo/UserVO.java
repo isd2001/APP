@@ -60,9 +60,6 @@ public class UserVO extends BaseVO {
 	private String addressDetail;
 
 	@JsonIgnore
-	private String userGroupId;
-
-	@JsonIgnore
 	private String authId;
 
 	@JsonIgnore

@@ -22,7 +22,6 @@
 		zipcode,
 		address,
 		address_detail,
-		user_group_id,
 		auth_id,
 		<!-- rcms 에서는 필요 없지 싶다 -->
 		<!--
