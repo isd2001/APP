@@ -2,10 +2,7 @@ package codegurus.study;
 
 import codegurus.cmm.service.FileService;
 import codegurus.cmm.util.SystemUtil;
-import codegurus.study.vo.ReqScoreSaveVO;
-import codegurus.study.vo.ReqStudyBookVO;
-import codegurus.study.vo.ResScoreSaveVO;
-import codegurus.study.vo.ResStudyBookVO;
+import codegurus.study.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,8 +42,7 @@ public class StudyService {
 
         // 책 한줄평 정보 조회/셋팅
         resVo.setOnelineList(studyDAO.selectOnelineList(resVo.getBookId()));
+
         return resVo;
     }
-
-
 }
