@@ -34,8 +34,9 @@ public class UserVO extends BaseVO {
 	@JsonIgnore
 	private String userPhoto;
 
+	// TODO: 무슨 필드임?
 	@JsonIgnore
-	private String namePast; // 개명했을 시 이전 이름
+	private String namePast;
 
 	@JsonIgnore
 	private String birth;
@@ -59,6 +60,9 @@ public class UserVO extends BaseVO {
 	private String addressDetail;
 
 	@JsonIgnore
+	private String authId;
+
+	@JsonIgnore
 	private String lastPassword;
 
 	@JsonIgnore
@@ -72,6 +76,9 @@ public class UserVO extends BaseVO {
 
 	@JsonIgnore
 	private String lock;
+
+	@JsonIgnore
+	private String userStatus;
 
 	@JsonIgnore
 	private String modifyDate;

@@ -22,6 +22,7 @@
 		zipcode,
 		address,
 		address_detail,
+		auth_id,
 		<!-- rcms 에서는 필요 없지 싶다 -->
 		<!--
 		termofuse_agree,
@@ -38,7 +39,9 @@
 		last_login_date,
 		login_fail_count,
 		login_fail_date,
-		lock_ornot,
+		`lock`,
+		user_status,
+		<!-- user_active, --> <!-- 정체 불명 -->
 		modify_date,
 		reg_date,
 		delete_ornot
