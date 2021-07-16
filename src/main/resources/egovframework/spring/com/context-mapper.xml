@@ -49,6 +49,7 @@
 		<mybatis:scan base-package="codegurus.cmm" />
 		<mybatis:scan base-package="codegurus.auth" />
 		<mybatis:scan base-package="codegurus.study" />
+		<mybatis:scan base-package="codegurus.oneline" />
 	</beans>
 
 </beans>

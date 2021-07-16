@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="codegurus.oneline.OnelineDAO">
+
+	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 한줄평 조회 -->
+	<select id="selectOneline" resultType="ResOnelineVO">
+		SELECT
+			onelinereview_id,
+			book_id,
+			onelinereview_content,
+			score,
+			reg_id
+		FROM
+			onelinereview
+		WHERE
+			1=1
+		  	AND reg_id=#{regId}
+		  	AND book_id=#{bookId}
+			AND delete_ornot='N'
+	</select>
+
+	<!-- 오늘의 학습 책 한줄평 등록 -->
+	<insert id="insertOnelineContent" useGeneratedKeys="true" keyProperty="onelinereviewId">
+		INSERT /* insertOnelineContent */
+		INTO onelinereview
+		(
+			book_id,
+			onelinereview_content,
+			reg_id,
+			reg_date,
+			modify_id,
+			modify_date,
+		 	delete_ornot
+		)
+		VALUES
+		(
+			#{bookId},
+			#{onelinereviewContent},
+			#{regId},
+			CURRENT_TIMESTAMP,
+			#{regId},
+			CURRENT_TIMESTAMP,
+		 	'N'
+		)
+	</insert>
+
+	<!-- 오늘의 학습 책 한줄평 내용 업데이트 -->
+	<update id = "updateOnelineContent">
+		UPDATE /* updateOnelineContent */
+			onelinereview
+		SET
+			onelinereview_content = #{onelinereviewContent},
+			modify_id = #{regId},
+			modify_date = CURRENT_TIMESTAMP
+		WHERE onelinereview_id = #{onelinereviewId}
+		AND book_id = #{bookId}
+		AND reg_id = #{regId}
+	</update>
+
+	<!-- 오늘의 학습 책 별점 등록 -->
+	<insert id="insertOnelineScore" useGeneratedKeys="true" keyProperty="onelinereviewId">
+		INSERT /* insertOnelineScore */
+		INTO onelinereview
+		(
+			book_id,
+			score,
+			reg_id,
+			reg_date,
+			modify_id,
+			modify_date,
+		 	delete_ornot
+		)
+		VALUES
+		(
+			#{bookId},
+			#{score},
+			#{regId},
+			CURRENT_TIMESTAMP,
+			#{regId},
+			CURRENT_TIMESTAMP,
+		 	'N'
+		)
+	</insert>
+
+	<!-- 오늘의 학습 책 별점 업데이트 -->
+	<update id = "updateOnelineScore">
+		UPDATE /* updateOnelineScore */
+			onelinereview
+		SET
+			score = #{score},
+			modify_id = #{regId},
+			modify_date = CURRENT_TIMESTAMP
+		WHERE onelinereview_id = #{onelinereviewId}
+		  AND book_id = #{bookId}
+		  AND reg_id = #{regId}
+	</update>
+
+	<!-- 해당 한줄평이 존재하는지 여부를 확인하기 위한 카운트 조회 -->
+	<select id="selectOnelineCount" resultType="int">
+		select /* selectOnelineCount */
+			count(*)
+		from onelinereview
+		where onelinereview_id = #{onelinereviewId}
+		  and delete_ornot  = 'N'
+	</select>
+
+	<!-- 이미 좋아요를 했는지 알아보기 위한 카운트 조회 -->
+	<select id="selectMarkGoodCount" resultType="int">
+		select /* selectMarkGoodCount */
+			count(*)
+		from onelinereview_like
+		where onelinereview_id = #{onelinereviewId}
+		  and reg_id = #{regId}
+		  and delete_ornot  = 'N'
+	</select>
+
+	<!-- 한줄평 좋아요 추가 -->
+	<insert id="insertMarkGood" useGeneratedKeys="true" keyProperty="onelinereviewLikeId">
+		INSERT /* insertMarkGood */
+		INTO onelinereview_like
+		(
+			onelinereview_id,
+			reg_id,
+			modify_id
+		)
+		VALUES
+		(
+			#{onelinereviewId},
+			#{regId},
+			#{regId}
+		)
+	</insert>
+
+	<!-- 한줄평 좋아요 제거 -->
+	<update id="deleteMarkGood">
+		UPDATE /* deleteMarkGood */
+			onelinereview_like
+		SET delete_ornot  = 'Y',
+			modify_id 	  = #{regId},
+			modify_date   = CURRENT_TIMESTAMP
+		WHERE onelinereview_like_id = #{onelinereviewLikeId}
+	</update>
+</mapper>

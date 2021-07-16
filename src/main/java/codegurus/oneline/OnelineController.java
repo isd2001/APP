@@ -1,0 +1,87 @@
+package codegurus.oneline;
+
+import codegurus.cmm.cache.CacheService;
+import codegurus.cmm.controller.BaseController;
+import codegurus.cmm.vo.res.Res;
+import codegurus.oneline.vo.ReqOnelineMarkGoodVO;
+import codegurus.oneline.vo.ReqOnelineSaveVO;
+import codegurus.oneline.vo.ResOnelineMarkGoodVO;
+import codegurus.oneline.vo.ResOnelineSaveVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+
+/**
+ * 한줄평/좋아요/별점 controller
+ *
+ * @author 이미란
+ * @version 2021.07
+ */
+@Slf4j
+@Api( tags = "한줄평/좋아요/별점")
+@RequestMapping("/oneline")
+@RestController
+public class OnelineController extends BaseController {
+
+    @Autowired
+    private OnelineService onelineService;
+
+    @Autowired
+    private CacheService cacheService;
+
+    /**
+     * 오늘의 학습 책 한줄평 등록
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/content")
+    @ApiOperation(value = "오늘의 학습 책 한줄평 내용 등록")
+    public Res<ResOnelineSaveVO> saveOnline(@RequestBody @Valid ReqOnelineSaveVO reqVo) {
+        ResOnelineSaveVO resVo = new ResOnelineSaveVO();
+        reqVo.setRegId(cacheService.getUserManageId());
+        reqVo.setSaveType("C");
+        onelineService.saveOneline(reqVo, resVo);
+
+        return new Res<ResOnelineSaveVO>(resVo);
+    }
+
+    /**
+     * 오늘의 학습 책 별점 등록
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/score")
+    @ApiOperation(value = "오늘의 학습 책 별점 등록")
+    public Res<ResOnelineSaveVO> saveScore(@RequestBody @Valid ReqOnelineSaveVO reqVo) {
+        ResOnelineSaveVO resVo = new ResOnelineSaveVO();
+        reqVo.setRegId(cacheService.getUserManageId());
+        reqVo.setSaveType("S");
+        onelineService.saveOneline(reqVo, resVo);
+
+        return new Res<ResOnelineSaveVO>(resVo);
+    }
+
+    /**
+     * 한줄평 좋아요 추가/제거
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/markGood")
+    @ApiOperation(value = "오늘의 학습 책 한줄평 좋아요 추가/제거")
+    public Res<ResOnelineMarkGoodVO> markGood(@RequestBody @Valid ReqOnelineMarkGoodVO reqVo) {
+        ResOnelineMarkGoodVO resVo = new ResOnelineMarkGoodVO();
+        reqVo.setRegId(cacheService.getUserManageId());
+        onelineService.saveMarkGood(reqVo, resVo);
+        return new Res<ResOnelineMarkGoodVO>(resVo);
+    }
+}

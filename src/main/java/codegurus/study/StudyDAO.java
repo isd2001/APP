@@ -1,5 +1,6 @@
 package codegurus.study;
 
+import codegurus.study.vo.ResOnelineListElemVO;
 import codegurus.study.vo.*;
 
 import java.util.List;
