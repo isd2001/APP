@@ -3,4 +3,80 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="codegurus.auth.AuthDAO">
 
+    <!-- 사용자 중복 체크 (회원가입 화면) -->
+    <select id="selectUserDup" resultType="int">
+        select /* selectUserDup */
+            count(*)
+        from user_manage um
+        where user_id = #{username}
+        and DELETE_ORNOT = 'N'
+    </select>
+
+    <!-- 사용자 등록 (회원가입) -->
+    <insert id="insertRegisterInfo" useGeneratedKeys="true" keyProperty="userManageId">
+        INSERT /* insertRegisterInfo */
+        INTO user_manage
+        (
+            user_id,
+            password,
+            name,
+            birth,
+            gender,
+            cellphone,
+            email,
+            zipcode,
+            address,
+            address_detail,
+            termofuse_agree_ornot,
+            personalinfo_agree_ornot,
+            promotion_agree_ornot,
+            locationinfo_agree_ornot,
+            termofuse_agree_date,
+            personalinfo_agree_date,
+            promotion_agree_date,
+            locationinfo_agree_date,
+            reg_id,
+            reg_date,
+            modify_id,
+            modify_date
+        )
+        values
+        (
+           #{username},
+           #{password},
+           #{name},
+           #{birth},
+           #{gender},
+           #{cellphone},
+           #{email},
+           #{zipcode},
+           #{address},
+           #{addressDetail},
+           #{termofuseAgreeOrnot},
+           #{personalinfoAgreeOrnot},
+           #{promotionAgreeOrnot},
+           #{locationinfoAgreeOrnot},
+           <choose>
+               <when test='termofuseAgreeOrnot != null and termofuseAgreeOrnot != "" and termofuseAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+               <otherwise>null,</otherwise>
+           </choose>
+           <choose>
+               <when test='personalinfoAgreeOrnot != null and personalinfoAgreeOrnot != "" and personalinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+               <otherwise>null,</otherwise>
+           </choose>
+           <choose>
+               <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+               <otherwise>null,</otherwise>
+           </choose>
+           <choose>
+               <when test='locationinfoAgreeOrnot != null and locationinfoAgreeOrnot != "" and locationinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+               <otherwise>null,</otherwise>
+           </choose>
+           0, /* reg_id (아직 user_manage_id 가 없는 상태이기 때문에) */
+           CURRENT_TIMESTAMP,
+           0,
+           CURRENT_TIMESTAMP
+        )
+    </insert>
+
 </mapper>

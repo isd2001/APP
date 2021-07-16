@@ -17,7 +17,14 @@ public class Test2Pro {
 //        test01();
 //        test02();
 //        test03();
-        test04();
+//        test04();
+        test05();
+    }
+
+    private static void test05() {
+
+        boolean ret = "01026683306".matches("^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$");
+        log.debug("## ret:[{}]", ret);
     }
 
     private static void test04() {

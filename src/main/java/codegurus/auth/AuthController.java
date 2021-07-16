@@ -4,8 +4,12 @@ import codegurus.auth.vo.ResUserVO;
 import codegurus.auth.vo.UserVO;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.req.ReqAuthVO;
+import codegurus.cmm.vo.req.ReqDupCheckVO;
+import codegurus.cmm.vo.req.ReqRegisterVO;
 import codegurus.cmm.vo.res.Res;
 import codegurus.cmm.vo.res.ResAuthVO;
+import codegurus.cmm.vo.res.ResBaseVO;
+import codegurus.cmm.vo.res.ResRegisterVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +48,34 @@ public class AuthController extends BaseController {
 
 		ResAuthVO resVo = authService.login(reqVo);
 		return new Res<ResAuthVO>(resVo);
+	}
+
+	/**
+	 * 사용자 중복 확인 (회원가입 화면)
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "사용자 중복 확인 (회원가입 화면)")
+	@PostMapping("/checkUserDup")
+	public Res<ResBaseVO> checkUserDup(@RequestBody @Valid ReqDupCheckVO reqVo) {
+
+		ResBaseVO resVo = authService.selectUserDup(reqVo);
+		return new Res<ResBaseVO>(resVo);
+	}
+
+	/**
+	 * 회원가입
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "회원가입")
+	@PostMapping("/register")
+	public Res<ResRegisterVO> register(@RequestBody @Valid ReqRegisterVO reqVo) {
+
+		ResRegisterVO resVo = authService.register(reqVo);
+		return new Res<ResRegisterVO>(resVo);
 	}
 
 
