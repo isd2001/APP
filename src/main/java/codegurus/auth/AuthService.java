@@ -4,16 +4,11 @@ import codegurus.auth.vo.CustomPrincipal;
 import codegurus.auth.vo.UserVO;
 import codegurus.cmm.CommonDAO;
 import codegurus.cmm.constants.ResCodeEnum;
-import codegurus.cmm.exception.CustomException;
 import codegurus.cmm.jwt.TokenProvider;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.WebUtil;
-import codegurus.cmm.vo.req.ReqAuthVO;
-import codegurus.cmm.vo.req.ReqDupCheckVO;
-import codegurus.cmm.vo.req.ReqRegisterVO;
-import codegurus.cmm.vo.res.ResAuthVO;
-import codegurus.cmm.vo.res.ResBaseVO;
-import codegurus.cmm.vo.res.ResRegisterVO;
+import codegurus.cmm.vo.req.*;
+import codegurus.cmm.vo.res.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,9 +17,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import codegurus_ext.voc.VocDAO;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -63,6 +58,9 @@ public class AuthService implements UserDetailsService {
 
     @Autowired
     private AuthDAO authDAO;
+
+    @Autowired
+    private VocDAO vocDAO;
 
     @Autowired
     private HttpServletRequest httpRequest;
@@ -167,7 +165,8 @@ public class AuthService implements UserDetailsService {
         //------------- 기 등록 회원 여부 체크 - end ---------------
 
         // 패스워드 암호화
-        reqVo.setPassword(new BCryptPasswordEncoder().encode(reqVo.getPassword()));
+//        reqVo.setPassword(new BCryptPasswordEncoder().encode(reqVo.getPassword()));
+        reqVo.setPassword(passwordEncoder.encode(reqVo.getPassword()));
 
         // insert
         authDAO.insertRegisterInfo(reqVo);
@@ -178,4 +177,34 @@ public class AuthService implements UserDetailsService {
         return resVo;
     }
 
+    /**
+     * 정회원 인증
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResFullMemberAuthVO fullmemberAuth(ReqFullMemberAuthVO reqVo) {
+
+
+        return null;
+    }
+
+    /**
+     * 상담 신청
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResVocVO callVoc(ReqVocVO reqVo) {
+
+        ResVocVO resVo = new ResVocVO();
+
+        ReqDupCheckVO tmpVo = new ReqDupCheckVO();
+        tmpVo.setUsername("testuser");
+
+        int ret = vocDAO.selectUserDup(tmpVo);
+        log.debug("## ret:[{}]", ret);
+
+        return resVo;
+    }
 }

@@ -3,13 +3,8 @@ package codegurus.auth;
 import codegurus.auth.vo.ResUserVO;
 import codegurus.auth.vo.UserVO;
 import codegurus.cmm.controller.BaseController;
-import codegurus.cmm.vo.req.ReqAuthVO;
-import codegurus.cmm.vo.req.ReqDupCheckVO;
-import codegurus.cmm.vo.req.ReqRegisterVO;
-import codegurus.cmm.vo.res.Res;
-import codegurus.cmm.vo.res.ResAuthVO;
-import codegurus.cmm.vo.res.ResBaseVO;
-import codegurus.cmm.vo.res.ResRegisterVO;
+import codegurus.cmm.vo.req.*;
+import codegurus.cmm.vo.res.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -76,6 +71,34 @@ public class AuthController extends BaseController {
 
 		ResRegisterVO resVo = authService.register(reqVo);
 		return new Res<ResRegisterVO>(resVo);
+	}
+
+	/**
+	 * 정회원 인증
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "정회원 인증")
+	@PostMapping("/fullmemberAuth")
+	public Res<ResFullMemberAuthVO> fullmemberAuth(@RequestBody @Valid ReqFullMemberAuthVO reqVo) {
+
+		ResFullMemberAuthVO resVo = authService.fullmemberAuth(reqVo);
+		return new Res<ResFullMemberAuthVO>(resVo);
+	}
+
+	/**
+	 * VOC 호출
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "VOC 호출")
+	@PostMapping("/callVoc")
+	public Res<ResVocVO> callVoc(@RequestBody @Valid ReqVocVO reqVo) {
+
+		ResVocVO resVo = authService.callVoc(reqVo);
+		return new Res<ResVocVO>(resVo);
 	}
 
 
