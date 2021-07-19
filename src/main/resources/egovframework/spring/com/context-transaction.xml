@@ -6,6 +6,7 @@
 						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
+	<!-- ============================== 기본 데이터소스 관련 - start ============================== -->
 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="egov.dataSource"/>
 	</bean>
@@ -33,5 +34,22 @@
 		<aop:pointcut id="txCG" expression="execution(* codegurus..*Service.*(..))" />
 		<aop:advisor advice-ref="txAdviceCG" pointcut-ref="txCG" />
 	</aop:config>
+	<!-- ============================== 기본 데이터소스 관련 - end ================================ -->
+
+	<!-- ============================== VOC용 데이터소스 관련 - start ============================= -->
+	<bean id="txManagerVOC" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceVOC"/>
+	</bean>
+	<tx:advice id="txAdviceVOC" transaction-manager="txManagerVOC">
+	   <tx:attributes>
+	       <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+	       <tx:method name="*" propagation="REQUIRED" rollback-for="Exception" />
+	   </tx:attributes>
+	</tx:advice>
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="txVOC" expression="execution(* codegurus..*Service.*(..))" />
+		<aop:advisor advice-ref="txAdviceVOC" pointcut-ref="txVOC" />
+	</aop:config>
+	<!-- ============================== VOC용 데이터소스 관련 - end =============================== -->
 
 </beans>
