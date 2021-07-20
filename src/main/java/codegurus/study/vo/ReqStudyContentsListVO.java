@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 학습 콘텐츠 목록 요청 VO
+ * 학습 콘텐츠 요청 VO
  */
 @Getter
 @Setter

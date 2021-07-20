@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 학습 콘텐츠 목록 조회 응답 > 리스트 요소 VO
+ * 학습 콘텐츠 조회 응답 > 리스트 요소 VO
  */
 @Getter
 @Setter
