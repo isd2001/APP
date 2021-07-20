@@ -1,7 +1,6 @@
 package codegurus.auth;
 
-import codegurus.auth.vo.CustomPrincipal;
-import codegurus.auth.vo.UserVO;
+import codegurus.auth.vo.*;
 import codegurus.cmm.CommonDAO;
 import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.jwt.TokenProvider;

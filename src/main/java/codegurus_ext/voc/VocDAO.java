@@ -1,6 +1,6 @@
 package codegurus_ext.voc;
 
-import codegurus.cmm.vo.req.ReqDupCheckVO;
+import codegurus.auth.vo.ReqDupCheckVO;
 
 public interface VocDAO {
 

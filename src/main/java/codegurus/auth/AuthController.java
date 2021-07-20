@@ -1,7 +1,6 @@
 package codegurus.auth;
 
-import codegurus.auth.vo.ResUserVO;
-import codegurus.auth.vo.UserVO;
+import codegurus.auth.vo.*;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.req.*;
 import codegurus.cmm.vo.res.*;

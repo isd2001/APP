@@ -1,7 +1,7 @@
 package codegurus.auth;
 
-import codegurus.cmm.vo.req.ReqDupCheckVO;
-import codegurus.cmm.vo.req.ReqRegisterVO;
+import codegurus.auth.vo.ReqDupCheckVO;
+import codegurus.auth.vo.ReqRegisterVO;
 
 public interface AuthDAO {
 
