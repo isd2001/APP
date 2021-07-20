@@ -2,12 +2,14 @@ package codegurus.auth;
 
 import codegurus.auth.vo.*;
 import codegurus.cmm.CommonDAO;
+import codegurus.cmm.constants.Constants;
 import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.jwt.TokenProvider;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.WebUtil;
 import codegurus.cmm.vo.req.*;
 import codegurus.cmm.vo.res.*;
+import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +23,9 @@ import org.springframework.stereotype.Service;
 import codegurus_ext.voc.VocDAO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -167,11 +172,39 @@ public class AuthService implements UserDetailsService {
 //        reqVo.setPassword(new BCryptPasswordEncoder().encode(reqVo.getPassword()));
         reqVo.setPassword(passwordEncoder.encode(reqVo.getPassword()));
 
-        // insert
+        // INSERT
         authDAO.insertRegisterInfo(reqVo);
 
         // 응답에 PK 바인딩
         resVo.setUserManageId(reqVo.getUserManageId());
+
+        return resVo;
+    }
+
+    /**
+     *　체험회원 등록
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResTrialRegisterVO trialRegister(ReqTrialRegisterVO reqVo) {
+
+        ResTrialRegisterVO resVo = new ResTrialRegisterVO();
+        reqVo.setTrialPeriod(Constants.TRIAL_PERIOD);
+
+        // TODO: 계속 체험회원 등록을 하는 것을 막아야 할 경우 추가 구현
+
+        // INSERT
+        authDAO.insertTrialRegister(reqVo);
+
+        // 체험회원 전용 토큰 생성
+        Map<String, Object> params = new HashMap<>();
+        params.put("trialManageId", reqVo.getTrialManageId());
+        String accessToken = tokenProvider.generateTokenTrialUser(params);
+        resVo.setTrialManageId(reqVo.getTrialManageId());
+        resVo.setGrantType(TokenProvider.BEARER_TYPE);
+        resVo.setAccessToken(accessToken);
+        resVo.setExpireDate(((Date)params.get("accessTokenExpiresIn")).getTime());
 
         return resVo;
     }
@@ -183,6 +216,7 @@ public class AuthService implements UserDetailsService {
      * @return
      */
     public ResFullMemberAuthVO fullmemberAuth(ReqFullMemberAuthVO reqVo) {
+
 
 
         return null;
@@ -198,12 +232,9 @@ public class AuthService implements UserDetailsService {
 
         ResVocVO resVo = new ResVocVO();
 
-        ReqDupCheckVO tmpVo = new ReqDupCheckVO();
-        tmpVo.setUsername("testuser");
-
-        int ret = vocDAO.selectUserDup(tmpVo);
-        log.debug("## ret:[{}]", ret);
+//        vocDAO.
 
         return resVo;
     }
+
 }

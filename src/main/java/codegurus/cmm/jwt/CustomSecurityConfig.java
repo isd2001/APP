@@ -103,7 +103,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .authorizeRequests()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // cors setting 1
-            .antMatchers("/auth/login", "/auth/checkUserDup", "/auth/register").permitAll()
+            .antMatchers("/auth/login", "/auth/checkUserDup", "/auth/register", "/auth/trialRegister").permitAll()
             .anyRequest().authenticated()   // 나머지 API 는 전부 인증 필요
 
              // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용

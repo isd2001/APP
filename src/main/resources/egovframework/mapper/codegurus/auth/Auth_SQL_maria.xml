@@ -79,4 +79,31 @@
         )
     </insert>
 
+    <!-- 체험회원 등록 -->
+    <insert id="insertTrialRegister" useGeneratedKeys="true" keyProperty="trialManageId">
+        INSERT /* insertTrialRegister */
+        INTO trial_manage
+        (
+            name,
+            birth,
+            gender,
+            parents_name,
+            parents_birth,
+            parents_cellphone,
+            trial_start_date,
+            trial_end_date
+        )
+        VALUES
+        (
+            #{name},
+            #{birth},
+            #{gender},
+            #{parentName},
+            #{parentBirth},
+            #{parentCellphone},
+            CURRENT_TIMESTAMP,
+            DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL #{trialPeriod} DAY)
+        )
+    </insert>
+
 </mapper>

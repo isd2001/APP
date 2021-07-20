@@ -64,7 +64,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "회원가입")
+	@ApiOperation(value = "회원가입 (작업중)")
 	@PostMapping("/register")
 	public Res<ResRegisterVO> register(@RequestBody @Valid ReqRegisterVO reqVo) {
 
@@ -73,12 +73,26 @@ public class AuthController extends BaseController {
 	}
 
 	/**
+	 * 체험회원 등록
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "체험회원 등록 (작업중)")
+	@PostMapping("/trialRegister")
+	public Res<ResTrialRegisterVO> trialRegister(@RequestBody @Valid ReqTrialRegisterVO reqVo) {
+
+		ResTrialRegisterVO resVo = authService.trialRegister(reqVo);
+		return new Res<ResTrialRegisterVO>(resVo);
+	}
+
+	/**
 	 * 정회원 인증
 	 *
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "정회원 인증")
+	@ApiOperation(value = "정회원 인증 (작업중)")
 	@PostMapping("/fullmemberAuth")
 	public Res<ResFullMemberAuthVO> fullmemberAuth(@RequestBody @Valid ReqFullMemberAuthVO reqVo) {
 
@@ -92,29 +106,12 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "VOC 호출")
+	@ApiOperation(value = "VOC 호출 (작업중)")
 	@PostMapping("/callVoc")
 	public Res<ResVocVO> callVoc(@RequestBody @Valid ReqVocVO reqVo) {
 
 		ResVocVO resVo = authService.callVoc(reqVo);
 		return new Res<ResVocVO>(resVo);
-	}
-
-
-	/**
-	 * 토큰 정보 확인
-	 *
-	 * @return
-	 */
-	@ApiOperation(value = "토근 정보 확인")
-	@PostMapping("/info")
-	public Res<ResUserVO> info() {
-
-		ResUserVO resVo = new ResUserVO();
-		resVo.setUserId("testuser");
-		resVo.setName("김개발");
-
-		return new Res<ResUserVO>(resVo);
 	}
 
 }
