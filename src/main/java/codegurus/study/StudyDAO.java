@@ -16,4 +16,6 @@ public interface StudyDAO {
     ResStudyBookVO selectBookDetail(ReqStudyBookVO reqVo);
     List<ResLabelListElemVO> selectLabelList(String labelDomainManageId);
     List<ResOnelineListElemVO> selectOnelineList(String bookId);
+
+    List<ResStudyContentsElemVO> selectContentsList(ReqStudyContentsListVO reqVo);
 }

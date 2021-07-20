@@ -60,4 +60,56 @@
 		and a.book_id = #{bookId}
 		and a.delete_ornot = 'N'
 	</select>
+
+	<!-- 학습 콘텐츠 목록 조회 -->
+	<select id="selectContentsList" resultType="ResStudyContentsElemVO">
+		SELECT
+			a.contents_id,
+			a.contents_title,
+		    a.book_id,
+		    a.inspection_status,
+			b.template_inst_id,
+		    b.template_id,
+		    b.json,
+		    b.`order`,
+		    b.type,
+		    b.difficulty,
+			c.cate_id,
+			c.parents_id,
+			c.depth,
+			c.`order` as cate_order,
+			c.cate_title,
+			c.first_cate_title,
+			c.second_cate_title,
+			c.third_cate_title,
+			c.fourth_cate_title,
+			c.fifth_cate_title,
+			c.sixth_cate_title,
+			c.seventh_cate_title,
+			c.eight_cate_title,
+			c.ninth_cate_title,
+			c.tenth_cate_title,
+			c.first_cate_id,
+			c.second_cate_id,
+			c.third_cate_id,
+			c.fourth_cate_id,
+			c.fifth_cate_id,
+			c.sixth_cate_id,
+			c.seventh_cate_id,
+			c.eight_cate_id,
+			c.ninth_cate_id,
+			c.tenth_cate_id
+		FROM contents a
+		inner join template_inst b
+		on a.contents_id = b.contents_id
+		and b.delete_ornot = 'N'
+		inner join cate c
+		on b.cate_id = c.cate_id
+		and c.delete_ornot = 'N'
+		WHERE 1=1
+		and a.book_id=#{bookId}
+		and a.inspection_status = '승인완료'
+		and a.delete_ornot = 'N'
+		order by b.`order` asc
+	</select>
 </mapper>

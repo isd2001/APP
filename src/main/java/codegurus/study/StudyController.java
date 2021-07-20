@@ -47,4 +47,19 @@ public class StudyController extends BaseController {
         ResStudyBookVO resVo = studyService.selectBookDetail(reqVo);
         return new Res<ResStudyBookVO>(resVo);
     }
+
+    /**
+     * 학습 콘텐츠
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/contents")
+    @ApiOperation(value = "학습 콘텐츠")
+    public Res<ResStudyContentsListVO> voca(@RequestBody @Valid ReqStudyContentsListVO reqVo) {
+
+        ResStudyContentsListVO resVo = studyService.selectStudyContentsList(reqVo);
+        return new Res<ResStudyContentsListVO>(resVo);
+    }
+
 }

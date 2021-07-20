@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  *  학습 서비스
  *
@@ -42,6 +44,27 @@ public class StudyService {
 
         // 책 한줄평 정보 조회/셋팅
         resVo.setOnelineList(studyDAO.selectOnelineList(resVo.getBookId()));
+
+        return resVo;
+    }
+
+    /**
+     * 학습 콘텐츠 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResStudyContentsListVO selectStudyContentsList(ReqStudyContentsListVO reqVo) {
+
+        ResStudyContentsListVO resVo = new ResStudyContentsListVO();
+
+        List<ResStudyContentsElemVO> list = studyDAO.selectContentsList(reqVo); // 콘텐츠 목록 조회
+
+        if (list.size() == 0) {
+            SystemUtil.returnNoSearchResult();
+        } // 조회 결과 없음 리턴
+
+        resVo.setList(list);
 
         return resVo;
     }
