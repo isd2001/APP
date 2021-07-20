@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 학습 콘텐츠 목록 웅답 VO
+ * 학습 콘텐츠 웅답 VO
  */
 @Getter
 @Setter
