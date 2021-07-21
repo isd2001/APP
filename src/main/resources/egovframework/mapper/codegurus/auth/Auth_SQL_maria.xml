@@ -106,4 +106,27 @@
         )
     </insert>
 
+    <!-- 체험회원 정보 조회 -->
+    <select id="selectTrialUser" resultType="ResTrialUserVO">
+        SELECT /* selectTrialUser */
+            trial_manage_id,
+            name,
+            birth,
+            gender,
+            parents_name as parentName,
+            parents_birth as parentBirth,
+            parents_cellphone as parentCellphone,
+            DF8(trial_start_date) as trial_start_date,
+            DF8(trial_end_date) as trial_end_date,
+            trial_status_code,
+            reg_date,
+            delete_ornot,
+            if(DF8(NOW()) <![CDATA[ <= ]]> DF8(trial_end_date), 'Y', 'N') as validPeriod
+        FROM
+            trial_manage tm
+        WHERE trial_manage_id = #{value}
+          AND trial_status_code = '00'
+          AND delete_ornot = 'N'
+    </select>
+
 </mapper>

@@ -1,6 +1,7 @@
 package codegurus.cmm.jwt;
 
 import codegurus.auth.AuthService;
+import codegurus.cmm.aop.AuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,6 +49,14 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
+    public static final String[] ANT_MATCHERS_WEB_IGNORE = { "/css/**", "/html/**", "/images/**", "/js/**", "/resource/**", "/resources/**", "" +
+            "/v2/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/download/**", "/index.jsp" }; // TODO: 파일 다운로드(/download)에 대한 권한제어 필요 여부 검토
+
+    public static final String[] REGEX_MATCHERS_WEB_IGNORE = { "\\A/WEB-INF/jsp/.*\\Z" };
+
+    public static final String[] ANT_MATCHERS_HTTP_PERMIT_ALL = { "/auth/login", "/auth/checkUserDup", "/auth/register", "/auth/trialRegister" };
+
     /**
      * WebSecurity configure
      * <p>
@@ -60,11 +69,9 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
 
         web
             .ignoring()
-                .antMatchers("/css/**", "/html/**", "/images/**", "/js/**", "/resource/**", "/resources/**", "/v2/**",
-                        "/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/download/**", "/index.jsp")
-                // TODO: 파일 다운로드(/download)에 대한 권한제어 필요 여부 검토
+                .antMatchers(ANT_MATCHERS_WEB_IGNORE)
             .and().ignoring()
-                .regexMatchers("\\A/WEB-INF/jsp/.*\\Z");
+                .regexMatchers(REGEX_MATCHERS_WEB_IGNORE);
     }
 
     /**
@@ -103,7 +110,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .authorizeRequests()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // cors setting 1
-            .antMatchers("/auth/login", "/auth/checkUserDup", "/auth/register", "/auth/trialRegister").permitAll()
+            .antMatchers(ANT_MATCHERS_HTTP_PERMIT_ALL).permitAll()
             .anyRequest().authenticated()   // 나머지 API 는 전부 인증 필요
 
              // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
@@ -153,5 +160,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
+
 
 }

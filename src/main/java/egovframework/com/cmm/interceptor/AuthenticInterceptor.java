@@ -33,9 +33,10 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  *  2011.09.07  서준식          인증이 필요없는 URL을 패스하는 로직 추가
  *  2017.08.31  장동한          인증된 사용자 체크로직 변경 및 관리자 권한 체크 로직 추가 
  *  </pre>
+ *  2021.07 - 플라톤RC에서는 사용하지 않음
+ *
  */
-
-
+@Deprecated
 public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 
 	@Autowired

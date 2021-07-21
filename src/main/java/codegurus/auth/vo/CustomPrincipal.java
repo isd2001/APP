@@ -1,5 +1,6 @@
 package codegurus.auth.vo;
 
+import codegurus.cmm.jwt.TokenProvider;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,8 +23,7 @@ public class CustomPrincipal implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        // 우리는 "ROLE_" 관리를 하지 않을 것이지만, 최소한 하나는 있어야 할 것 같아서 임의로 작성해 줌.
-        return Lists.newArrayList(new SimpleGrantedAuthority("ROLE_USER"));
+        return Lists.newArrayList(new SimpleGrantedAuthority(TokenProvider.DEFAULT_ROLE));
     }
 
     @Override
