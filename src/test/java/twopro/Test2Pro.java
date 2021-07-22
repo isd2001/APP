@@ -1,7 +1,9 @@
 package twopro;
 
+import codegurus.cmm.util.StringUtil;
 import egovframework.rte.fdl.idgnr.impl.Base64;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -18,7 +20,15 @@ public class Test2Pro {
 //        test02();
 //        test03();
 //        test04();
-        test05();
+//        test05();
+        test06();
+    }
+
+    private static void test06() {
+
+        String s = "asdfasdfsadf";
+        String ret = s.replaceAll(StringUtil.REGEX_MASK_LAST3, "***");
+        System.out.println(ret);
     }
 
     private static void test05() {
