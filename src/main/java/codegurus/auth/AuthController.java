@@ -78,7 +78,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "체험회원 등록 (작업중)")
+	@ApiOperation(value = "체험회원 등록")
 	@PostMapping("/trialRegister")
 	public Res<ResTrialRegisterVO> trialRegister(@RequestBody @Valid ReqTrialRegisterVO reqVo) {
 
