@@ -75,6 +75,7 @@
 		<mybatis:scan base-package="codegurus.auth" 	factory-ref="egov.sqlSession"/>
 		<mybatis:scan base-package="codegurus.study" 	factory-ref="egov.sqlSession"/>
 		<mybatis:scan base-package="codegurus.oneline" 	factory-ref="egov.sqlSession"/>
+		<mybatis:scan base-package="codegurus.board" 	factory-ref="egov.sqlSession"/>
 
 		<!-- VOC 데이터소스 범위 (패키지 경로가 기본 데이터소스와 겹치면 안되기 때문에 '_ext' 추가) -->
 		<mybatis:scan base-package="codegurus_ext.voc" 	factory-ref="sqlSessionVOC"/>

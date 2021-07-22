@@ -26,6 +26,7 @@
 		<package name="codegurus.auth.vo"/>
 		<package name="codegurus.study.vo"/>
 		<package name="codegurus.oneline.vo"/>
+		<package name="codegurus.board.vo"/>
 	</typeAliases>
     
 	<plugins>

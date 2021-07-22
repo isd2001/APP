@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="codegurus.board.BoardDAO">
+
+	<!-- 게시판 목록 조회 -->
+	<select id="selectBoardList" resultType="ResBoardListElemVO">
+		SELECT /* selectBoardList */
+			board_id,
+		    boardtitle,
+		    content,
+		    type,
+		    lookup_count,
+		    reg_id,
+			DF14(reg_date) as reg_date
+		FROM board
+		WHERE 1=1
+		and type = #{type}
+		and delete_ornot = 'N'
+	</select>
+
+	<!-- 게시판 상세 조회 -->
+	<select id="selectBoardDetail" resultType="ResBoardListElemVO">
+		SELECT /* selectBoardList */
+			board_id,
+			boardtitle,
+			content,
+			type,
+			lookup_count,
+			reg_id,
+			DF14(reg_date) as reg_date
+		FROM board
+		WHERE 1=1
+		  and type = #{type}
+		  and board_id = #{boardId}
+		  and delete_ornot = 'N'
+	</select>
+</mapper>
