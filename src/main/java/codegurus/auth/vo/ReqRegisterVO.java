@@ -34,22 +34,42 @@ public class ReqRegisterVO extends ReqBaseVO {
     @NotBlank
     private String password;
 
-    @ApiModelProperty(notes = "이름", required = true, example = "이지은", position = 3)
+    @ApiModelProperty(notes = "이름", required = false, example = "이지은", position = 3)
     @NotBlank
     @Size(min = 2, max = 20)
     private String name;
 
-    @ApiModelProperty(notes = "생년월일", required = true, example = "20141111", position = 4)
+    @ApiModelProperty(notes = "생년월일", required = false, example = "20141111", position = 4)
     @NotBlank
     @DateCheck(format = Constants.DF8)
     private String birth;
 
-    @ApiModelProperty(notes = "성별", required = true, example = "M", position = 5)
+    @ApiModelProperty(notes = "성별", required = false, example = "M", position = 5)
     @NotBlank
     @Pattern(regexp=StringUtil.REGEX_GENDER)
     private String gender;
 
-    @ApiModelProperty(notes = "핸드폰번호", required = false, example = "01012345678", position = 6)
+    @ApiModelProperty(notes = "서비스 이용 약관 동의여부", required = true, example = "Y", position = 6)
+    @Pattern(regexp=StringUtil.REGEX_YN)
+    private String termofuseAgreeOrnot;
+
+    @ApiModelProperty(notes = "개인정보 수집 및 이용에 대한 동의여부", required = true, example = "Y", position = 7)
+    @Pattern(regexp=StringUtil.REGEX_YN)
+    private String personalinfoAgreeOrnot;
+
+    @ApiModelProperty(notes = "마케팅 활용을 위한 개인정보 수집 및 이용에 대한 동의여부", required = false, example = "Y", position = 8)
+    @Pattern(regexp=StringUtil.REGEX_YN)
+    private String promotionAgreeOrnot;
+
+    // 아직까지 요건이 없는 필드인 듯
+//    @ApiModelProperty(notes = "위치정보 동의 여부", required = false, example = "Y", position = 14, hidden = true)
+//    @Pattern(regexp=StringUtil.REGEX_YN)
+//    private String locationinfoAgreeOrnot;
+
+
+
+    // 이하 나중에 필요할 지 몰라서 백업
+/*    @ApiModelProperty(notes = "핸드폰번호", required = false, example = "01012345678", position = 6)
     @Pattern(regexp= StringUtil.REGEX_CELLPHONE)
     private String cellphone;
 
@@ -67,23 +87,6 @@ public class ReqRegisterVO extends ReqBaseVO {
 
     @ApiModelProperty(notes = "상세주소", required = false, example = "101동 1405호", position = 10)
     @Size(min = 0, max = 200)
-    private String addressDetail;
-
-    @ApiModelProperty(notes = "서비스 이용 약관 동의여부", required = false, example = "Y", position = 11)
-    @Pattern(regexp=StringUtil.REGEX_YN)
-    private String termofuseAgreeOrnot;
-
-    @ApiModelProperty(notes = "개인정보 수집 및 이용에 대한 동의여부", required = false, example = "Y", position = 12)
-    @Pattern(regexp=StringUtil.REGEX_YN)
-    private String personalinfoAgreeOrnot;
-
-    @ApiModelProperty(notes = "마케팅 활용을 위한 개인정보 수집 및 이용에 대한 동의여부", required = false, example = "Y", position = 13)
-    @Pattern(regexp=StringUtil.REGEX_YN)
-    private String promotionAgreeOrnot;
-
-    // 아직까지 요건이 없는 필드인 듯
-    @ApiModelProperty(notes = "위치정보 동의 여부", required = false, example = "Y", position = 14, hidden = true)
-    @Pattern(regexp=StringUtil.REGEX_YN)
-    private String locationinfoAgreeOrnot;
+    private String addressDetail;*/
 
 }
