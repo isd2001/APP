@@ -22,19 +22,21 @@
             name,
             birth,
             gender,
+            <!-- 이후에 필요할 지 몰라 백업
             cellphone,
             email,
             zipcode,
             address,
             address_detail,
+            -->
             termofuse_agree_ornot,
             personalinfo_agree_ornot,
             promotion_agree_ornot,
-            locationinfo_agree_ornot,
+            <!-- locationinfo_agree_ornot, --><!-- 필요하면 사용  -->
             termofuse_agree_date,
             personalinfo_agree_date,
             promotion_agree_date,
-            locationinfo_agree_date,
+            <!-- locationinfo_agree_date, -->
             reg_id,
             reg_date,
             modify_id,
@@ -47,15 +49,17 @@
            #{name},
            #{birth},
            #{gender},
+           <!-- 이후에 필요할 지 몰라 백업
            #{cellphone},
            #{email},
            #{zipcode},
            #{address},
            #{addressDetail},
+           -->
            #{termofuseAgreeOrnot},
            #{personalinfoAgreeOrnot},
            #{promotionAgreeOrnot},
-           #{locationinfoAgreeOrnot},
+           <!-- #{locationinfoAgreeOrnot}, -->
            <choose>
                <when test='termofuseAgreeOrnot != null and termofuseAgreeOrnot != "" and termofuseAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
                <otherwise>null,</otherwise>
@@ -68,14 +72,31 @@
                <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
                <otherwise>null,</otherwise>
            </choose>
+           <!--
            <choose>
                <when test='locationinfoAgreeOrnot != null and locationinfoAgreeOrnot != "" and locationinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
                <otherwise>null,</otherwise>
            </choose>
+           -->
            0, /* reg_id (아직 user_manage_id 가 없는 상태이기 때문에) */
            CURRENT_TIMESTAMP,
            0,
            CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <!-- 사용자 권한 매핑 등록 -->
+    <insert id="insertUserAuth" useGeneratedKeys="true" keyProperty="userAuthId">
+        INSERT /* insertUserAuth */
+        INTO user_auth
+        (
+            user_manage_id,
+            auth_id
+        )
+        VALUES
+        (
+            #{userManageId},
+            #{authId}
         )
     </insert>
 

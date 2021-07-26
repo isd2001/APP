@@ -1,7 +1,9 @@
 package codegurus.auth;
 
 import codegurus.auth.vo.*;
+import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.controller.BaseController;
+import codegurus.cmm.exception.CustomException;
 import codegurus.cmm.vo.req.*;
 import codegurus.cmm.vo.res.*;
 import io.swagger.annotations.Api;
@@ -50,7 +52,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "사용자 중복 확인 (회원가입 화면)")
+	@ApiOperation(value = "회원가입 > 사용자 중복 확인")
 	@PostMapping("/checkUserDup")
 	public Res<ResBaseVO> checkUserDup(@RequestBody @Valid ReqDupCheckVO reqVo) {
 
@@ -64,9 +66,17 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "회원가입 (작업중)")
+	@ApiOperation(value = "회원가입")
 	@PostMapping("/register")
 	public Res<ResRegisterVO> register(@RequestBody @Valid ReqRegisterVO reqVo) {
+
+		// 약관동의 여부 확인
+		if(! "Y".equals(reqVo.getTermofuseAgreeOrnot())){
+			throw new CustomException(ResCodeEnum.INFO_0004.name(), "서비스 이용 약관 동의가 필요합니다.");
+		}
+		if(! "Y".equals(reqVo.getPersonalinfoAgreeOrnot())){
+			throw new CustomException(ResCodeEnum.INFO_0004.name(), "개인정보 수집 및 이용에 대한 동의가 필요합니다.");
+		}
 
 		ResRegisterVO resVo = authService.register(reqVo);
 		return new Res<ResRegisterVO>(resVo);

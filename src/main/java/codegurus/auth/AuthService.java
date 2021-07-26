@@ -2,6 +2,7 @@ package codegurus.auth;
 
 import codegurus.auth.vo.*;
 import codegurus.cmm.CommonDAO;
+import codegurus.cmm.constants.AuthEnum;
 import codegurus.cmm.constants.Constants;
 import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.jwt.TokenProvider;
@@ -11,6 +12,7 @@ import codegurus.cmm.vo.req.ReqAuthVO;
 import codegurus.cmm.vo.res.ResAuthVO;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus_ext.voc.VocDAO;
+import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -172,8 +174,14 @@ public class AuthService implements UserDetailsService {
 //        reqVo.setPassword(new BCryptPasswordEncoder().encode(reqVo.getPassword()));
         reqVo.setPassword(passwordEncoder.encode(reqVo.getPassword()));
 
-        // INSERT
+        // INSERT (사용자관리)
         authDAO.insertRegisterInfo(reqVo);
+
+        // INSERT (사용자 권한 매핑)
+        Map<String, Object> params = new HashMap<>();
+        params.put("userManageId", reqVo.getUserManageId());
+        params.put("authId", AuthEnum.학생일반회원.getAuthId());
+        authDAO.insertUserAuth(params);
 
         // 응답에 PK 바인딩
         resVo.setUserManageId(reqVo.getUserManageId());

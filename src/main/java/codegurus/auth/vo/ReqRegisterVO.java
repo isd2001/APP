@@ -35,25 +35,24 @@ public class ReqRegisterVO extends ReqBaseVO {
     private String password;
 
     @ApiModelProperty(notes = "이름", required = false, example = "이지은", position = 3)
-    @NotBlank
-    @Size(min = 2, max = 20)
+    @Size(min = 0, max = 20)
     private String name;
 
     @ApiModelProperty(notes = "생년월일", required = false, example = "20141111", position = 4)
-    @NotBlank
     @DateCheck(format = Constants.DF8)
     private String birth;
 
     @ApiModelProperty(notes = "성별", required = false, example = "M", position = 5)
-    @NotBlank
     @Pattern(regexp=StringUtil.REGEX_GENDER)
     private String gender;
 
     @ApiModelProperty(notes = "서비스 이용 약관 동의여부", required = true, example = "Y", position = 6)
+    @NotBlank
     @Pattern(regexp=StringUtil.REGEX_YN)
     private String termofuseAgreeOrnot;
 
     @ApiModelProperty(notes = "개인정보 수집 및 이용에 대한 동의여부", required = true, example = "Y", position = 7)
+    @NotBlank
     @Pattern(regexp=StringUtil.REGEX_YN)
     private String personalinfoAgreeOrnot;
 
