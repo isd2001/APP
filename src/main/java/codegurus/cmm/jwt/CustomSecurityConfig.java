@@ -55,7 +55,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String[] REGEX_MATCHERS_WEB_IGNORE = { "\\A/WEB-INF/jsp/.*\\Z" };
 
-    public static final String[] ANT_MATCHERS_HTTP_PERMIT_ALL = { "/auth/login", "/auth/checkUserDup", "/auth/register", "/auth/trialRegister", "/auth/sms*" };
+    public static final String[] ANT_MATCHERS_HTTP_PERMIT_ALL = { "/auth/login", "/auth/checkUserDup", "/auth/register", "/auth/trialRegister", "/auth/sms*", "/auth/callVoc" };
 
     /**
      * WebSecurity configure

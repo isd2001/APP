@@ -77,8 +77,12 @@ public class AuthService implements UserDetailsService {
     @Autowired
     private HttpServletRequest httpRequest;
 
+	@Value("#{new Integer('${sms.cert.timeout.minute}')}")
+	private int smsCertTimeoutMinute;
+
 	@Value("#{new Boolean('${rest.response.sms.certnumber}')}")
 	private boolean restResponseSmsCertnumber;
+
 
     /**
      * 로그인
@@ -251,7 +255,8 @@ public class AuthService implements UserDetailsService {
 
         ResVocVO resVo = new ResVocVO();
 
-//        vocDAO.
+        Map<String, String> vocTestList = vocDAO.selectVocDbTest();
+        log.debug("## vocTestList:[{}]", JsonUtil.toJson(vocTestList));
 
         return resVo;
     }
@@ -323,6 +328,7 @@ public class AuthService implements UserDetailsService {
         ResSmsCertCfmVO resVo = new ResSmsCertCfmVO();
 
         // smsCertId로 sms_cert 레코드 조회
+        reqVo.setSmsCertTimeoutMinute(smsCertTimeoutMinute);
         Map<String, String> smsCert = authDAO.selectSmsCert(reqVo);
         log.debug("## smsCert:[{}]", JsonUtil.toJson(smsCert));
 
@@ -330,9 +336,10 @@ public class AuthService implements UserDetailsService {
         if (smsCert == null) {
             throw new CustomException(ResCodeEnum.WARN_0001);
         }
-
-        // TODO: 인증번호 유효시간 체크
-
+        // SMS 인증 유효시간 체크
+        if("Y".equals(smsCert.get("timeoutYN"))){
+            throw new CustomException(ResCodeEnum.INFO_0008);
+        }
         // 인증번호 불일치
         if(! StringUtil.trim(reqVo.getCertNumber()).equals(StringUtil.trim(smsCert.get("cert_number")))){ // select 결과가 map에 담길 때는 camel 변환이 없는 듯.
             throw new CustomException(ResCodeEnum.INFO_0005);

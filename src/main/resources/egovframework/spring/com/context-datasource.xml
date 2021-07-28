@@ -101,10 +101,10 @@
 	<!-- ============================== VOC용 데이터소스 관련 - start ============================= -->
 	<beans>
 		<bean id="dataSourceVOC" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-			<property name="driverClassName" value="${Globals.maria.voc.DriverClassName}"/>
-			<property name="url" value="${Globals.maria.voc.Url}" />
-			<property name="username" value="${Globals.maria.voc.UserName}"/>
-			<property name="password" value="${Globals.maria.voc.Password}"/>
+			<property name="driverClassName" value="${Globals.oracle.voc.DriverClassName}"/>
+			<property name="url" value="${Globals.oracle.voc.Url}" />
+			<property name="username" value="${Globals.oracle.voc.UserName}"/>
+			<property name="password" value="${Globals.oracle.voc.Password}"/>
 		</bean>
 	</beans>
 	<!-- ============================== VOC용 데이터소스 관련 - end =============================== -->

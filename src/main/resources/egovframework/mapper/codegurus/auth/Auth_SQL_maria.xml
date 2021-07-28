@@ -180,7 +180,8 @@
             name,
             cellphone,
             cert_number,
-            cert_req_date
+            cert_req_date,
+            if(NOW() > DATE_ADD(cert_req_date, INTERVAL 3 MINUTE), 'Y', 'N') as timeoutYN
         FROM
             sms_cert
         WHERE sms_cert_id = #{smsCertId}

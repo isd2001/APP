@@ -42,7 +42,7 @@
             </snapshots>
         </repository>
     </repositories>
-    
+
     <dependencies>
         <!-- 실행환경 라이브러리 -->
         <!--
@@ -652,6 +652,20 @@
             <artifactId>libs</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <!-- 로컬PC에서의 SSH 터널링을 위해 추가 -->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version>
+        </dependency>
+
+        <!-- VOC DB 연결을 위해 추가 -->
+<!--        <dependency>-->
+<!--            <groupId>com.oracle.jdbc</groupId>-->
+<!--            <artifactId>ojdbc14</artifactId>-->
+<!--            <version>10.2.0.1.0</version>-->
+<!--        </dependency>        -->
 
     </dependencies>
 

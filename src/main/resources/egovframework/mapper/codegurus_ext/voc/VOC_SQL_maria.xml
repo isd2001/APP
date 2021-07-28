@@ -3,13 +3,12 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="codegurus_ext.voc.VocDAO">
 
-    <!-- 사용자 중복 체크 (회원가입 화면) -->
-    <select id="selectUserDup" resultType="int">
-        select /* selectUserDup */
-            count(*)
-        from user_manage um
-        where user_id = #{username}
-        and DELETE_ORNOT = 'N'
+    <!-- VOC DB 조회 테스트 -->
+    <select id="selectVocDbTest" resultType="int">
+        select /* selectVocDbTest */
+            *
+        from cust_family
+        limit 10
     </select>
 
 

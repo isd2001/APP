@@ -1,6 +1,7 @@
 package codegurus.auth.vo;
 
 import codegurus.cmm.util.StringUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,5 +27,9 @@ public class ReqSmsCertCfmVO extends ReqSmsCertBaseVO {
     @NotBlank
     @Pattern(regexp = StringUtil.REGEX_SMS_CERT_NUM)
     private String certNumber;
+
+    // SMS 인증 유효시간 (단위: 분)
+    @JsonIgnore
+    private int smsCertTimeoutMinute;
 
 }

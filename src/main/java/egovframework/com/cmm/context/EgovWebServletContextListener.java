@@ -1,5 +1,6 @@
 package egovframework.com.cmm.context;
 
+import codegurus.cmm.ssh.SSHTunnelVOC;
 import egovframework.com.cmm.service.EgovProperties;
 
 import javax.servlet.ServletContextEvent;
@@ -32,8 +33,11 @@ import org.slf4j.LoggerFactory;
  */
 
 public class EgovWebServletContextListener implements ServletContextListener {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(EgovWebServletContextListener.class);
-    
+
+    private SSHTunnelVOC sshTunnelVOC;
+
     public EgovWebServletContextListener(){
     	setEgovProfileSetting();
     }
@@ -42,21 +46,31 @@ public class EgovWebServletContextListener implements ServletContextListener {
     	if(System.getProperty("spring.profiles.active") == null){
     		setEgovProfileSetting();
     	}
+        // SSH 터널링 접속
+        sshTunnelVOC = new SSHTunnelVOC();
     }
 
     public void contextDestroyed(ServletContextEvent event) {
     	if(System.getProperty("spring.profiles.active") != null){
     		System.setProperty("spring.profiles.active", null);
     	}
+    	// SSH 터널링 접속 해제
+    	sshTunnelVOC.closeSSH();
     } 
     
     public void setEgovProfileSetting(){
         try {
             LOGGER.debug("===========================Start EgovServletContextLoad START ===========");
-//            System.setProperty("spring.profiles.active", EgovProperties.getProperty("Globals.DbType")+","+EgovProperties.getProperty("Globals.Auth"));
-            System.setProperty("spring.profiles.active", EgovProperties.getProperty("Globals.DbType")+","+EgovProperties.getProperty("Globals.Auth")+","+EgovProperties.getProperty("system.type")); // 시스템구분 추가 (2021.06 이프로)
+
+            String dbType = EgovProperties.getProperty("Globals.DbType");
+            String auth = EgovProperties.getProperty("Globals.Auth");
+            String systemType = EgovProperties.getProperty("system.type");
+//            System.setProperty("spring.profiles.active", dbType +","+ auth);
+            System.setProperty("spring.profiles.active", dbType +","+ auth +","+ systemType); // 시스템구분 추가 (2021.06 이프로)
             LOGGER.debug("Setting spring.profiles.active>"+System.getProperty("spring.profiles.active"));
+
             LOGGER.debug("===========================END   EgovServletContextLoad END ===========");
+
         //2017.03.03 	조성원 	시큐어코딩(ES)-오류 메시지를 통한 정보노출[CWE-209]
         } catch(IllegalArgumentException e) {
     		LOGGER.error("[IllegalArgumentException] Try/Catch...usingParameters Runing : "+ e.getMessage());

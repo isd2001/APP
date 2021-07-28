@@ -1,8 +1,8 @@
 package codegurus_ext.voc;
 
-import codegurus.auth.vo.ReqDupCheckVO;
+import java.util.Map;
 
 public interface VocDAO {
 
-    int selectUserDup(ReqDupCheckVO reqVo);
+    Map<String, String> selectVocDbTest();
 }

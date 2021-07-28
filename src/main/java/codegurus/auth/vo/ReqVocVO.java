@@ -43,6 +43,10 @@ public class ReqVocVO extends ReqBaseVO {
     @Pattern(regexp= StringUtil.REGEX_CELLPHONE)
     private String parentCellphone;
 
+    @ApiModelProperty(notes = "SMS 인증 확인 성공 후 응답으로 받은 토큰", required = true, example = "7Ymv68kOyED3qdDXAlfPUt5lgqX5n1AQSpQjAjdKSI7SDcCj6%2FiW0yqLFEhFfbZBJWonV1bfXXFheGic1LDOeQ%3D%3D", position = 6)
+    @NotBlank
+    private String smsToken;
+
     // VOC 파라미터에 정의된 드러나지 않은 필드들
     private String type;
     private String zipcode;

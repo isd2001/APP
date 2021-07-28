@@ -38,11 +38,13 @@ public class ReqRegisterVO extends ReqBaseVO {
     @JsonIgnore
     private String passwordMask;
 
-    @ApiModelProperty(notes = "이름", required = false, example = "이지은", position = 3)
+    @ApiModelProperty(notes = "이름", required = true, example = "이지은", position = 3)
+    @NotBlank
     @Size(min = 0, max = 20)
     private String name;
 
-    @ApiModelProperty(notes = "생년월일", required = false, example = "20141111", position = 4)
+    @ApiModelProperty(notes = "생년월일", required = true, example = "20141111", position = 4)
+    @NotBlank
     @DateCheck(format = Constants.DF8)
     private String birth;
 
