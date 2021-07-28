@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 /**
- * 인증 처리 관련 controller
+ * 인증 처리 관련 controller@
  *
  * @author 이프로
  * @version 2021.06
