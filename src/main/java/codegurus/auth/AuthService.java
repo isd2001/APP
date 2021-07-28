@@ -5,14 +5,16 @@ import codegurus.cmm.CommonDAO;
 import codegurus.cmm.constants.AuthEnum;
 import codegurus.cmm.constants.Constants;
 import codegurus.cmm.constants.ResCodeEnum;
+import codegurus.cmm.exception.CustomException;
 import codegurus.cmm.jwt.TokenProvider;
+import codegurus.cmm.util.JsonUtil;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.WebUtil;
 import codegurus.cmm.vo.req.ReqAuthVO;
 import codegurus.cmm.vo.res.ResAuthVO;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus_ext.voc.VocDAO;
-import com.google.common.collect.ImmutableMap;
+import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,6 +46,9 @@ public class AuthService implements UserDetailsService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+    @Autowired
+	private EgovEnvCryptoService cryptoService;
 
 	@Autowired
 	private TokenProvider tokenProvider;
@@ -170,9 +175,11 @@ public class AuthService implements UserDetailsService {
         }
         //------------- 기 등록 회원 여부 체크 - end ---------------
 
-        // 패스워드 암호화
-//        reqVo.setPassword(new BCryptPasswordEncoder().encode(reqVo.getPassword()));
-        reqVo.setPassword(passwordEncoder.encode(reqVo.getPassword()));
+        String passwordRaw = reqVo.getPassword();
+		// 마스킹된 패스워드의 암호화 저장을 위한 처리 (비밀번호 찾기 화면에서 사용자에게 패스워드를 노출해 주어야 하는 요건 때문에 추가함.)
+		reqVo.setPasswordMask(cryptoService.encrypt(StringUtil.maskPW(passwordRaw)));
+        // 패스워드 해싱
+        reqVo.setPassword(passwordEncoder.encode(passwordRaw));
 
         // INSERT (사용자관리)
         authDAO.insertRegisterInfo(reqVo);
@@ -241,6 +248,105 @@ public class AuthService implements UserDetailsService {
         ResVocVO resVo = new ResVocVO();
 
 //        vocDAO.
+
+        return resVo;
+    }
+
+    /**
+     * ID 찾기
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResFindIDVO findId(ReqFindIDVO reqVo) {
+
+        // TODO: SAP 테이블 조회 => 자녀 개인정보 조회 => 자녀 ID 획득
+
+        // TODO: 일반회원은 어떻게 할 것인가?
+
+        return null;
+    }
+
+    /**
+     * 패스워드 찾기
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResFindPWVO findPw(ReqFindPWVO reqVo) {
+
+
+        return null;
+    }
+
+    /**
+     * SMS 인증번호 요청
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResSmsCertVO reqSmsCert(ReqSmsCertVO reqVo) {
+
+        ResSmsCertVO resVo = new ResSmsCertVO();
+
+        String certNumber = StringUtil.getRandom6Digits();
+        reqVo.setCertNumber(certNumber);
+
+        // TODO: SMS 발송
+
+        // TODO: 테스트용 response를 줄 것인지 검토
+
+        // SMS 인증 테이블 저장
+        authDAO.insertSmsCert(reqVo);
+
+        // 응답값 바인딩
+        resVo.setSmsCertId(reqVo.getSmsCertId());
+
+        return resVo;
+    }
+
+    /**
+     * SMS 인증번호 확인
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResSmsCertCfmVO cfmSmsCert(ReqSmsCertCfmVO reqVo) {
+
+        ResSmsCertCfmVO resVo = new ResSmsCertCfmVO();
+
+        // smsCertId로 sms_cert 레코드 조회
+        Map<String, String> smsCert = authDAO.selectSmsCert(reqVo);
+        log.debug("## smsCert:[{}]", JsonUtil.toJson(smsCert));
+
+        // smsCertId 에 해당하는 레코드가 없을 경우
+        if (smsCert == null) {
+            throw new CustomException(ResCodeEnum.WARN_0001);
+        }
+
+        // TODO: 인증번호 유효시간 체크
+
+        // 인증번호 불일치
+        if(! StringUtil.trim(reqVo.getCertNumber()).equals(StringUtil.trim(smsCert.get("cert_number")))){ // select 결과가 map에 담길 때는 camel 변환이 없는 듯.
+            throw new CustomException(ResCodeEnum.INFO_0005);
+        }
+        // 이름 불일치
+        if(! StringUtil.trim(reqVo.getName()).equals(StringUtil.trim(smsCert.get("name")))){
+            throw new CustomException(ResCodeEnum.INFO_0006);
+        }
+        // 핸드폰번호 불일치
+        if(! StringUtil.trim(reqVo.getCellphone()).equals(StringUtil.trim(smsCert.get("cellphone")))){
+            throw new CustomException(ResCodeEnum.INFO_0007);
+        }
+
+        // smsToken 생성
+        String smsToken = new SmsToken(reqVo.getSmsCertId(), reqVo.getName(), reqVo.getCellphone()).json();
+        log.debug("## smsToken:[{}]", JsonUtil.toJson(smsToken));
+
+        // sms_cert update (인증성공 날짜)
+        authDAO.updateSmsCert(reqVo);
+
+        resVo.setSmsToken(cryptoService.encrypt(smsToken)); // smsToken을 암호화 하여 응답에 바인딩
 
         return resVo;
     }

@@ -66,7 +66,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "회원가입")
+	@ApiOperation(value = "회원가입 (변경 가능성 있음)")
 	@PostMapping("/register")
 	public Res<ResRegisterVO> register(@RequestBody @Valid ReqRegisterVO reqVo) {
 
@@ -123,5 +123,62 @@ public class AuthController extends BaseController {
 		ResVocVO resVo = authService.callVoc(reqVo);
 		return new Res<ResVocVO>(resVo);
 	}
+
+	/**
+	 * SMS 인증 요청
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "SMS 인증 요청 (작업중)")
+	@PostMapping("/smsCertReq")
+	public Res<ResSmsCertVO> smsCertReq(@RequestBody @Valid ReqSmsCertVO reqVo) {
+
+		ResSmsCertVO resVo = authService.reqSmsCert(reqVo);
+		return new Res<ResSmsCertVO>(resVo);
+	}
+
+	/**
+	 * SMS 인증번호 확인
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "SMS 인증번호 확인 (작업중)")
+	@PostMapping("/smsCertCfm")
+	public Res<ResSmsCertCfmVO> smsCertCfm(@RequestBody @Valid ReqSmsCertCfmVO reqVo) {
+
+		ResSmsCertCfmVO resVo = authService.cfmSmsCert(reqVo);
+		return new Res<ResSmsCertCfmVO>(resVo);
+	}
+
+	/**
+	 * ID 찾기
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "ID 찾기 (작업중)")
+	@PostMapping("/findId")
+	public Res<ResFindIDVO> findId(@RequestBody @Valid ReqFindIDVO reqVo) {
+
+		ResFindIDVO resVo = authService.findId(reqVo);
+		return new Res<ResFindIDVO>(resVo);
+	}
+
+	/**
+	 * 패스워드 찾기
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "패스워드 찾기 (작업중)")
+	@PostMapping("/findPw")
+	public Res<ResFindPWVO> findPw(@RequestBody @Valid ReqFindPWVO reqVo) {
+
+		ResFindPWVO resVo = authService.findPw(reqVo);
+		return new Res<ResFindPWVO>(resVo);
+	}
+
 
 }

@@ -21,14 +21,25 @@ public class Test2Pro {
 //        test03();
 //        test04();
 //        test05();
-        test06();
+//        test06();
+        test07();
+    }
+
+    private static void test07() {
+
+        String ret = StringUtil.getRandom6Digits();
+        log.debug("## ret:[{}]", ret);
     }
 
     private static void test06() {
 
-        String s = "asdfasdfsadf";
-        String ret = s.replaceAll(StringUtil.REGEX_MASK_LAST3, "***");
-        System.out.println(ret);
+        String s = "abcd1234가나다라";
+
+//        String ret = StringUtil.maskRight(s, StringUtil.MASK_CNT_RIGHT_ID);
+//        String ret = StringUtil.maskRight(s, StringUtil.MASK_CNT_RIGHT_PW);
+        String ret = StringUtil.mask(s, 0, 5);
+
+        log.debug("## ret:[{}]", ret);
     }
 
     private static void test05() {
@@ -43,6 +54,7 @@ public class Test2Pro {
         String enc = new BCryptPasswordEncoder().encode(plain);
 
         log.debug("## enc:[{}]", enc);
+//        $2a$10$Y0iIsyWhnmM6XK2GVORxveZiZbk8CSCL9vk/BGvUdLksUjDRwsgJm
     }
 
     private static void test03() {

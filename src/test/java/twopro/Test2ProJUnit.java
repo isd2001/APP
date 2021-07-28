@@ -1,6 +1,7 @@
 package twopro; // 테스트코드에서도 log4j를 사용하고 싶다면 패키지는 꼭 필요한 듯.
 
 import codegurus.cmm.jwt.TokenProvider;
+import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -10,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import javax.annotation.Resource;
 
 /**
  * JUnit 테스트
@@ -28,11 +31,31 @@ public class Test2ProJUnit {
     @Autowired
     TokenProvider tokenProvider;
 
+    @Autowired
+    EgovEnvCryptoService cryptoService;
+
     @Test
     public void test01(){
 
         log.debug("## tokenProvider:[{}]", tokenProvider);
     }
+
+    /**
+     * 전자정부 암호화 테스트
+     */
+    @Test
+    public void test02(){
+
+        String pw = "brucejason*****";
+
+        String encPw = cryptoService.encrypt(pw);
+        log.debug("## encPw:[{}]", encPw);
+
+        String decPw = cryptoService.decrypt(encPw);
+
+        log.debug("## decPw:[{}]", decPw);
+    }
+
 
     /**
      * 시스템 프로퍼티 셋팅

@@ -19,6 +19,7 @@
         (
             user_id,
             password,
+            password_mask,
             name,
             birth,
             gender,
@@ -46,6 +47,7 @@
         (
            #{username},
            #{password},
+           #{passwordMask},
            #{name},
            #{birth},
            #{gender},
@@ -149,5 +151,49 @@
           AND trial_status_code = '00'
           AND delete_ornot = 'N'
     </select>
+
+
+    <!-- SMS 인증 insert -->
+    <insert id="insertSmsCert" useGeneratedKeys="true" keyProperty="smsCertId">
+        INSERT /* insertSmsCert */
+        INTO sms_cert
+        (
+            sms_type,
+            name,
+            cellphone,
+            cert_number
+        )
+        values
+        (
+            #{smsType},
+            #{name},
+            #{cellphone},
+            #{certNumber}
+        )
+    </insert>
+
+    <!-- SMS 인증 조회 -->
+    <select id="selectSmsCert" resultType="LHMap">
+        SELECT /* selectSmsCert */
+            sms_cert_id,
+            sms_type,
+            name,
+            cellphone,
+            cert_number,
+            cert_req_date
+        FROM
+            sms_cert
+        WHERE sms_cert_id = #{smsCertId}
+    </select>
+
+    <!-- SMS 인증 update -->
+    <update id="updateSmsCert">
+        UPDATE /* updateSmsCert */
+            sms_cert
+        SET
+            cert_success_date = CURRENT_TIMESTAMP
+        WHERE sms_cert_id = #{smsCertId}
+    </update>
+
 
 </mapper>

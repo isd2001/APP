@@ -34,6 +34,10 @@ public class ReqRegisterVO extends ReqBaseVO {
     @NotBlank
     private String password;
 
+    // 평문 패스워드의 뒤 몇 글자를 마스킹 한 후, 암호화한 필드 (추후 비밀번호 찾기에서 사용하기 위해)
+    @JsonIgnore
+    private String passwordMask;
+
     @ApiModelProperty(notes = "이름", required = false, example = "이지은", position = 3)
     @Size(min = 0, max = 20)
     private String name;
