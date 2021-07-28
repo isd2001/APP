@@ -4,11 +4,11 @@
 <mapper namespace="codegurus_ext.voc.VocDAO">
 
     <!-- VOC DB 조회 테스트 -->
-    <select id="selectVocDbTest" resultType="int">
+    <select id="selectVocDbTest" resultType="LHMap">
         select /* selectVocDbTest */
             *
         from cust_family
-        limit 10
+        where rownum &lt; 10
     </select>
 
 

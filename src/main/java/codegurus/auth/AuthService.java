@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -255,7 +256,7 @@ public class AuthService implements UserDetailsService {
 
         ResVocVO resVo = new ResVocVO();
 
-        Map<String, String> vocTestList = vocDAO.selectVocDbTest();
+        List<Map<String, String>> vocTestList = vocDAO.selectVocDbTest();
         log.debug("## vocTestList:[{}]", JsonUtil.toJson(vocTestList));
 
         return resVo;

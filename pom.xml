@@ -661,11 +661,11 @@
         </dependency>
 
         <!-- VOC DB 연결을 위해 추가 -->
-<!--        <dependency>-->
-<!--            <groupId>com.oracle.jdbc</groupId>-->
-<!--            <artifactId>ojdbc14</artifactId>-->
-<!--            <version>10.2.0.1.0</version>-->
-<!--        </dependency>        -->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc14</artifactId>
+            <version>10.2.0.4.0</version>
+        </dependency>
 
     </dependencies>
 

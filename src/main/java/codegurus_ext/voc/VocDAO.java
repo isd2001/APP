@@ -1,8 +1,9 @@
 package codegurus_ext.voc;
 
+import java.util.List;
 import java.util.Map;
 
 public interface VocDAO {
 
-    Map<String, String> selectVocDbTest();
+    List<Map<String, String>> selectVocDbTest();
 }

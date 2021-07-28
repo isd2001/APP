@@ -39,7 +39,7 @@
 			<property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
 			<property name="mapperLocations">
 				<list>
-					<value>classpath:/egovframework/mapper/codegurus_ext/voc/*_${Globals.DbType}.xml</value>
+					<value>classpath:/egovframework/mapper/codegurus_ext/voc/*.xml</value>
 				</list>
 			</property>
 		</bean>
@@ -50,7 +50,7 @@
 			<property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
 			<property name="mapperLocations">
 				<list>
-					<value>classpath:/egovframework/mapper/codegurus_ext/voc/*_${Globals.DbType}.xml</value>
+					<value>classpath:/egovframework/mapper/codegurus_ext/voc/*.xml</value>
 				</list>
 			</property>
 		</bean>
