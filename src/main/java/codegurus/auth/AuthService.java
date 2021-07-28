@@ -17,6 +17,7 @@ import codegurus_ext.voc.VocDAO;
 import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -75,6 +76,9 @@ public class AuthService implements UserDetailsService {
 
     @Autowired
     private HttpServletRequest httpRequest;
+
+	@Value("#{new Boolean('${rest.response.sms.certnumber}')}")
+	private boolean restResponseSmsCertnumber;
 
     /**
      * 로그인
@@ -294,13 +298,16 @@ public class AuthService implements UserDetailsService {
 
         // TODO: SMS 발송
 
-        // TODO: 테스트용 response를 줄 것인지 검토
-
         // SMS 인증 테이블 저장
         authDAO.insertSmsCert(reqVo);
 
         // 응답값 바인딩
         resVo.setSmsCertId(reqVo.getSmsCertId());
+
+        // sms 인증 테스트 간소화를 위해 응답에 sms 인증번호를 실어준다.
+        if (restResponseSmsCertnumber) { // 운영환경에서는 사용하지 않도록 프로퍼티를 조정하자.
+            resVo.setCertNumber(certNumber);
+        }
 
         return resVo;
     }

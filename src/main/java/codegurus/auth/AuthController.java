@@ -24,7 +24,7 @@ import javax.validation.Valid;
  * @version 2021.06
  */
 @Slf4j
-@Api(tags = "인증 관련 컨트롤러")
+@Api(tags = "인증")
 @RequestMapping("/auth")
 @RestController
 public class AuthController extends BaseController {
