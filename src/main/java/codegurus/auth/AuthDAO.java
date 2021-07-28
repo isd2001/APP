@@ -1,9 +1,6 @@
 package codegurus.auth;
 
-import codegurus.auth.vo.ReqDupCheckVO;
-import codegurus.auth.vo.ReqRegisterVO;
-import codegurus.auth.vo.ReqTrialRegisterVO;
-import codegurus.auth.vo.ResTrialUserVO;
+import codegurus.auth.vo.*;
 
 import java.util.Map;
 
@@ -14,4 +11,7 @@ public interface AuthDAO {
     void insertTrialRegister(ReqTrialRegisterVO reqVo);
     void insertUserAuth(Map<String, Object> params);
     ResTrialUserVO selectTrialUser(String trialManageId);
+    void insertSmsCert(ReqSmsCertVO reqVo);
+    Map<String, String> selectSmsCert(ReqSmsCertCfmVO reqVo);
+    int updateSmsCert(ReqSmsCertCfmVO reqVo);
 }
