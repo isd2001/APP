@@ -1,6 +1,7 @@
 package egovframework.com.cmm.context;
 
 import codegurus.cmm.ssh.SSHTunnelVOC;
+import codegurus.cmm.util.SystemUtil;
 import egovframework.com.cmm.service.EgovProperties;
 
 import javax.servlet.ServletContextEvent;
@@ -46,16 +47,20 @@ public class EgovWebServletContextListener implements ServletContextListener {
     	if(System.getProperty("spring.profiles.active") == null){
     		setEgovProfileSetting();
     	}
-        // SSH 터널링 접속
-        sshTunnelVOC = new SSHTunnelVOC();
+        if (SystemUtil.isLocal()) {
+            // SSH 터널링 접속
+            sshTunnelVOC = new SSHTunnelVOC();
+        }
     }
 
     public void contextDestroyed(ServletContextEvent event) {
     	if(System.getProperty("spring.profiles.active") != null){
     		System.setProperty("spring.profiles.active", null);
     	}
-    	// SSH 터널링 접속 해제
-    	sshTunnelVOC.closeSSH();
+    	if (SystemUtil.isLocal()) {
+            // SSH 터널링 접속 해제
+            sshTunnelVOC.closeSSH();
+        }
     } 
     
     public void setEgovProfileSetting(){
@@ -78,4 +83,5 @@ public class EgovWebServletContextListener implements ServletContextListener {
         	LOGGER.error("[" + e.getClass() +"] search fail : " + e.getMessage());
         }
     }
+
 }
