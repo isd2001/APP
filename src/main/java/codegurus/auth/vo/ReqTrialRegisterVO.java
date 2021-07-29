@@ -21,17 +21,17 @@ import javax.validation.constraints.Size;
 @Setter
 public class ReqTrialRegisterVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "이름", required = true, example = "이지은", position = 1)
+    @ApiModelProperty(notes = "이름", required = true, example = "이지금", position = 1)
     @NotBlank
     @Size(min = 2, max = 20)
     private String name;
 
-    @ApiModelProperty(notes = "생년월일", required = true, example = "20141111", position = 2)
+    @ApiModelProperty(notes = "생년월일", required = true, example = "20141122", position = 2)
     @NotBlank
     @DateCheck(format = Constants.DF8)
     private String birth;
 
-    @ApiModelProperty(notes = "성별", required = true, example = "M", position = 3)
+    @ApiModelProperty(notes = "성별", required = true, example = "F", position = 3)
     @NotBlank
     @Pattern(regexp=StringUtil.REGEX_GENDER)
     private String gender;

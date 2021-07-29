@@ -19,12 +19,12 @@ import javax.validation.constraints.Size;
 @Setter
 public class ReqFindIDVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "학생 이름", required = true, example = "이지은", position = 1)
+    @ApiModelProperty(notes = "학생 이름", required = true, example = "이지은", position = 2)
     @NotBlank
     @Size(min = 2, max = 20)
     private String name;
 
-    @ApiModelProperty(notes = "학생 생년월일", required = true, example = "20141212", position = 2)
+    @ApiModelProperty(notes = "학생 생년월일", required = true, example = "20130111", position = 3)
     @NotBlank
     @DateCheck(format = Constants.DF8)
     private String birth;

@@ -59,7 +59,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
             // 유효하지 않은 회원 (삭제되었거나 정상상태가 아니거나, 없는 trialManageId)
             if(trialUser == null){
-                throw new CustomException(ResCodeEnum.INFO_0002);
+                throw new CustomException(ResCodeEnum.INFO_0009);
             }
 
             // 체험 기간 만료

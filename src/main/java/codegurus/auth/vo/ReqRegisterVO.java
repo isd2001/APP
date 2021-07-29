@@ -26,11 +26,11 @@ public class ReqRegisterVO extends ReqBaseVO {
     private String userManageId;
 
     // username, password 는 spring security 기본 필드명이기 때문에 일단 따라가 본다.
-    @ApiModelProperty(notes = "ID", required = true, example = "testuser", position = 1)
+    @ApiModelProperty(notes = "ID", required = true, example = "student11", position = 1)
     @NotBlank
     private String username;
 
-    @ApiModelProperty(notes = "패스워드", required = true, example = "testuser", position = 2)
+    @ApiModelProperty(notes = "패스워드", required = true, example = "student11", position = 2)
     @NotBlank
     private String password;
 
@@ -48,7 +48,7 @@ public class ReqRegisterVO extends ReqBaseVO {
     @DateCheck(format = Constants.DF8)
     private String birth;
 
-    @ApiModelProperty(notes = "성별", required = false, example = "M", position = 5)
+    @ApiModelProperty(notes = "성별", required = false, example = "F", position = 5)
     @Pattern(regexp=StringUtil.REGEX_GENDER)
     private String gender;
 

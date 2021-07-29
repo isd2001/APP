@@ -9,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ResVocVO extends ResBaseVO {
+public class ResCounselVO extends ResBaseVO {
 
     private String grantType;
 }

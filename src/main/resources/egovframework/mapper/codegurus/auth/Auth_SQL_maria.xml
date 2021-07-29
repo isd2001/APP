@@ -207,5 +207,15 @@
         limit 1
     </select>
 
+    <!-- 패스워드 찾기 -->
+    <select id="selectUserPassword" resultType="String">
+        SELECT
+            password_mask
+        FROM user_manage
+        WHERE user_id = #{username}
+        AND name = #{name}
+        AND birth = #{birth}
+    </select>
+
 
 </mapper>

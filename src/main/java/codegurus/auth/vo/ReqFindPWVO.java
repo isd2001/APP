@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 public class ReqFindPWVO extends ReqFindIDVO {
 
-    @ApiModelProperty(notes = "아이디", required = true, example = "testuser", position = 3)
+    @ApiModelProperty(notes = "아이디", required = true, example = "student01", position = 1)
     @NotBlank
     protected String username;
 }

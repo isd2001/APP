@@ -12,6 +12,6 @@ import lombok.Setter;
 @Setter
 public class ReqDupCheckVO extends ReqBaseVO {
 
-    @ApiModelProperty(example = "testuser", position = 1)
+    @ApiModelProperty(example = "student01", position = 1)
     private String username;
 }

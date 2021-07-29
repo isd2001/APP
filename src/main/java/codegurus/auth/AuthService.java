@@ -137,7 +137,7 @@ public class AuthService implements UserDetailsService {
 
         UserVO vo = commonDAO.selectUserByUserId(username);
         if (vo == null) {
-            WebUtil.setResCodeOverride(httpRequest, ResCodeEnum.ERROR_0002); // 응답코드 재정의
+            WebUtil.setResCodeOverride(httpRequest, ResCodeEnum.INFO_0009); // 응답코드 재정의
             throw new UsernameNotFoundException(username);
         }
         return new CustomPrincipal(vo);
@@ -156,7 +156,7 @@ public class AuthService implements UserDetailsService {
         int cnt = authDAO.selectUserDup(reqVo);
         log.debug("## 사용자 중복 확인 조회 카운트:[{}]", cnt);
         if (cnt > 0) {
-            ret.setResCodeEnum(ResCodeEnum.ERROR_0007);
+            ret.setResCodeEnum(ResCodeEnum.INFO_0011);
         }
 
         return ret;
@@ -179,8 +179,7 @@ public class AuthService implements UserDetailsService {
         int cnt = authDAO.selectUserDup(tmpVo);
         log.debug("## 사용자 중복 확인 조회 카운트:[{}]", cnt);
         if (cnt > 0) {
-            resVo.setResCodeEnum(ResCodeEnum.ERROR_0007);
-            return resVo; // error stack trace 까지는 찍지 않기 위해서 exception throw가 아닌 return으로 처리.
+            throw new CustomException(ResCodeEnum.INFO_0011);
         }
         //------------- 기 등록 회원 여부 체크 - end ---------------
 
@@ -221,6 +220,8 @@ public class AuthService implements UserDetailsService {
         // INSERT
         authDAO.insertTrialRegister(reqVo);
 
+        // TODO: VOC 호출
+
         // 체험회원 전용 토큰 생성
         Map<String, Object> params = new HashMap<>();
         params.put("trialManageId", reqVo.getTrialManageId());
@@ -252,10 +253,23 @@ public class AuthService implements UserDetailsService {
      * @param reqVo
      * @return
      */
-    public ResVocVO callVoc(ReqVocVO reqVo) {
+    public ResCounselVO reqCounsel(ReqCounselVO reqVo) {
 
-        ResVocVO resVo = new ResVocVO();
+        ResCounselVO resVo = new ResCounselVO();
 
+        log.debug("## reqVo:[{}]", JsonUtil.toJson(reqVo));
+
+        // smsToken 체크
+        SmsToken smsToken = JsonUtil.toObject(cryptoService.decrypt(reqVo.getSmsToken()), SmsToken.class);
+        log.debug("## smsToken:[{}]", JsonUtil.toJson(smsToken));
+        if(! smsToken.getName().equals(StringUtil.trim(reqVo.getParentName()))){
+            throw new CustomException(ResCodeEnum.INFO_0013);
+        }
+        if(! smsToken.getCellphone().equals(StringUtil.trim(reqVo.getParentCellphone()))){
+            throw new CustomException(ResCodeEnum.INFO_0014);
+        }
+
+        // db 조회 테스트 코드 - TODO: 삭제
         List<Map<String, String>> vocTestList = vocDAO.selectVocDbTest();
         log.debug("## vocTestList:[{}]", JsonUtil.toJson(vocTestList));
 
@@ -295,8 +309,16 @@ public class AuthService implements UserDetailsService {
      */
     public ResFindPWVO findPw(ReqFindPWVO reqVo) {
 
+        ResFindPWVO resVo = new ResFindPWVO();
 
-        return null;
+        String pw = authDAO.selectUserPassword(reqVo);
+        if (pw == null) {
+            throw new CustomException(ResCodeEnum.INFO_0009);
+        }
+
+        resVo.setPassword(cryptoService.decrypt(pw));
+
+        return resVo;
     }
 
     /**

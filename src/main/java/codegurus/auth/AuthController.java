@@ -66,7 +66,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "회원가입 (변경 가능성 있음)")
+	@ApiOperation(value = "회원가입")
 	@PostMapping("/register")
 	public Res<ResRegisterVO> register(@RequestBody @Valid ReqRegisterVO reqVo) {
 
@@ -111,17 +111,17 @@ public class AuthController extends BaseController {
 	}
 
 	/**
-	 * VOC 호출
+	 * 상담 신청
 	 *
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "VOC 호출 (작업중)")
-	@PostMapping("/callVoc")
-	public Res<ResVocVO> callVoc(@RequestBody @Valid ReqVocVO reqVo) {
+	@ApiOperation(value = "상담 신청 (파라미터 변경 가능성 있음)")
+	@PostMapping("/counselReq")
+	public Res<ResCounselVO> counselReq(@RequestBody @Valid ReqCounselVO reqVo) {
 
-		ResVocVO resVo = authService.callVoc(reqVo);
-		return new Res<ResVocVO>(resVo);
+		ResCounselVO resVo = authService.reqCounsel(reqVo);
+		return new Res<ResCounselVO>(resVo);
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "패스워드 찾기 (설계 변경중)")
+	@ApiOperation(value = "패스워드 찾기")
 	@PostMapping("/findPw")
 	public Res<ResFindPWVO> findPw(@RequestBody @Valid ReqFindPWVO reqVo) {
 

@@ -3,6 +3,7 @@ package codegurus.auth.vo;
 import codegurus.cmm.util.JsonUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class SmsToken {
 
     private String smsCertId;

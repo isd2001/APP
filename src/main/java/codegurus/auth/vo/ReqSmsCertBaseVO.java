@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @Setter
 public class ReqSmsCertBaseVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "SMS 유형 ('01':상담신청, '02':ID찾기, '03':비밀번호찾기)", required = true, example = "01", position = 3)
+    @ApiModelProperty(notes = "SMS 유형 ('01':상담신청)", required = true, example = "01", position = 3)
     @NotBlank
     @Pattern(regexp = StringUtil.REGEX_SMS_TYPE)
     protected String smsType;

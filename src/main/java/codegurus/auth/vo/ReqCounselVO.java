@@ -17,14 +17,14 @@ import javax.validation.constraints.Size;
  */
 @Getter
 @Setter
-public class ReqVocVO extends ReqBaseVO {
+public class ReqCounselVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "이름", required = true, example = "이지은", position = 1)
+    @ApiModelProperty(notes = "이름", required = true, example = "이지동", position = 1)
     @NotBlank
     @Size(min = 2, max = 20)
     private String name;
 
-    @ApiModelProperty(notes = "생년월일", required = true, example = "20141111", position = 2)
+    @ApiModelProperty(notes = "생년월일", required = true, example = "20140511", position = 2)
     @NotBlank
     @DateCheck(format = Constants.DF8)
     private String birth;

@@ -11,5 +11,5 @@ import lombok.Setter;
 @Setter
 public class ResFindPWVO extends ResBaseVO {
 
-    private String username;
+    private String password;
 }
