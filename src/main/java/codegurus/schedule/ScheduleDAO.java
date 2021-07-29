@@ -1,9 +1,6 @@
 package codegurus.schedule;
 
-import codegurus.schedule.vo.ReqScheduleListVO;
-import codegurus.schedule.vo.ReqSubjectListVO;
-import codegurus.schedule.vo.ResScheduleListElemVO;
-import codegurus.schedule.vo.ResSubjectListElemVO;
+import codegurus.schedule.vo.*;
 
 import java.util.List;
 
@@ -16,5 +13,9 @@ import java.util.List;
 public interface ScheduleDAO {
 
     List<ResSubjectListElemVO> selectSubjectList(ReqSubjectListVO reqVo);
-    List<ResScheduleListElemVO> selectScheduleList(ReqScheduleListVO reqVo);
+    List<ResScheduleVO> selectBookScheduleList(ReqScheduleListVO reqVo);
+    List<ResScheduleVO> selectThisMonthBookList(ReqScheduleListVO reqVo);
+
+    ResScheduleVO selectPopup(ReqSchedulePopupVO reqVo);
+
 }

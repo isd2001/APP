@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ResScheduleListElemVO extends BaseVO {
+public class ResScheduleVO extends BaseVO {
 
     @ApiModelProperty(notes = "온라인 과목 스케줄 ID", example = "1", position = 1)
     private int onlineSubjectScheduleId;
@@ -45,6 +45,9 @@ public class ResScheduleListElemVO extends BaseVO {
 
     @ApiModelProperty(notes = "수정 날짜", example = "", position = 11)
     private String modifyDate;
+
+    @ApiModelProperty(notes = "책 ID")
+    private ResStudyBookVO bookId;
 
     @ApiModelProperty(notes = "책 정보")
     private ResStudyBookVO book;

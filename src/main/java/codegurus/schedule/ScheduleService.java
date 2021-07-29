@@ -1,10 +1,8 @@
 package codegurus.schedule;
 
+import codegurus.cmm.util.SystemUtil;
 import codegurus.cmm.vo.res.Res;
-import codegurus.schedule.vo.ReqScheduleListVO;
-import codegurus.schedule.vo.ReqSubjectListVO;
-import codegurus.schedule.vo.ResScheduleListVO;
-import codegurus.schedule.vo.ResSubjectListVO;
+import codegurus.schedule.vo.*;
 import codegurus.cmm.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +44,42 @@ public class ScheduleService {
      * @param reqVo
      * @return
      */
-    public ResScheduleListVO selectScheduleList(ReqScheduleListVO reqVo) {
+    public ResScheduleListVO selectBookScheduleList(ReqScheduleListVO reqVo) {
 
         ResScheduleListVO resVo = new ResScheduleListVO();
-        resVo.setList(scheduleDAO.selectScheduleList(reqVo));
+        resVo.setList(scheduleDAO.selectBookScheduleList(reqVo));
+
+        return resVo;
+    }
+
+    /**
+     * 이달의 도서 목록 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResScheduleListVO selectThisMonthBookList(ReqScheduleListVO reqVo) {
+
+        ResScheduleListVO resVo = new ResScheduleListVO();
+        resVo.setList(scheduleDAO.selectThisMonthBookList(reqVo));
+
+        return resVo;
+    }
+
+    /**
+     * 이달의 도서 목록 조회
+     *
+     * @param reqVo
+     * @param resVo
+     * @return
+     */
+    public ResSchedulePopupVO selectPopup(ReqSchedulePopupVO reqVo, ResSchedulePopupVO resVo) {
+
+        ResScheduleVO item = scheduleDAO.selectPopup(reqVo);
+
+        if(item == null){ SystemUtil.returnNoSearchResult(); } // 조회 결과 없음 리턴
+
+        resVo.setItem(item);
 
         return resVo;
     }
