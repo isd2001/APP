@@ -50,12 +50,17 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+    /**
+     * spring security를 아예 타지 않도록 처리 (web ignore)
+     */
     public static final String[] ANT_MATCHERS_WEB_IGNORE = { "/css/**", "/html/**", "/images/**", "/js/**", "/resource/**", "/resources/**", "" +
             "/v2/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/download/**", "/index.jsp" }; // TODO: 파일 다운로드(/download)에 대한 권한제어 필요 여부 검토
-
     public static final String[] REGEX_MATCHERS_WEB_IGNORE = { "\\A/WEB-INF/jsp/.*\\Z" };
 
-    public static final String[] ANT_MATCHERS_HTTP_PERMIT_ALL = { "/auth/login", "/auth/checkUserDup", "/auth/register", "/auth/trialRegister", "/auth/sms*", "/auth/callVoc" };
+    /**
+     * spring security를 아예 타지 않는 것은 아니고, 모든 사용자에 대해 권한 허용 예외처리 (http permit all)
+     */
+    public static final String[] ANT_MATCHERS_HTTP_PERMIT_ALL = { "/auth/login", "/auth/checkUserDup", "/auth/register", "/auth/trialRegister", "/auth/sms*", "/auth/callVoc", "/auth/find*", "/auth/fullmemberAuth" };
 
     /**
      * WebSecurity configure

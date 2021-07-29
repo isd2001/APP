@@ -196,5 +196,16 @@
         WHERE sms_cert_id = #{smsCertId}
     </update>
 
+    <!-- ID 찾기 -->
+    <select id="selectUserId" resultType="String">
+        select /* selectUserId */
+            user_id
+        from user_manage
+        where name = #{name}
+        and birth = #{birth}
+        and delete_ornot = 'N'
+        limit 1
+    </select>
+
 
 </mapper>

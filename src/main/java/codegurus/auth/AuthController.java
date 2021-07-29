@@ -130,7 +130,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "SMS 인증 요청 (작업중)")
+	@ApiOperation(value = "SMS 인증 요청 (SMS발송모듈 연동 제외하고 완료. 업무 흐름은 가능)")
 	@PostMapping("/smsCertReq")
 	public Res<ResSmsCertVO> smsCertReq(@RequestBody @Valid ReqSmsCertVO reqVo) {
 
@@ -144,7 +144,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "SMS 인증번호 확인 (작업중)")
+	@ApiOperation(value = "SMS 인증번호 확인 (SMS발송모듈 연동 제외하고 완료. 업무 흐름은 가능)")
 	@PostMapping("/smsCertCfm")
 	public Res<ResSmsCertCfmVO> smsCertCfm(@RequestBody @Valid ReqSmsCertCfmVO reqVo) {
 
@@ -158,7 +158,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "ID 찾기 (작업중)")
+	@ApiOperation(value = "ID 찾기")
 	@PostMapping("/findId")
 	public Res<ResFindIDVO> findId(@RequestBody @Valid ReqFindIDVO reqVo) {
 
@@ -172,7 +172,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "패스워드 찾기 (작업중)")
+	@ApiOperation(value = "패스워드 찾기 (설계 변경중)")
 	@PostMapping("/findPw")
 	public Res<ResFindPWVO> findPw(@RequestBody @Valid ReqFindPWVO reqVo) {
 

@@ -14,4 +14,5 @@ public interface AuthDAO {
     void insertSmsCert(ReqSmsCertVO reqVo);
     Map<String, String> selectSmsCert(ReqSmsCertCfmVO reqVo);
     int updateSmsCert(ReqSmsCertCfmVO reqVo);
+    String selectUserId(ReqFindIDVO reqVo);
 }

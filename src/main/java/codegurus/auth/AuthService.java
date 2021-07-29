@@ -270,11 +270,21 @@ public class AuthService implements UserDetailsService {
      */
     public ResFindIDVO findId(ReqFindIDVO reqVo) {
 
-        // TODO: SAP 테이블 조회 => 자녀 개인정보 조회 => 자녀 ID 획득
+        ResFindIDVO resVo = new ResFindIDVO();
 
+        // 이름 생년월일이 필수값으로 변경되었으므로 회원정보를 직접 조회하자.
+        String userId = authDAO.selectUserId(reqVo);
+        if (userId == null) {
+            throw new CustomException(ResCodeEnum.INFO_0009);
+        }
+
+        resVo.setUsername(StringUtil.maskID(userId));
+
+        // 예전 기획에서 생각하던 부분.
+        // TODO: SAP 테이블 조회 => 자녀 개인정보 조회 => 자녀 ID 획득
         // TODO: 일반회원은 어떻게 할 것인가?
 
-        return null;
+        return resVo;
     }
 
     /**
