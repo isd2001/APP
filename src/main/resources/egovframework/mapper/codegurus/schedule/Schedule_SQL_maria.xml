@@ -12,11 +12,10 @@
 		    use_ornot,
 		    apply_start_date,
 		    apply_end_date,
-		    insert_id,
-		    insert_date,
-		    update_id,
-		    update_date,
+			reg_id,
 			DF14(reg_date) as reg_date,
+			modify_id,
+	        DF14(modify_date) as modify_date,
 			delete_ornot
 		FROM
 			online_subject
