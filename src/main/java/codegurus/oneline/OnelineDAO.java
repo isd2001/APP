@@ -1,8 +1,8 @@
 package codegurus.oneline;
 
-import codegurus.oneline.vo.ReqOnelineMarkGoodVO;
-import codegurus.oneline.vo.ReqOnelineSaveVO;
-import codegurus.oneline.vo.ResOnelineVO;
+import codegurus.oneline.vo.*;
+
+import java.util.List;
 
 /**
  * 한줄평/좋아요/별점 DAO
@@ -11,6 +11,9 @@ import codegurus.oneline.vo.ResOnelineVO;
  * @version 2021.07
  */
 public interface OnelineDAO {
+
+    List<OnelineVO> selectOnelineList(ReqOnelineListVO reqVo);
+
     ResOnelineVO selectOneline(ReqOnelineSaveVO reqVo);
     void insertOnelineContent(ReqOnelineSaveVO reqVo);
     int updateOnelineContent(ReqOnelineSaveVO reqVo);

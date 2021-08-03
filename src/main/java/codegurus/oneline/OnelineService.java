@@ -21,6 +21,22 @@ public class OnelineService {
     @Autowired
     private OnelineDAO onelineDAO;
 
+
+    /**
+     * 오늘의 학습 책 한줄평 목록 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResOnelineListVO selectOnelineList(ReqOnelineListVO reqVo) {
+
+        ResOnelineListVO resVo = new ResOnelineListVO();
+        resVo.setList(onelineDAO.selectOnelineList(reqVo));
+
+        return resVo;
+
+    }
+
     /**
      * 오늘의 학습 책 한줄평/별점 등록
      *

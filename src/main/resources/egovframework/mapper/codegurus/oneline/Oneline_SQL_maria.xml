@@ -4,6 +4,31 @@
 <mapper namespace="codegurus.oneline.OnelineDAO">
 
 	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 한줄평 조회 -->
+	<select id="selectOnelineList" resultType="OnelineVO">
+		SELECT
+			onelinereview.onelinereview_id,
+			onelinereview.book_id,
+			onelinereview.onelinereview_content,
+			CASE
+				WHEN onelinereviewLike.onelinereview_like_id is null THEN 'N'
+				ELSE 'Y'
+			END as onelinereview_like_yn, /* 좋아요 클릭 YN */
+			regUser.name as reg_user_name,
+			regUser.user_manage_id as reg_user_id,
+			onelinereviewLike.reg_id
+		FROM
+			onelinereview onelinereview
+		LEFT JOIN user_manage regUser
+			on onelinereview.reg_id = regUser.user_manage_id
+		LEFT JOIN onelinereview_like onelinereviewLike
+			on onelinereview.onelinereview_id = onelinereviewLike.onelinereview_id
+			and regUser.user_manage_id = onelinereviewLike.reg_id
+			and onelinereviewLike.delete_ornot = 'N'
+		WHERE 1=1
+		  	and onelinereview.delete_ornot = 'N'
+			and onelinereview.book_id = #{bookId}
+	</select>
+	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 한줄평 조회 -->
 	<select id="selectOneline" resultType="ResOnelineVO">
 		SELECT
 			onelinereview_id,

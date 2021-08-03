@@ -3,10 +3,7 @@ package codegurus.oneline;
 import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.res.Res;
-import codegurus.oneline.vo.ReqOnelineMarkGoodVO;
-import codegurus.oneline.vo.ReqOnelineSaveVO;
-import codegurus.oneline.vo.ResOnelineMarkGoodVO;
-import codegurus.oneline.vo.ResOnelineSaveVO;
+import codegurus.oneline.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +32,19 @@ public class OnelineController extends BaseController {
 
     @Autowired
     private CacheService cacheService;
+
+    /**
+     * 오늘의 학습 책 한줄평 목록 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/list")
+    @ApiOperation(value = "오늘의 학습 책 한줄평 목록 조회")
+    public Res<ResOnelineListVO> list(@RequestBody @Valid ReqOnelineListVO reqVo) {
+        ResOnelineListVO resVo = onelineService.selectOnelineList(reqVo);
+        return new Res<ResOnelineListVO>(resVo);
+    }
 
     /**
      * 오늘의 학습 책 한줄평 등록
