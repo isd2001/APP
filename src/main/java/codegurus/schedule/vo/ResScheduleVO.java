@@ -1,7 +1,7 @@
 package codegurus.schedule.vo;
 
 import codegurus.cmm.vo.BaseVO;
-import codegurus.study.vo.ResStudyBookVO;
+import codegurus.learning.vo.BookVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,8 +47,8 @@ public class ResScheduleVO extends BaseVO {
     private String modifyDate;
 
     @ApiModelProperty(notes = "책 ID")
-    private ResStudyBookVO bookId;
+    private String bookId;
 
     @ApiModelProperty(notes = "책 정보")
-    private ResStudyBookVO book;
+    private BookVO book;
 }
