@@ -67,7 +67,7 @@ public class ScheduleService {
     }
 
     /**
-     * 이달의 도서 목록 조회
+     * 이달의 도서 팝업
      *
      * @param reqVo
      * @param resVo

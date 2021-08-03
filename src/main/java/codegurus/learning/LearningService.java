@@ -33,7 +33,7 @@ public class LearningService {
      */
     public ResLearningBookVO selectBookDetail(ReqLearningBookVO reqVo, ResLearningBookVO resVo) {
 
-        LearningVO item = learningDAO.selectBookDetail(reqVo);
+        BookVO item = learningDAO.selectBookDetail(reqVo);
         if(item == null){ SystemUtil.returnNoSearchResult(); }  // 조회 결과 없음 리턴
 
         resVo.setItem(item);
@@ -47,17 +47,12 @@ public class LearningService {
      * @param reqVo
      * @return
      */
-    public ResStudyContentsListVO selectStudyContents(ReqStudyContentsListVO reqVo) {
+    public ResLearningContentsVO selectLearningContents(ReqLearningContentsVO reqVo, ResLearningContentsVO resVo) {
 
-        ResStudyContentsListVO resVo = new ResStudyContentsListVO();
+        ContentsVO item = learningDAO.selectLearningContents(reqVo);
+        if(item == null){ SystemUtil.returnNoSearchResult(); } // 조회 결과 없음 리턴
 
-        List<ResStudyContentsElemVO> list = learningDAO.selectContentsList(reqVo); // 콘텐츠 목록 조회
-
-        if (list.size() == 0) {
-            SystemUtil.returnNoSearchResult();
-        } // 조회 결과 없음 리턴
-
-        resVo.setList(list);
+        resVo.setItem(item);
 
         return resVo;
     }

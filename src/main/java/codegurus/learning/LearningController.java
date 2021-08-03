@@ -57,10 +57,11 @@ public class LearningController extends BaseController {
      */
     @PostMapping("/contents")
     @ApiOperation(value = "학습 콘텐츠")
-    public Res<ResStudyContentsListVO> contents(@RequestBody @Valid ReqStudyContentsListVO reqVo) {
+    public Res<ResLearningContentsVO> contents(@RequestBody @Valid ReqLearningContentsVO reqVo) {
 
-        ResStudyContentsListVO resVo = learningService.selectStudyContents(reqVo);
-        return new Res<ResStudyContentsListVO>(resVo);
+        ResLearningContentsVO resVo = new ResLearningContentsVO();
+        learningService.selectLearningContents(reqVo, resVo);
+        return new Res<ResLearningContentsVO>(resVo);
     }
 
     /**

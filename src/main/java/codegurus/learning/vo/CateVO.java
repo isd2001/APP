@@ -1,55 +1,28 @@
-package codegurus.study.vo;
+package codegurus.learning.vo;
 
-
-import codegurus.cmm.vo.res.ResBaseVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 학습 콘텐츠 조회 응답 > 리스트 요소 VO
+ * 카테고리 VO
  */
 @Getter
 @Setter
-public class ResStudyContentsElemVO extends ResBaseVO {
-
-    @ApiModelProperty(notes = "콘텐츠 ID", example = "4")
-    private String contentsId;
-
-    @ApiModelProperty(notes = "책 ID", example = "4")
-    private String bookID = "";
-
-    @ApiModelProperty(notes = "템플릿 인스턴스 ID", example = "1")
-    private String templateInstId;
-
-    @ApiModelProperty(notes = "템플릿 ID", example = "1")
-    private String templateId;
-
-    @ApiModelProperty(notes = "JSON", example = "")
-    private String json;
-
-    @ApiModelProperty(notes = "순서", example = "1")
-    private String order;
-
-    @ApiModelProperty(notes = "유형", example = "어휘")
-    private String type;
-
-    @ApiModelProperty(notes = "난이도", example = "중")
-    private String difficulty;
-
-    @ApiModelProperty(notes = "카테고리 ID", example = "1")
+public class CateVO {
+    @ApiModelProperty(notes = "카테고리 ID")
     private String cateId;
 
-    @ApiModelProperty(notes = "부모 ID", example = "1")
+    @ApiModelProperty(notes = "부모 ID")
     private String parentsId;
 
-    @ApiModelProperty(notes = "깊이", example = "")
+    @ApiModelProperty(notes = "깊이")
     private String depth;
 
-    @ApiModelProperty(notes = "카테고리 순서", example = "")
-    private String cateOrder;
+    @ApiModelProperty(notes = "순서")
+    private String order;
 
-    @ApiModelProperty(notes = "카테고리 명", example = "")
+    @ApiModelProperty(notes = "카테고리 명")
     private String cateTitle;
 
     @ApiModelProperty(notes = "1차 카테고리 명")
@@ -83,7 +56,7 @@ public class ResStudyContentsElemVO extends ResBaseVO {
     private String tenthCateTitle;
 
     @ApiModelProperty(notes = "1차 카테고리 ID")
-    private String firthCateId;
+    private String firstCateId;
 
     @ApiModelProperty(notes = "2차 카테고리 ID")
     private String secondCateId;
@@ -104,12 +77,11 @@ public class ResStudyContentsElemVO extends ResBaseVO {
     private String seventhCateId;
 
     @ApiModelProperty(notes = "8차 카테고리 ID")
-    private String eighthCateId;
+    private String eightCateId;
 
     @ApiModelProperty(notes = "9차 카테고리 ID")
     private String ninthCateId;
 
     @ApiModelProperty(notes = "10차 카테고리 ID")
     private String tenthCateId;
-
 }

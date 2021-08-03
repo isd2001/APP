@@ -1,4 +1,4 @@
-package codegurus.study.vo;
+package codegurus.learning.vo;
 
 import codegurus.cmm.vo.req.ReqBaseVO;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,9 +10,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ReqStudyContentsListVO extends ReqBaseVO {
+public class ReqLearningContentsVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "책 ID", example = "111")
-    private String bookId = "";
+    @ApiModelProperty(notes = "콘텐츠 ID", example = "43")
+    private String contentsId = "";
 
 }

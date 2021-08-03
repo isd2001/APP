@@ -13,5 +13,5 @@ import lombok.Setter;
 public class ResLearningBookVO extends ResBaseVO {
 
     @ApiModelProperty(notes = "오늘의 학습 책 정보")
-    private LearningVO item;
+    private BookVO item;
 }

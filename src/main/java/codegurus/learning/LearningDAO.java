@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface LearningDAO {
 
-    LearningVO selectBookDetail(ReqLearningBookVO reqVo);
-    List<ResStudyContentsElemVO> selectContentsList(ReqStudyContentsListVO reqVo);
+    BookVO selectBookDetail(ReqLearningBookVO reqVo);
+    ContentsVO selectLearningContents(ReqLearningContentsVO reqVo);
 
     void insertLearningContentsHistory(ReqLearningContentsHistorySaveVO reqVo);
     void insertTemplateInstHistory(List<TemplateInstHistorySaveVo> insertTemplateInstList);

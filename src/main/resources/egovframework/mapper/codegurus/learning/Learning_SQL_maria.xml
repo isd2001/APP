@@ -4,16 +4,16 @@
 <mapper namespace="codegurus.learning.LearningDAO">
 
 	<!-- 오늘의 학습 책 상세 조회 -->
-	<resultMap id="BookDetailMap" type="LearningVO" autoMapping="true">
-		<id property="contentsId" column="contents_id"/>
-		<association property="book" javaType="BookVO" autoMapping="true">
+	<resultMap id="BookDetailMap" type="BookVO" autoMapping="true">
+		<!--<id property="contentsId" column="contents_id"/>
+		<association property="book" javaType="BookVO" autoMapping="true">-->
 			<id property="bookId" column="book_id"/>
 			<result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
 			<association property="bookThumbnail" javaType="FileVO" autoMapping="true">
 				<id property="atchFileId" column="book_thumbnail_file_id"/>
 			</association>
 			<collection property="labelList" ofType="LabelVO" autoMapping="true" />
-		</association>
+		<!--</association>-->
 	</resultMap>
 	<select id="selectBookDetail" resultMap="BookDetailMap">
 		SELECT /* selectBookDetail */
@@ -58,55 +58,92 @@
 	</select>
 
 	<!-- 학습 콘텐츠 조회 -->
-	<select id="selectContentsList" resultType="ResStudyContentsElemVO">
-		SELECT
-			a.contents_id,
-			a.contents_title,
-		    a.book_id,
-		    a.inspection_status,
-			b.template_inst_id,
-		    b.template_id,
-		    b.json,
-		    b.`order`,
-		    b.type,
-		    b.difficulty,
-			c.cate_id,
-			c.parents_id,
-			c.depth,
-			c.`order` as cate_order,
-			c.cate_title,
-			c.first_cate_title,
-			c.second_cate_title,
-			c.third_cate_title,
-			c.fourth_cate_title,
-			c.fifth_cate_title,
-			c.sixth_cate_title,
-			c.seventh_cate_title,
-			c.eight_cate_title,
-			c.ninth_cate_title,
-			c.tenth_cate_title,
-			c.first_cate_id,
-			c.second_cate_id,
-			c.third_cate_id,
-			c.fourth_cate_id,
-			c.fifth_cate_id,
-			c.sixth_cate_id,
-			c.seventh_cate_id,
-			c.eight_cate_id,
-			c.ninth_cate_id,
-			c.tenth_cate_id
-		FROM contents a
-		inner join template_inst b
-		on a.contents_id = b.contents_id
-		and b.delete_ornot = 'N'
-		inner join cate c
-		on b.cate_id = c.cate_id
-		and c.delete_ornot = 'N'
-		WHERE 1=1
-		and a.book_id=#{bookId}
-		and a.inspection_status = '승인완료'
-		and a.delete_ornot = 'N'
-		order by b.`order` asc
+	<resultMap id="ContentsMap" type="ContentsVO" autoMapping="true">
+		<id property="contentsId" column="contents_id"/>
+		<collection property="templateInstList" ofType="TemplateInstVO" autoMapping="true">
+			<id property="templateInstId" column="template_inst_id"/>
+			<result property="contentsId" column="contents_id"/>
+			<result property="templateId" column="template_id"/>
+			<result property="cateId" column="template_inst_cate_id"/>
+			<result property="order" column="template_inst_order"/>
+			<association property="cate" javaType="CateVO" autoMapping="true">
+				<result property="cateId" column="template_inst_cate_cate_id"/>
+				<result property="parentsId" column="template_inst_cate_parents_id"/>
+				<result property="depth" column="template_inst_cate_depth"/>
+				<result property="order" column="template_inst_cate_order"/>
+				<result property="cateTitle" column="template_inst_cate_cate_title"/>
+				<result property="firstCateTitle" column="template_inst_cate_first_cate_title"/>
+				<result property="secondCateTitle" column="template_inst_cate_second_cate_title"/>
+				<result property="thirdCateTitle" column="template_inst_cate_third_cate_title"/>
+				<result property="fourthCateTitle" column="template_inst_cate_fourth_cate_title"/>
+				<result property="fifthCateTitle" column="template_inst_cate_fifth_cate_title"/>
+				<result property="sixthCateTitle" column="template_inst_cate_sixth_cate_title"/>
+				<result property="seventhCateTitle" column="template_inst_cate_seventh_cate_title"/>
+				<result property="eightCateTitle" column="template_inst_cate_eight_cate_title"/>
+				<result property="ninthCateTitle" column="template_inst_cate_ninth_cate_title"/>
+				<result property="tenthCateTitle" column="template_inst_cate_tenth_cate_title"/>
+				<result property="firstCateId" column="template_inst_cate_first_cate_id"/>
+				<result property="secondCateId" column="template_inst_cate_second_cate_id"/>
+				<result property="thirdCateId" column="template_inst_cate_third_cate_id"/>
+				<result property="fourthCateId" column="template_inst_cate_fourth_cate_id"/>
+				<result property="fifthCateId" column="template_inst_cate_fifth_cate_id"/>
+				<result property="sixthCateId" column="template_inst_cate_sixth_cate_id"/>
+				<result property="seventhCateId" column="template_inst_cate_seventh_cate_id"/>
+				<result property="eightCateId" column="template_inst_cate_eight_cate_id"/>
+				<result property="ninthCateId" column="template_inst_cate_ninth_cate_id"/>
+				<result property="tenthCateId" column="template_inst_cate_tenth_cate_id"/>
+			</association>
+		</collection>
+	</resultMap>
+	<select id="selectLearningContents" resultMap="ContentsMap">
+		SELECT /* selectContents */
+			schedule.online_subject_schedule_id,
+
+			template_inst.contents_id,
+		    template_inst.template_inst_id,
+		    template_inst.template_id,
+		    template_inst.json,
+		    template_inst.`order` as template_inst_order,
+		    template_inst.type,
+		    template_inst.difficulty,
+		    template_inst.cate_id as template_inst_cate_id,
+
+			template_inst_cate.cate_id as template_inst_cate_cate_id,
+			template_inst_cate.parents_id as template_inst_cate_parents_id,
+			template_inst_cate.depth as template_inst_cate_depth,
+			template_inst_cate.`order` as template_inst_cate_order,
+			template_inst_cate.cate_title as template_inst_cate_cate_title,
+			template_inst_cate.first_cate_title as template_inst_cate_first_cate_title,
+			template_inst_cate.second_cate_title as template_inst_cate_second_cate_title,
+			template_inst_cate.third_cate_title as template_inst_cate_third_cate_title,
+			template_inst_cate.fourth_cate_title as template_inst_cate_fourth_cate_title,
+			template_inst_cate.fifth_cate_title as template_inst_cate_fifth_cate_title,
+			template_inst_cate.sixth_cate_title as template_inst_cate_sixth_cate_title,
+			template_inst_cate.seventh_cate_title as template_inst_cate_seventh_cate_title,
+			template_inst_cate.eight_cate_title as template_inst_cate_eight_cate_title,
+			template_inst_cate.ninth_cate_title as template_inst_cate_ninth_cate_title,
+			template_inst_cate.tenth_cate_title as template_inst_cate_tenth_cate_title,
+			template_inst_cate.first_cate_id as template_inst_cate_first_cate_id,
+			template_inst_cate.second_cate_id as template_inst_cate_second_cate_id,
+			template_inst_cate.third_cate_id as template_inst_cate_third_cate_id,
+			template_inst_cate.fourth_cate_id as template_inst_cate_fourth_cate_id,
+			template_inst_cate.fifth_cate_id as template_inst_cate_fifth_cate_id,
+			template_inst_cate.sixth_cate_id as template_inst_cate_sixth_cate_id,
+			template_inst_cate.seventh_cate_id as template_inst_cate_seventh_cate_id,
+			template_inst_cate.eight_cate_id as template_inst_cate_eight_cate_id,
+			template_inst_cate.ninth_cate_id as template_inst_cate_ninth_cate_id,
+			template_inst_cate.tenth_cate_id as template_inst_cate_tenth_cate_id
+
+		FROM online_subject_schedule schedule
+		LEFT JOIN contents
+			on schedule.contents_id = contents.contents_id
+		LEFT JOIN template_inst
+			on contents.contents_id = template_inst.contents_id
+		LEFT JOIN cate as template_inst_cate
+			on template_inst.cate_id = template_inst_cate.cate_id
+		WHERE
+			1=1
+		AND contents.contents_id = #{contentsId}
 	</select>
 
 	<!-- 학습 콘텐츠 이력 등록 -->
