@@ -26,7 +26,7 @@
 	</select>
 
 	<resultMap id="ScheduleMap" type="ResScheduleVO" autoMapping="true">
-		<association property="book" javaType = "ResStudyBookVO" autoMapping="true">
+		<association property="book" javaType = "BookVO" autoMapping="true">
 			<result property="bookId" column="book_id"/>
 			<association property="bookThumbnail" javaType="FileVO" autoMapping="true" />
 		</association>

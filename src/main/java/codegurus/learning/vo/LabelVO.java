@@ -1,17 +1,19 @@
-package codegurus.study.vo;
+package codegurus.learning.vo;
 
-import codegurus.cmm.vo.res.ResBaseVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
- * 라벨 목록 조회 응답 > 리스트 요소 VO
+ * 라벨 VO
  */
 @Getter
 @Setter
-public class ResLabelListElemVO extends ResBaseVO {
+public class LabelVO {
+
 
     @JsonIgnore
     private String bookId;

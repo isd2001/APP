@@ -24,7 +24,7 @@
 		<package name="codegurus.sample.vo"/>
 		<package name="codegurus.cmm.vo"/>
 		<package name="codegurus.auth.vo"/>
-		<package name="codegurus.study.vo"/>
+		<package name="codegurus.learning.vo"/>
 		<package name="codegurus.oneline.vo"/>
 		<package name="codegurus.board.vo"/>
 		<package name="codegurus.schedule.vo"/>

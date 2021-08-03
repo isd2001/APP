@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="codegurus.learning.LearningDAO">
+
+	<!-- 오늘의 학습 책 상세 조회 -->
+	<resultMap id="BookDetailMap" type="LearningVO" autoMapping="true">
+		<id property="contentsId" column="contents_id"/>
+		<association property="book" javaType="BookVO" autoMapping="true">
+			<id property="bookId" column="book_id"/>
+			<result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
+			<association property="bookThumbnail" javaType="FileVO" autoMapping="true">
+				<id property="atchFileId" column="book_thumbnail_file_id"/>
+			</association>
+			<collection property="labelList" ofType="LabelVO" autoMapping="true" />
+		</association>
+	</resultMap>
+	<select id="selectBookDetail" resultMap="BookDetailMap">
+		SELECT /* selectBookDetail */
+		    schedule.online_subject_schedule_id,
+		    contents.contents_id,
+		    contents.book_id,
+
+		    book.book_thumbnail_file_id,
+
+			labelManage.label_manage_id,
+			labelManage.label_title,
+
+			COMTNFILE.ATCH_FILE_ID,
+			COMTNFILEDETAIL.FILE_CN,
+			COMTNFILEDETAIL.FILE_SN,
+			COMTNFILEDETAIL.FILE_STRE_COURS,
+			COMTNFILEDETAIL.STRE_FILE_NM,
+			COMTNFILEDETAIL.FILE_EXTSN,
+			COMTNFILEDETAIL.ORIGNL_FILE_NM,
+			COMTNFILEDETAIL.FILE_SIZE,
+			COMTNFILE.CREAT_DT,
+			COMTNFILEDETAIL.DOWNLOAD_CNT
+		FROM online_subject_schedule schedule
+		LEFT JOIN contents contents
+			on schedule.contents_id = contents.contents_id
+		LEFT JOIN book book
+			on contents.book_id = book.book_id
+		LEFT JOIN label_mapping labelMapping
+		  	on 	labelMapping.label_domain_manage_id = 1 /* 1:책 */
+			and labelMapping.object_manage_id = book.book_id
+			and labelMapping.delete_ornot = 'N'
+		LEFT JOIN label_manage labelManage
+			on 	labelManage.label_manage_id = labelMapping.label_manage_id
+			and labelManage.label_domain_manage_id = labelMapping.label_domain_manage_id
+			and labelManage.delete_ornot = 'N'
+		LEFT JOIN COMTNFILE
+			on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
+		LEFT JOIN COMTNFILEDETAIL
+			on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+		WHERE 1=1
+		  AND schedule.online_subject_schedule_id = #{onlineSubjectScheduleId}
+	</select>
+
+	<!-- 학습 콘텐츠 조회 -->
+	<select id="selectContentsList" resultType="ResStudyContentsElemVO">
+		SELECT
+			a.contents_id,
+			a.contents_title,
+		    a.book_id,
+		    a.inspection_status,
+			b.template_inst_id,
+		    b.template_id,
+		    b.json,
+		    b.`order`,
+		    b.type,
+		    b.difficulty,
+			c.cate_id,
+			c.parents_id,
+			c.depth,
+			c.`order` as cate_order,
+			c.cate_title,
+			c.first_cate_title,
+			c.second_cate_title,
+			c.third_cate_title,
+			c.fourth_cate_title,
+			c.fifth_cate_title,
+			c.sixth_cate_title,
+			c.seventh_cate_title,
+			c.eight_cate_title,
+			c.ninth_cate_title,
+			c.tenth_cate_title,
+			c.first_cate_id,
+			c.second_cate_id,
+			c.third_cate_id,
+			c.fourth_cate_id,
+			c.fifth_cate_id,
+			c.sixth_cate_id,
+			c.seventh_cate_id,
+			c.eight_cate_id,
+			c.ninth_cate_id,
+			c.tenth_cate_id
+		FROM contents a
+		inner join template_inst b
+		on a.contents_id = b.contents_id
+		and b.delete_ornot = 'N'
+		inner join cate c
+		on b.cate_id = c.cate_id
+		and c.delete_ornot = 'N'
+		WHERE 1=1
+		and a.book_id=#{bookId}
+		and a.inspection_status = '승인완료'
+		and a.delete_ornot = 'N'
+		order by b.`order` asc
+	</select>
+
+	<!-- 학습 콘텐츠 이력 등록 -->
+	<insert id="insertLearningContentsHistory" useGeneratedKeys="true" keyProperty="contentsHistoryId">
+		INSERT /* insertLearningContentsHistory */
+		INTO contents_history
+		(
+			online_subject_schedule_id,
+		 	summary_doing_drawing_file_id,
+			summary_doing_vice_file_id,
+		 	reg_id,
+		 	reg_date,
+		 	delete_ornot
+		)
+		VALUES
+		(
+			#{contentsTitle},
+			#{summaryDoingDrawingFileId},
+			#{summaryDoingVoiceFileId},
+			#{regId},
+			CURRENT_TIMESTAMP,
+			'N'
+		)
+	</insert>
+
+	<!-- 학습 콘텐츠 템플릿 인스턴스 이력 등록 -->
+	<insert id="insertTemplateInstHistory" useGeneratedKeys="true" keyProperty="templateInstHistoryId" parameterType="java.util.List">
+		INSERT /* insertTemplateInstHistory */
+		INTO template_inst_history
+		(
+			contents_history_id,
+			template_inst_id,
+		 	correctanswer_status,
+		 	reg_id,
+		 	reg_date,
+		 	delete_ornot
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+
+			#{item.contentsHistoryId},
+			#{item.templateInstId},
+			#{item.correctanswerStatus},
+			#{item.regId},
+			CURRENT_TIMESTAMP,
+			'N'
+			)
+		</foreach>
+	</insert>
+</mapper>

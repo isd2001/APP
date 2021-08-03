@@ -73,7 +73,7 @@
 		<mybatis:scan base-package="codegurus.sample" 	factory-ref="egov.sqlSession"/>
 		<mybatis:scan base-package="codegurus.cmm" 		factory-ref="egov.sqlSession"/>
 		<mybatis:scan base-package="codegurus.auth" 	factory-ref="egov.sqlSession"/>
-		<mybatis:scan base-package="codegurus.study" 	factory-ref="egov.sqlSession"/>
+		<mybatis:scan base-package="codegurus.learning" factory-ref="egov.sqlSession"/>
 		<mybatis:scan base-package="codegurus.oneline" 	factory-ref="egov.sqlSession"/>
 		<mybatis:scan base-package="codegurus.board" 	factory-ref="egov.sqlSession"/>
 		<mybatis:scan base-package="codegurus.schedule" factory-ref="egov.sqlSession"/>
