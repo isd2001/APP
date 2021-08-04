@@ -66,7 +66,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "회원가입")
+	@ApiOperation(value = "회원가입 (학생)")
 	@PostMapping("/register")
 	public Res<ResRegisterVO> register(@RequestBody @Valid ReqRegisterVO reqVo) {
 
@@ -80,7 +80,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "회원가입 (학부모 회원가입 전용)")
+	@ApiOperation(value = "회원가입 (학부모)")
 	@PostMapping("/registerParent")
 	public Res<ResRegisterVO> registerParent(@RequestBody @Valid ReqRegisterParentVO reqVo) {
 
