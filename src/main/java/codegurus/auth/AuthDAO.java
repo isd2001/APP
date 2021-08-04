@@ -9,7 +9,7 @@ public interface AuthDAO {
     int selectUserDup(ReqDupCheckVO reqVo);
     void insertRegisterInfo(ReqRegisterVO reqVo);
     void insertTrialRegister(ReqTrialRegisterVO reqVo);
-    void insertUserAuth(Map<String, Object> params);
+    void insertUserAuth(ReqRegisterVO params);
     ResTrialUserVO selectTrialUser(String trialManageId);
     void insertSmsCert(ReqSmsCertVO reqVo);
     Map<String, String> selectSmsCert(ReqSmsCertCfmVO reqVo);

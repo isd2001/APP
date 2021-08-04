@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.util.SystemOutLogger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.regex.Pattern;
+
 /**
  * 테스트 클래스
  *
@@ -22,7 +24,25 @@ public class Test2Pro {
 //        test04();
 //        test05();
 //        test06();
-        test07();
+//        test07();
+        test08();
+    }
+
+    private static void test08() {
+
+//        String s = "1234567a901234567890";
+//        String s = "abcd9";
+//        String s = "abcd9가나";
+//        String s = "8abcd9a";
+
+//        String s = "1234567890123456";
+//        String s = "(a23456789012345";
+        String s = "34#$*^11111111@";
+
+//        Pattern ptn = Pattern.compile(StringUtil.REGEX_USER_ID);
+        Pattern ptn = Pattern.compile(StringUtil.REGEX_USER_PW);
+        boolean ret = ptn.matcher(s).matches();
+        System.out.println(ret);
     }
 
     private static void test07() {

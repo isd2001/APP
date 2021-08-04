@@ -23,13 +23,13 @@
             name,
             birth,
             gender,
-            <!-- 이후에 필요할 지 몰라 백업
-            cellphone,
-            email,
-            zipcode,
-            address,
-            address_detail,
-            -->
+            <if test="parent">
+                cellphone,
+                email,
+                zipcode,
+                address,
+                address_detail,
+            </if>
             termofuse_agree_ornot,
             personalinfo_agree_ornot,
             promotion_agree_ornot,
@@ -51,13 +51,13 @@
            #{name},
            #{birth},
            #{gender},
-           <!-- 이후에 필요할 지 몰라 백업
-           #{cellphone},
-           #{email},
-           #{zipcode},
-           #{address},
-           #{addressDetail},
-           -->
+           <if test="parent">
+              #{cellphone},
+              #{email},
+              #{zipcode},
+              #{address},
+              #{addressDetail},
+           </if>
            #{termofuseAgreeOrnot},
            #{personalinfoAgreeOrnot},
            #{promotionAgreeOrnot},

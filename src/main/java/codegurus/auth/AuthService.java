@@ -168,9 +168,22 @@ public class AuthService implements UserDetailsService {
      * @param reqVo
      * @return
      */
-    public ResRegisterVO register(ReqRegisterVO reqVo) {
+    public <T extends ReqRegisterVO> ResRegisterVO register(T reqVo) {
 
         ResRegisterVO resVo = new ResRegisterVO();
+
+		// 약관동의 여부 확인
+		if(! "Y".equals(reqVo.getTermofuseAgreeOrnot())){
+			throw new CustomException(ResCodeEnum.INFO_0004.name(), "서비스 이용 약관 동의가 필요합니다.");
+		}
+		if(! "Y".equals(reqVo.getPersonalinfoAgreeOrnot())){
+			throw new CustomException(ResCodeEnum.INFO_0004.name(), "개인정보 수집 및 이용에 대한 동의가 필요합니다.");
+		}
+
+        //-------------- 학생/학부모 분기 처리 - start -------------
+        reqVo.setParent((reqVo instanceof ReqRegisterParentVO) ? true : false);
+        reqVo.setAuthId(reqVo.isParent() ? AuthEnum.학부모.getAuthId() : AuthEnum.학생일반회원.getAuthId());
+        //-------------- 학생/학부모 분기 처리 - end ---------------
 
         //------------- 기 등록 회원 여부 체크 - start -------------
         // 화면에서 selectUserDup()를 통해 체크하고 있지만, 그래도 한 번 더 체크해 주자.
@@ -193,10 +206,7 @@ public class AuthService implements UserDetailsService {
         authDAO.insertRegisterInfo(reqVo);
 
         // INSERT (사용자 권한 매핑)
-        Map<String, Object> params = new HashMap<>();
-        params.put("userManageId", reqVo.getUserManageId());
-        params.put("authId", AuthEnum.학생일반회원.getAuthId());
-        authDAO.insertUserAuth(params);
+        authDAO.insertUserAuth(reqVo);
 
         // 응답에 PK 바인딩
         resVo.setUserManageId(reqVo.getUserManageId());
