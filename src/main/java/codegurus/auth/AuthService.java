@@ -2,6 +2,7 @@ package codegurus.auth;
 
 import codegurus.auth.vo.*;
 import codegurus.cmm.CommonDAO;
+import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.constants.AuthEnum;
 import codegurus.cmm.constants.Constants;
 import codegurus.cmm.constants.ResCodeEnum;
@@ -14,6 +15,7 @@ import codegurus.cmm.vo.req.ReqAuthVO;
 import codegurus.cmm.vo.res.ResAuthVO;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus_ext.voc.VocDAO;
+import com.google.common.collect.ImmutableMap;
 import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +51,6 @@ public class AuthService implements UserDetailsService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-    @Autowired
-	private EgovEnvCryptoService cryptoService;
-
 	@Autowired
 	private TokenProvider tokenProvider;
 
@@ -65,6 +64,12 @@ public class AuthService implements UserDetailsService {
 //	private AuthenticationManagerBuilder authenticationManagerBuilder;
 	@Autowired
 	private AuthenticationManager authenticationManager;
+
+    @Autowired
+	private EgovEnvCryptoService cryptoService;
+
+    @Autowired
+    private CacheService cacheService;
 
     @Autowired
     private CommonDAO commonDAO;
@@ -408,4 +413,43 @@ public class AuthService implements UserDetailsService {
         return resVo;
     }
 
+    /**
+     * 자녀 연결
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResConnectChildVO connectChild(ReqConnectChildVO reqVo) {
+
+        ResConnectChildVO resVo = new ResConnectChildVO();
+
+        UserVO userVo = commonDAO.selectUserByUserId(reqVo.getChildUsername());
+        if (userVo == null) {
+            throw new CustomException(ResCodeEnum.INFO_0009);
+        }
+
+        boolean match = passwordEncoder.matches(StringUtil.trim(reqVo.getChildPassword()), userVo.getPassword());
+        log.debug("## 자녀 매칭 결과:[{}]", match);
+
+        if (! match) {
+            throw new CustomException(ResCodeEnum.INFO_0010);
+        }
+
+        // 기 연결된 자녀인지 체크
+        Map<String, String> qp = new HashMap<>();
+        qp.put("userManageIdParent", cacheService.getUserManageId());
+        qp.put("userManageIdChild", userVo.getUserManageId());
+        String connYN = authDAO.selectConnectedFamilyYN(qp);
+        log.debug("## 자녀 기 연결 여부:[{}]", connYN);
+
+//        if(){
+//
+//        }
+
+        // 부모 - 자녀 연결 작업
+//        cacheService.getTokenUser().getUserId()
+
+
+        return resVo;
+    }
 }

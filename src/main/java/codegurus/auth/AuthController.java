@@ -75,17 +75,31 @@ public class AuthController extends BaseController {
 	}
 
 	/**
-	 * 회원가입
+	 * 회원가입 (학부모 회원가입 전용)
 	 *
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "회원가입 (학부모 전용)")
+	@ApiOperation(value = "회원가입 (학부모 회원가입 전용)")
 	@PostMapping("/registerParent")
 	public Res<ResRegisterVO> registerParent(@RequestBody @Valid ReqRegisterParentVO reqVo) {
 
 		ResRegisterVO resVo = authService.register(reqVo);
 		return new Res<ResRegisterVO>(resVo);
+	}
+
+	/**
+	 * 자녀 연결
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "자녀 연결 (학부모 회원이 기 등록 자녀회원과의 가족관계 연결을 설정하는 작업)")
+	@PostMapping("/connectChild")
+	public Res<ResConnectChildVO> connectChild(@RequestBody @Valid ReqConnectChildVO reqVo) {
+
+		ResConnectChildVO resVo = authService.connectChild(reqVo);
+		return new Res<ResConnectChildVO>(resVo);
 	}
 
 	/**

@@ -16,4 +16,5 @@ public interface AuthDAO {
     int updateSmsCert(ReqSmsCertCfmVO reqVo);
     String selectUserId(ReqFindIDVO reqVo);
     String selectUserPassword(ReqFindPWVO reqVo);
+    String selectConnectedFamilyYN(Map<String, String> qp);
 }
