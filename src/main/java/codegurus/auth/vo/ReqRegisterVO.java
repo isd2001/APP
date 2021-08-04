@@ -1,6 +1,5 @@
 package codegurus.auth.vo;
 
-import codegurus.cmm.constants.AuthEnum;
 import codegurus.cmm.constants.Constants;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.validation.DateCheck;
@@ -10,7 +9,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;

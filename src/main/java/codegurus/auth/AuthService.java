@@ -423,32 +423,43 @@ public class AuthService implements UserDetailsService {
 
         ResConnectChildVO resVo = new ResConnectChildVO();
 
+        // 자녀회원 select
         UserVO userVo = commonDAO.selectUserByUserId(reqVo.getChildUsername());
         if (userVo == null) {
             throw new CustomException(ResCodeEnum.INFO_0009);
         }
 
+        // 자녀 패스워드 대조
         boolean match = passwordEncoder.matches(StringUtil.trim(reqVo.getChildPassword()), userVo.getPassword());
         log.debug("## 자녀 매칭 결과:[{}]", match);
-
         if (! match) {
             throw new CustomException(ResCodeEnum.INFO_0010);
         }
 
-        // 기 연결된 자녀인지 체크
+        String userManageIdParent = cacheService.getUserManageId();
+
         Map<String, String> qp = new HashMap<>();
-        qp.put("userManageIdParent", cacheService.getUserManageId());
-        qp.put("userManageIdChild", userVo.getUserManageId());
+        qp.put("userManageFamilyId", userManageIdParent);
+        qp.put("userManageId", userVo.getUserManageId());
+        qp.put("relationCode", reqVo.getRelationCode());
+
+        // 기 연결된 자녀인지 체크
         String connYN = authDAO.selectConnectedFamilyYN(qp);
         log.debug("## 자녀 기 연결 여부:[{}]", connYN);
+        if("Y".equals(connYN)){
+            // 해당 부모의 자녀목록 조회
+            resVo.setChildenList(authDAO.selectChildrenByParent(userManageIdParent));
+            resVo.setResCodeEnum(ResCodeEnum.INFO_0015);
+            return resVo; // 흐름 종료
+        }
 
-//        if(){
-//
-//        }
+        // 가족관계 매핑 등록
+        authDAO.insertFamilyRelation(qp);
+//        String familyRelationId = StringUtil.trim(qp.get("familyRelationId")); // 지금은 딱히 필요 없어 보여 주석처리
+//        log.debug("## familyRelationId:[{}]", familyRelationId);
 
-        // 부모 - 자녀 연결 작업
-//        cacheService.getTokenUser().getUserId()
-
+        // 해당 부모의 자녀목록 조회
+        resVo.setChildenList(authDAO.selectChildrenByParent(userManageIdParent));
 
         return resVo;
     }

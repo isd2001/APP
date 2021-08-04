@@ -217,5 +217,55 @@
         AND birth = #{birth}
     </select>
 
+    <!-- 가족관계가 매핑이 되어 있는 상태이면 Y, 관계가 없으면 N 리턴 -->
+    <select id="selectConnectedFamilyYN" resultType="String">
+        SELECT
+            if(count(*) > 0, 'Y', 'N') as connected
+        FROM family_relation fr
+        WHERE user_manage_id = #{userManageId}
+        AND user_manage_family_id = #{userManageFamilyId}
+        AND delete_ornot = 'N'
+    </select>
+
+    <!-- 가족관계 매핑 등록 -->
+    <insert id="insertFamilyRelation" useGeneratedKeys="true" keyProperty="familyRelationId">
+        INSERT /* insertFamilyRelation */
+        INTO family_relation
+        (
+            user_manage_id,
+            user_manage_family_id,
+            relation_code
+        )
+        VALUES
+        (
+            #{userManageId},
+            #{userManageFamilyId},
+            #{relationCode}
+        )
+    </insert>
+
+    <!-- 학부모의 자녀 회원 조회 -->
+    <select id="selectChildrenByParent" resultType="ChildInfoVO">
+        SELECT /* selectChildrenByParent */
+            b.user_manage_id,
+            b.user_id as username,
+            b.name,
+            b.birth,
+            d.auth_title
+        FROM family_relation a, -- 가족관계
+             user_manage b, -- 사용자 관리
+             user_auth c, -- 사용자-권한 매핑
+             auth d -- 권한
+        WHERE a.user_manage_family_id = #{value} -- 학부모의 user_manage_id
+        AND a.relation_code = 'PARENT' -- 관계: 학부모
+        AND a.user_manage_id = b.user_manage_id
+        AND b.user_manage_id = c.user_manage_id
+        AND c.user_status_code = '00'
+        AND c.auth_id = d.auth_id
+        AND a.delete_ornot = 'N'
+        AND b.delete_ornot = 'N'
+        AND c.delete_ornot = 'N'
+        AND d.delete_ornot = 'N'
+    </select>
 
 </mapper>

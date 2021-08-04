@@ -38,7 +38,7 @@ public class TestPassword {
     @Test
     public void testPasswordEnc(){
 
-        String s = "parent01";
+        String s = "parent01!@";
         String enc = passwordEncoder.encode(s);
         log.debug("## 패스워드 해싱결과:[{}]", enc);
     }
@@ -51,7 +51,7 @@ public class TestPassword {
     @Test
     public void testEgovEncDec(){
 
-        String pw = "parent01";
+        String pw = "parent01!@";
         pw = StringUtil.maskPW(pw); // 패스워드 마스킹
 
         String encPw = cryptoService.encrypt(pw);

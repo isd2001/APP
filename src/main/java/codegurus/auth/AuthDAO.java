@@ -2,6 +2,7 @@ package codegurus.auth;
 
 import codegurus.auth.vo.*;
 
+import java.util.List;
 import java.util.Map;
 
 public interface AuthDAO {
@@ -17,4 +18,6 @@ public interface AuthDAO {
     String selectUserId(ReqFindIDVO reqVo);
     String selectUserPassword(ReqFindPWVO reqVo);
     String selectConnectedFamilyYN(Map<String, String> qp);
+    void insertFamilyRelation(Map<String, String> qp);
+    List<ChildInfoVO> selectChildrenByParent(String userManageFamilyId);
 }
