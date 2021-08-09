@@ -1,5 +1,7 @@
 package codegurus.learning.vo;
 
+import codegurus.cmm.constants.Constants;
+import codegurus.cmm.validation.DateCheck;
 import codegurus.cmm.vo.req.ReqBaseVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -29,6 +31,10 @@ public class ReqLearningContentsHistorySaveVO extends ReqBaseVO {
     @ApiModelProperty(notes = "템플릿 인스턴스 이력 리스트")
     private List<TemplateInstHistorySaveVo> templateInstHistorySaveList;
 
+    @ApiModelProperty(notes = "시작날짜", example="20210806111111")
+    @DateCheck(format = Constants.DF14)
+    private String startDate;
+
     @ApiModelProperty(hidden = true)
-    private String regId;
+    private String userManageId;
 }

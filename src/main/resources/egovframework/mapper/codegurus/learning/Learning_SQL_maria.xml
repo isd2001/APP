@@ -152,19 +152,21 @@
 		INTO contents_history
 		(
 			online_subject_schedule_id,
+		 	user_manage_id,
+			start_date,
+			end_date,
 		 	summary_doing_drawing_file_id,
-			summary_doing_vice_file_id,
-		 	reg_id,
-		 	reg_date,
+			summary_doing_voice_file_id,
 		 	delete_ornot
 		)
 		VALUES
 		(
-			#{contentsTitle},
+			#{onlineSubjectScheduleId},
+			#{userManageId},
+			#{startDate},
+			CURRENT_TIMESTAMP,
 			#{summaryDoingDrawingFileId},
 			#{summaryDoingVoiceFileId},
-			#{regId},
-			CURRENT_TIMESTAMP,
 			'N'
 		)
 	</insert>
@@ -177,8 +179,7 @@
 			contents_history_id,
 			template_inst_id,
 		 	correctanswer_status,
-		 	reg_id,
-		 	reg_date,
+		 	user_manage_id,
 		 	delete_ornot
 		)
 		VALUES
@@ -188,10 +189,105 @@
 			#{item.contentsHistoryId},
 			#{item.templateInstId},
 			#{item.correctanswerStatus},
-			#{item.regId},
-			CURRENT_TIMESTAMP,
+			#{item.userManageId},
 			'N'
 			)
 		</foreach>
 	</insert>
+
+	<!-- 학습 결과 조회 -->
+	<resultMap id="LearningResultMap" type="ContentsHistoryVO" autoMapping="true">
+		<id property="onlineSubjectScheduleId" column="online_subject_schedule_id"/>
+		<association property="contents" javaType="ContentsVO" autoMapping="true">
+			<id property="onlineSubjectScheduleId" column="online_subject_schedule_id"/>
+			<association property="book" javaType="BookVO" autoMapping="true">
+				<id property="bookId" column="book_id"/>
+				<result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
+				<association property="bookThumbnail" javaType="FileVO" autoMapping="true">
+					<id property="atchFileId" column="book_thumbnail_file_id"/>
+				</association>
+				<collection property="labelList" ofType="LabelVO" autoMapping="true" />
+			</association>
+		</association>
+	</resultMap>
+	<select id="selectLearningResult" resultMap="LearningResultMap">
+		SELECT /* selectLearningResult */
+			contents_history.contents_history_id,
+		    contents_history.online_subject_schedule_id,
+		    contents_history.summary_doing_drawing_file_id,
+		    contents_history.summary_doing_voice_file_id,
+
+		    contents.contents_id,
+
+		    book.book_id,
+		    book.book_title,
+		    book.author,
+		    book.illustrator,
+			book.book_thumbnail_file_id,
+		    book.book_introduction,
+			book.cate_id as book_cate_id,
+
+			book_cate.parents_id as book_cate_parents_id,
+			book_cate.depth as book_cate_depth,
+			book_cate.`order` as book_cate_order,
+			book_cate.cate_title as book_cate_cate_title,
+			book_cate.first_cate_title as book_cate_first_cate_title,
+			book_cate.second_cate_title as book_cate_second_cate_title,
+			book_cate.third_cate_title as book_cate_third_cate_title,
+			book_cate.fourth_cate_title as book_cate_fourth_cate_title,
+			book_cate.fifth_cate_title as book_cate_fifth_cate_title,
+			book_cate.sixth_cate_title as book_cate_sixth_cate_title,
+			book_cate.seventh_cate_title as book_cate_seventh_cate_title,
+			book_cate.eight_cate_title as book_cate_eight_cate_title,
+			book_cate.ninth_cate_title as book_cate_ninth_cate_title,
+			book_cate.tenth_cate_title as book_cate_tenth_cate_title,
+			book_cate.first_cate_id as book_cate_first_cate_id,
+			book_cate.second_cate_id as book_cate_second_cate_id,
+			book_cate.third_cate_id as book_cate_third_cate_id,
+			book_cate.fourth_cate_id as book_cate_fourth_cate_id,
+			book_cate.fifth_cate_id as book_cate_fifth_cate_id,
+			book_cate.sixth_cate_id as book_cate_sixth_cate_id,
+			book_cate.seventh_cate_id as book_cate_seventh_cate_id,
+			book_cate.eight_cate_id as book_cate_eight_cate_id,
+			book_cate.ninth_cate_id as book_cate_ninth_cate_id,
+			book_cate.tenth_cate_id as book_cate_tenth_cate_id,
+
+			labelManage.label_manage_id,
+			labelManage.label_title,
+
+			COMTNFILE.ATCH_FILE_ID,
+			COMTNFILEDETAIL.FILE_CN,
+			COMTNFILEDETAIL.FILE_SN,
+			COMTNFILEDETAIL.FILE_STRE_COURS,
+			COMTNFILEDETAIL.STRE_FILE_NM,
+			COMTNFILEDETAIL.FILE_EXTSN,
+			COMTNFILEDETAIL.ORIGNL_FILE_NM,
+			COMTNFILEDETAIL.FILE_SIZE,
+			COMTNFILE.CREAT_DT,
+			COMTNFILEDETAIL.DOWNLOAD_CNT
+
+		FROM contents_history
+		LEFT JOIN online_subject_schedule as schedule
+		    on contents_history.online_subject_schedule_id = schedule.online_subject_schedule_id
+		LEFT JOIN contents contents
+			on schedule.contents_id = contents.contents_id
+		LEFT JOIN book book
+			on contents.book_id = book.book_id
+		LEFT JOIN cate book_cate
+		    on book.cate_id = book_cate.cate_id
+		LEFT JOIN label_mapping labelMapping
+			on 	labelMapping.label_domain_manage_id = 1 /* 1:책 */
+			and labelMapping.object_manage_id = book.book_id
+			and labelMapping.delete_ornot = 'N'
+		LEFT JOIN label_manage labelManage
+			on 	labelManage.label_manage_id = labelMapping.label_manage_id
+			and labelManage.label_domain_manage_id = labelMapping.label_domain_manage_id
+			and labelManage.delete_ornot = 'N'
+		LEFT JOIN COMTNFILE
+			on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
+		LEFT JOIN COMTNFILEDETAIL
+			on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+		WHERE 1=1
+		  AND contents_history.contents_history_id = #{contentsHistoryId}
+	</select>
 </mapper>
