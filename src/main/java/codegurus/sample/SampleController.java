@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- * 개발 표준을 제시하기 위한 sample controller 입니다
+ * 개발 표준을 제시하기 위한 sample controller 입니다@
  *
  *  - 참고
  *      - 이전 프로젝트에서 사용하던 controller method의 두 번째 args인 BindingResult 는 사용하지 말아야 합니다.
