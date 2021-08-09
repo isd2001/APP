@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 회원가입 응답 VO
+ * 회원가입 (학생) 응답 VO
  */
 @Getter
 @Setter

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="codegurus.auth.AuthDAO">
 
@@ -23,20 +23,22 @@
             name,
             birth,
             gender,
-            <if test="parent">
+            <if test='authCode == "11"'><!-- 학부모 회원가입일 경우 -->
                 cellphone,
                 email,
                 zipcode,
                 address,
                 address_detail,
             </if>
-            termofuse_agree_ornot,
-            personalinfo_agree_ornot,
-            promotion_agree_ornot,
-            <!-- locationinfo_agree_ornot, --><!-- 필요하면 사용  -->
-            termofuse_agree_date,
-            personalinfo_agree_date,
-            promotion_agree_date,
+            <if test='authCode != "11"'><!-- 학부모 회원가입이 아닐 경우 --><!-- 프렌즈몬의 기획에 따라 사용하게 될 수도 있음 -->
+                termofuse_agree_ornot,
+                personalinfo_agree_ornot,
+                promotion_agree_ornot,
+                <!-- locationinfo_agree_ornot, --><!-- 필요하면 사용  -->
+                termofuse_agree_date,
+                personalinfo_agree_date,
+                promotion_agree_date,
+            </if>
             <!-- locationinfo_agree_date, -->
             reg_id,
             reg_date,
@@ -51,35 +53,37 @@
            #{name},
            #{birth},
            #{gender},
-           <if test="parent">
+           <if test='authCode == "11"'><!-- 학부모 회원가입일 경우 -->
               #{cellphone},
               #{email},
               #{zipcode},
               #{address},
               #{addressDetail},
            </if>
-           #{termofuseAgreeOrnot},
-           #{personalinfoAgreeOrnot},
-           #{promotionAgreeOrnot},
-           <!-- #{locationinfoAgreeOrnot}, -->
-           <choose>
-               <when test='termofuseAgreeOrnot != null and termofuseAgreeOrnot != "" and termofuseAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
-               <otherwise>null,</otherwise>
-           </choose>
-           <choose>
-               <when test='personalinfoAgreeOrnot != null and personalinfoAgreeOrnot != "" and personalinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
-               <otherwise>null,</otherwise>
-           </choose>
-           <choose>
-               <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
-               <otherwise>null,</otherwise>
-           </choose>
-           <!--
-           <choose>
-               <when test='locationinfoAgreeOrnot != null and locationinfoAgreeOrnot != "" and locationinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
-               <otherwise>null,</otherwise>
-           </choose>
-           -->
+           <if test='authCode != "11"'><!-- 학부모 회원가입이 아닐 경우 -->
+               #{termofuseAgreeOrnot},
+               #{personalinfoAgreeOrnot},
+               #{promotionAgreeOrnot},
+               <!-- #{locationinfoAgreeOrnot}, -->
+               <choose>
+                   <when test='termofuseAgreeOrnot != null and termofuseAgreeOrnot != "" and termofuseAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+                   <otherwise>null,</otherwise>
+               </choose>
+               <choose>
+                   <when test='personalinfoAgreeOrnot != null and personalinfoAgreeOrnot != "" and personalinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+                   <otherwise>null,</otherwise>
+               </choose>
+               <choose>
+                   <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+                   <otherwise>null,</otherwise>
+               </choose>
+               <!--
+               <choose>
+                   <when test='locationinfoAgreeOrnot != null and locationinfoAgreeOrnot != "" and locationinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+                   <otherwise>null,</otherwise>
+               </choose>
+               -->
+           </if>
            0, /* reg_id (아직 user_manage_id 가 없는 상태이기 때문에) */
            CURRENT_TIMESTAMP,
            0,
@@ -113,6 +117,9 @@
             parents_name,
             parents_birth,
             parents_cellphone,
+            zipcode,
+            address,
+            address_detail,
             trial_start_date,
             trial_end_date
         )
@@ -124,6 +131,9 @@
             #{parentName},
             #{parentBirth},
             #{parentCellphone},
+            #{zipcode},
+            #{address},
+            #{addressDetail},
             CURRENT_TIMESTAMP,
             DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL #{trialPeriod} DAY)
         )
@@ -139,6 +149,9 @@
             parents_name as parentName,
             parents_birth as parentBirth,
             parents_cellphone as parentCellphone,
+            zipcode,
+            address,
+            address_detail as addressDetail,
             DF8(trial_start_date) as trial_start_date,
             DF8(trial_end_date) as trial_end_date,
             trial_status_code,

@@ -51,6 +51,21 @@ public class ReqTrialRegisterVO extends ReqBaseVO {
     @Pattern(regexp= StringUtil.REGEX_CELLPHONE)
     private String parentCellphone;
 
+    @ApiModelProperty(notes = "우편번호", required = true, example = "05869", position = 8)
+    @NotBlank
+    @Pattern(regexp=StringUtil.REGEX_ZIPCODE)
+    private String zipcode;
+
+    @ApiModelProperty(notes = "주소", required = true, example = "서울특별시 강동구 진황도로 189(둔촌동)", position = 9)
+    @NotBlank
+    @Size(min = 0, max = 200)
+    private String address;
+
+    @ApiModelProperty(notes = "상세주소", required = true, example = "101동 1405호", position = 10)
+    @NotBlank
+    @Size(min = 0, max = 200)
+    private String addressDetail;
+
     @JsonIgnore
     private String trialManageId;
 

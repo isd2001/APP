@@ -8,9 +8,9 @@ import java.util.Map;
 public interface AuthDAO {
 
     int selectUserDup(ReqDupCheckVO reqVo);
-    void insertRegisterInfo(ReqRegisterVO reqVo);
+    void insertRegisterInfo(ReqRegisterBaseVO reqVo);
     void insertTrialRegister(ReqTrialRegisterVO reqVo);
-    void insertUserAuth(ReqRegisterVO params);
+    void insertUserAuth(ReqRegisterBaseVO params);
     ResTrialUserVO selectTrialUser(String trialManageId);
     void insertSmsCert(ReqSmsCertVO reqVo);
     Map<String, String> selectSmsCert(ReqSmsCertCfmVO reqVo);
