@@ -35,13 +35,13 @@ public class BoardController extends BaseController {
     /**
      * 공지사항 목록 조회
      *
-     * @param reqVo
      * @return
      */
     @PostMapping("/noticeList")
     @ApiOperation(value = "공지사항 목록 조회")
-    public Res<ResBoardListVO> noticeList (@RequestBody @Valid ReqBoardListVO reqVo) {
+    public Res<ResBoardListVO> noticeList () {
 
+        ReqBoardListVO reqVo = new ReqBoardListVO();
         reqVo.setType("공지사항");
         ResBoardListVO resVo = boardService.selectBoardList(reqVo);
         return new Res<ResBoardListVO>(resVo);
@@ -65,13 +65,12 @@ public class BoardController extends BaseController {
     /**
      * FAQ 목록 조회
      *
-     * @param reqVo
      * @return
      */
     @PostMapping("/faqList")
     @ApiOperation(value = "FAQ 목록 조회")
-    public Res<ResBoardListVO> qnaList (@RequestBody @Valid ReqBoardListVO reqVo) {
-
+    public Res<ResBoardListVO> qnaList () {
+        ReqBoardListVO reqVo = new ReqBoardListVO();
         reqVo.setType("FAQ");
         ResBoardListVO resVo = boardService.selectBoardList(reqVo);
         return new Res<ResBoardListVO>(resVo);
