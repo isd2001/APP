@@ -5,15 +5,12 @@
 
 	<!-- 오늘의 학습 책 상세 조회 -->
 	<resultMap id="BookDetailMap" type="BookVO" autoMapping="true">
-		<!--<id property="contentsId" column="contents_id"/>
-		<association property="book" javaType="BookVO" autoMapping="true">-->
-			<id property="bookId" column="book_id"/>
-			<result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
-			<association property="bookThumbnail" javaType="FileVO" autoMapping="true">
-				<id property="atchFileId" column="book_thumbnail_file_id"/>
-			</association>
-			<collection property="labelList" ofType="LabelVO" autoMapping="true" />
-		<!--</association>-->
+		<id property="bookId" column="book_id"/>
+		<result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
+		<association property="bookThumbnail" javaType="FileVO" autoMapping="true">
+			<id property="atchFileId" column="book_thumbnail_file_id"/>
+		</association>
+		<collection property="labelList" ofType="LabelVO" autoMapping="true" />
 	</resultMap>
 	<select id="selectBookDetail" resultMap="BookDetailMap">
 		SELECT /* selectBookDetail */
@@ -144,6 +141,8 @@
 		WHERE
 			1=1
 		AND contents.contents_id = #{contentsId}
+		AND contents.delete_ornot = 'N'
+		ORDER BY template_inst.`order`
 	</select>
 
 	<!-- 학습 콘텐츠 이력 등록 -->
