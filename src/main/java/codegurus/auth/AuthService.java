@@ -244,6 +244,13 @@ public class AuthService implements UserDetailsService {
      */
     public ResFullMemberAuthVO fullmemberAuth(ReqFullMemberAuthVO reqVo) {
 
+        // 교육계약 사본 조회
+
+        // 조회 결과가 없을 경우 종료
+
+        // 사용자과목 레코드 생성
+
+        // 사용자권한 변경 (학생일반회원 -> 학생정회원)
 
 
         return null;
