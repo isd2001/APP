@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="codegurus.mypage.MypageDAO">
+    <!-- 나의진도 목록 조회 -->
+    <resultMap id="MagnitudeMap" type="ResScheduleVO" autoMapping="true">
+        <id property="contentsId" column="contents_id"/>
+        <association property="book" javaType = "BookVO" autoMapping="true">
+            <id property="bookId" column="book_id"/>
+            <result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
+            <association property="bookThumbnail" javaType="FileVO" autoMapping="true">
+                <id property="atchFileId" column="book_thumbnail_file_id"/>
+            </association>
+        </association>
+    </resultMap>
+    <select id="selectmagnitudeList" resultMap="MagnitudeMap">
+        SELECT /* selectmagnitudeList */
+            schedule.online_subject_schedule_id,
+            schedule.online_subject_id,
+            schedule.`year`,
+            schedule.`month`,
+            schedule.contents_id,
+
+            book.book_id,
+            book.book_title,
+            book.book_thumbnail_file_id,
+            book.book_introduction,
+
+            COMTNFILE.ATCH_FILE_ID,
+            COMTNFILEDETAIL.FILE_CN,
+            COMTNFILEDETAIL.FILE_SN,
+            COMTNFILEDETAIL.FILE_STRE_COURS,
+            COMTNFILEDETAIL.STRE_FILE_NM,
+            COMTNFILEDETAIL.FILE_EXTSN,
+            COMTNFILEDETAIL.ORIGNL_FILE_NM,
+            COMTNFILEDETAIL.FILE_SIZE,
+            COMTNFILE.CREAT_DT,
+            COMTNFILEDETAIL.DOWNLOAD_CNT
+        FROM
+            online_subject_schedule as schedule
+            left join contents_history as history
+                on history.user_manage_id = #{userManageId}
+                and history.delete_ornot ='N'
+            inner join contents as contents
+                on schedule.contents_id = contents.contents_id
+            inner join book as book
+                on contents.book_id = book.book_id
+            LEFT JOIN COMTNFILE
+                on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
+            LEFT JOIN COMTNFILEDETAIL
+                on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+        WHERE schedule.`month`= #{month}
+        and schedule.delete_ornot ='N'
+    </select>
+
+    <!-- 나의진도 목록 조회 -->
+    <resultMap id="BookcaseMap" type="BookVO" autoMapping="true">
+        <id property="bookId" column="book_id"/>
+        <result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
+        <association property="bookThumbnail" javaType="FileVO" autoMapping="true">
+            <id property="atchFileId" column="book_thumbnail_file_id"/>
+        </association>
+        <collection property="labelList" ofType="LabelVO" autoMapping="true" />
+    </resultMap>
+    <select id="selectBookcaseList" resultMap="BookcaseMap">
+        SELECT /* selectBookcaseList */
+            book.book_id,
+            book.book_title,
+            book.book_thumbnail_file_id,
+
+            labelManage.label_manage_id,
+            labelManage.label_title,
+
+            COMTNFILE.ATCH_FILE_ID,
+            COMTNFILEDETAIL.FILE_CN,
+            COMTNFILEDETAIL.FILE_SN,
+            COMTNFILEDETAIL.FILE_STRE_COURS,
+            COMTNFILEDETAIL.STRE_FILE_NM,
+            COMTNFILEDETAIL.FILE_EXTSN,
+            COMTNFILEDETAIL.ORIGNL_FILE_NM,
+            COMTNFILEDETAIL.FILE_SIZE,
+            COMTNFILE.CREAT_DT,
+            COMTNFILEDETAIL.DOWNLOAD_CNT
+        FROM contents_history as history
+        LEFT JOIN online_subject_schedule as schedule
+            on history.online_subject_schedule_id = schedule.online_subject_schedule_id
+        INNER JOIN contents as contents
+            on schedule.contents_id = contents.contents_id
+        INNER JOIN book as book
+            on contents.book_id = book.book_id
+        LEFT JOIN COMTNFILE
+            on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
+        LEFT JOIN COMTNFILEDETAIL
+            on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+        LEFT JOIN label_mapping labelMapping
+            on  labelMapping.label_domain_manage_id = 1 /* 1:책 */
+            and labelMapping.object_manage_id = book.book_id
+            and labelMapping.delete_ornot = 'N'
+        LEFT JOIN label_manage labelManage
+            on 	labelManage.label_manage_id = labelMapping.label_manage_id
+            and labelManage.label_domain_manage_id = labelMapping.label_domain_manage_id
+            and labelManage.delete_ornot = 'N'
+        where history.delete_ornot = 'N'
+        and   history.user_manage_id = #{userManageId}
+    </select>
+</mapper>

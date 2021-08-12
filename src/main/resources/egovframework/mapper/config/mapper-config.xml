@@ -28,6 +28,7 @@
 		<package name="codegurus.oneline.vo"/>
 		<package name="codegurus.board.vo"/>
 		<package name="codegurus.schedule.vo"/>
+		<package name="codegurus.mypage.vo"/>
 	</typeAliases>
     
 	<plugins>
