@@ -14,4 +14,7 @@ public class ReqOnelineListVO extends ReqBaseVO {
 
     @ApiModelProperty(notes = "책 ID", example ="139")
     private String bookId;
+
+    @ApiModelProperty(notes = "등록 ID", hidden = true)
+    private String regId;
 }
