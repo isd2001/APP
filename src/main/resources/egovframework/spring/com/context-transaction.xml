@@ -47,7 +47,7 @@
 	   </tx:attributes>
 	</tx:advice>
 	<aop:config proxy-target-class="true">
-		<aop:pointcut id="txVOC" expression="execution(* codegurus..*Service.*(..))" />
+		<aop:pointcut id="txVOC" expression="execution(* codegurus_ext.voc..*Service.*(..))" /><!-- 패키지 분리를 하지 않으면 모든 service method 실행시 VOC 컨넥션도 함께 체크하는 것 같다. -->
 		<aop:advisor advice-ref="txAdviceVOC" pointcut-ref="txVOC" />
 	</aop:config>
 	<!-- ============================== VOC용 데이터소스 관련 - end =============================== -->
