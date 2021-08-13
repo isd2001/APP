@@ -1,6 +1,7 @@
 package codegurus.mypage;
 
 import codegurus.learning.vo.BookVO;
+import codegurus.learning.vo.ContentsHistoryVO;
 import codegurus.mypage.vo.*;
 import codegurus.schedule.vo.ResScheduleVO;
 
@@ -18,5 +19,5 @@ public interface MypageDAO {
     List<ResScheduleVO> selectmagnitudeList(ReqMagnitudeListVO reqVo);
     List<BookVO> selectBookcaseList(ReqBookcaseListVO reqVo);
     List<BookVO> selectportfolioList(ReqPortfolioListVO reqVo);
-    List<MyDicVO> selectDicList(ReqDicListVO reqVo);
+    List<ContentsHistoryVO> selectDicList(ReqDicListVO reqVo);
 }

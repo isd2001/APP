@@ -2,6 +2,7 @@ package codegurus.mypage;
 
 import codegurus.cmm.util.SystemUtil;
 import codegurus.learning.vo.BookVO;
+import codegurus.learning.vo.ContentsHistoryVO;
 import codegurus.mypage.vo.*;
 import codegurus.schedule.vo.ResScheduleVO;
 import com.google.common.collect.ImmutableMap;
@@ -79,7 +80,7 @@ public class MypageService {
         ResDicListVO resVo = new ResDicListVO();
 
         // 나의 사전 목록 조회
-        List<MyDicVO> list = mypageDAO.selectDicList(reqVo);
+        List<ContentsHistoryVO> list = mypageDAO.selectDicList(reqVo);
         if (list == null) {
             SystemUtil.returnNoSearchResult();
         } // 조회 결과 없음 리턴

@@ -1,7 +1,5 @@
 package codegurus.learning.vo;
 
-import codegurus.mypage.vo.MyDicVO;
-import codegurus.oneline.vo.OnelineVO;
 import egovframework.com.cmm.service.FileVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

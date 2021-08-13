@@ -1,7 +1,6 @@
 package codegurus.learning.vo;
 
 import egovframework.com.cmm.service.FileVO;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,4 +40,10 @@ public class ContentsHistoryVO {
 
     @ApiModelProperty(notes = "템플릿 인스턴스 이력 정보")
     private List<TemplateInstHistoryVO> templateInstHistoryList;
+
+    @ApiModelProperty(notes = "사전 목록")
+    private List<TemplateInstVO> templateInstList;
+
+    @ApiModelProperty(notes = "책 정보")
+    private BookVO book;
 }

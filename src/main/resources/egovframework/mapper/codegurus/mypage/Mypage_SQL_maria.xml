@@ -55,7 +55,7 @@
             on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
         where schedule.`month`=#{month}
             and schedule.active_ornot = 'Y'
-            and   history.user_manage_id = #{userManageId}
+            and contents_history.user_manage_id = #{userManageId}
         order by schedule.online_subject_schedule_id asc
     </select>
 
@@ -70,6 +70,9 @@
     </resultMap>
     <select id="selectBookcaseList" resultMap="BookcaseMap">
         SELECT /* selectBookcaseList */
+            book.book_id,
+            book.book_title,
+            book.book_introduction,
             book.book_thumbnail_file_id,
 
             labelManage.label_manage_id,
@@ -109,19 +112,21 @@
     </select>
 
     <!-- 나의사전 목록 조회 -->
-    <resultMap id="MyDicMap" type="MyDicVO" autoMapping="true">
-        <id property="templateInstId" column="template_inst_id" />
-        <collection property="templateInstList" ofType="TemplateInstVO">
+    <resultMap id="MyDicMap" type="ContentsHistoryVO" autoMapping="true">
+        <id property="contentsHistoryId" column="contents_history_id"/>
+        <association property="book" javaType = "BookVO" autoMapping="true">
             <id property="bookId" column="book_id" />
+            <result property="bookTitle" column="book_title"/>
+        </association>
+        <collection property="templateInstList" ofType="TemplateInstVO" autoMapping="true">
+            <id property="templateInstId" column="template_inst_id" />
             <result property="templateTitle" column="tempate_title"/>
             <result property="json" column="json"/>
-            <association property="book" javaType = "BookVO" autoMapping="true">
-                <result property="bookTitle" column="book_title"/>
-            </association>
         </collection>
     </resultMap>
     <select id="selectDicList" resultMap="MyDicMap">
         SELECT /* selectDicList */
+            history.contents_history_id,
             book.book_id,
             book.book_title,
 
