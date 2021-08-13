@@ -1,8 +1,12 @@
 package codegurus.learning.vo;
 
+import egovframework.com.cmm.service.FileVO;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * 콘텐츠 이력 VO
@@ -21,11 +25,20 @@ public class ContentsHistoryVO {
     private String regId;
 
     @ApiModelProperty(notes = "요약하기 그리기 파일 ID")
-    private String summaryDrawingFileId;
+    private String summaryDoingDrawingFileId;
+
+    @ApiModelProperty(notes = "책 썸네일 파일 정보", example = "{}")
+    private FileVO drawingFile;
 
     @ApiModelProperty(notes = "요약하기 음성 파일 ID")
-    private String summaryVoiceFileId;
+    private String summaryDoingVoiceFileId;
 
-    @ApiModelProperty(notes = "콘텐츠 정보")
-    private ContentsVO contents;
+    @ApiModelProperty(notes = "책 썸네일 파일 정보", example = "{}")
+    private FileVO voiceFile;
+
+    @ApiModelProperty(notes = "학습 완료일")
+    private String endDate;
+
+    @ApiModelProperty(notes = "템플릿 인스턴스 이력 정보")
+    private List<TemplateInstHistoryVO> templateInstHistoryList;
 }

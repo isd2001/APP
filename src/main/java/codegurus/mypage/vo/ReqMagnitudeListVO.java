@@ -15,6 +15,6 @@ public class ReqMagnitudeListVO extends ReqBaseVO {
     @ApiModelProperty(notes = "month", example="07")
     private String month;
 
-    @ApiModelProperty(notes = "사용자 관리 ID", example="2")
+    @ApiModelProperty(hidden = true)
     private String userManageId;
 }

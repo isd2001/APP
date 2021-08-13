@@ -6,11 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 나의 책장 목록 요청 VO
+ * 나의 포트폴리오 목록 요청 VO
  */
 @Getter
 @Setter
-public class ReqBookcaseListVO extends ReqBaseVO {
+public class ReqPortfolioListVO extends ReqBaseVO {
+
+    @ApiModelProperty(notes = "month", example="07")
+    private String month;
 
     @ApiModelProperty(hidden = true)
     private String userManageId;

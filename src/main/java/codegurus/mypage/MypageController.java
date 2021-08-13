@@ -3,10 +3,7 @@ package codegurus.mypage;
 import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.res.Res;
-import codegurus.mypage.vo.ReqBookcaseListVO;
-import codegurus.mypage.vo.ReqMagnitudeListVO;
-import codegurus.mypage.vo.ResBookcaseListVO;
-import codegurus.mypage.vo.ResMagnitudeListVO;
+import codegurus.mypage.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -45,10 +42,10 @@ public class MypageController extends BaseController {
     @PostMapping("magnitudeList")
     @ApiOperation(value = "나의 진도 목록 조회")
     public Res<ResMagnitudeListVO> magnitudeList(@RequestBody @Valid ReqMagnitudeListVO reqVo) {
-
-        ResMagnitudeListVO resVo = mypageService.selectmagnitudeList(reqVo);
         reqVo.setUserManageId(cacheService.getUserManageId());
-        return new Res<>(resVo);
+        ResMagnitudeListVO resVo = mypageService.selectmagnitudeList(reqVo);
+
+        return new Res<ResMagnitudeListVO>(resVo);
     }
 
     /**
@@ -60,9 +57,39 @@ public class MypageController extends BaseController {
     @PostMapping("bookcaseList")
     @ApiOperation(value = "나의 책장 목록 조회")
     public Res<ResBookcaseListVO> bookcaseList(@RequestBody @Valid ReqBookcaseListVO reqVo) {
-
-        ResBookcaseListVO resVo = mypageService.selectBookcaseList(reqVo);
         reqVo.setUserManageId(cacheService.getUserManageId());
+        ResBookcaseListVO resVo = mypageService.selectBookcaseList(reqVo);
+
         return new Res<ResBookcaseListVO>(resVo);
+    }
+
+    /**
+     * 나의 사전
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("dicList")
+    @ApiOperation(value = "나의 사전 목록 조회")
+    public Res<ResDicListVO> dicList(@RequestBody @Valid ReqDicListVO reqVo) {
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        ResDicListVO resVo = mypageService.selectDicList(reqVo);
+
+        return new Res<ResDicListVO>(resVo);
+    }
+
+    /**
+     * 나의 포트 폴리오
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("portfolioList")
+    @ApiOperation(value = "나의 포트폴리오 목록 조회")
+    public Res<ResPortfolioListVO> portfolioList(@RequestBody @Valid ReqPortfolioListVO reqVo) {
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        ResPortfolioListVO resVo = mypageService.selectportfolioList(reqVo);
+
+        return new Res<ResPortfolioListVO>(resVo);
     }
 }

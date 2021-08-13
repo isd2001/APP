@@ -1,5 +1,6 @@
 package codegurus.learning.vo;
 
+import codegurus.mypage.vo.MyDicVO;
 import codegurus.oneline.vo.OnelineVO;
 import egovframework.com.cmm.service.FileVO;
 import io.swagger.annotations.ApiModelProperty;
@@ -77,7 +78,4 @@ public class BookVO {
 
     @ApiModelProperty(notes = "책 라벨 목록")
     private List<LabelVO> labelList;
-
-    @ApiModelProperty(notes = "책 한줄평 목록")
-    private List<OnelineVO> onelineList;
 }

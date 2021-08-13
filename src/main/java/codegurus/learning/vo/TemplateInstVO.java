@@ -16,6 +16,9 @@ public class TemplateInstVO {
     @ApiModelProperty(notes = "템플릿 ID", example = "1")
     private String templateId;
 
+    @ApiModelProperty(notes = "템플릿 명", example = "1")
+    private String templateTitle;
+
     @ApiModelProperty(notes = "콘텐츠 ID", example = "4")
     private String contentsId;
 
