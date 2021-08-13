@@ -12,6 +12,9 @@ import lombok.Setter;
 @Setter
 public class ResLearningContentsHistorySaveVO extends ResBaseVO {
 
-    @ApiModelProperty(notes = "콘텐츠 이력 ID", example = "1")
+    @ApiModelProperty(notes = "콘텐츠 이력 ID", example = "3")
     private String contentsHistoryId;
+
+    @ApiModelProperty(notes = "온라인 과목 스케줄 ID", example = "1")
+    private String onlineSubjectScheduleId;
 }

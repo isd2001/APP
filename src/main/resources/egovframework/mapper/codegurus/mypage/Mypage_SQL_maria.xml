@@ -4,8 +4,12 @@
 <mapper namespace="codegurus.mypage.MypageDAO">
     <!-- 나의진도 목록 조회 -->
     <resultMap id="MagnitudeMap" type="ResScheduleVO" autoMapping="true">
+        <id property="onlineSubjectScheduleId" column="online_subject_schedule_id" />
         <id property="contentsId" column="contents_id"/>
-        <association property="book" javaType = "BookVO" autoMapping="true">
+        <association property="contentsHistory" javaType="ContentsHistoryVO" autoMapping="true">
+            <result property="endDate" column="end_date"/>
+        </association>
+        <association property="book" javaType="BookVO" autoMapping="true">
             <id property="bookId" column="book_id"/>
             <result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
             <association property="bookThumbnail" javaType="FileVO" autoMapping="true">
@@ -16,15 +20,15 @@
     <select id="selectmagnitudeList" resultMap="MagnitudeMap">
         SELECT /* selectmagnitudeList */
             schedule.online_subject_schedule_id,
-            schedule.online_subject_id,
-            schedule.`year`,
-            schedule.`month`,
-            schedule.contents_id,
+
+            contents_history.contents_history_id,
+            contents_history.end_date,
+
+            contents.contents_id,
 
             book.book_id,
             book.book_title,
             book.book_thumbnail_file_id,
-            book.book_introduction,
 
             COMTNFILE.ATCH_FILE_ID,
             COMTNFILEDETAIL.FILE_CN,
@@ -38,22 +42,24 @@
             COMTNFILEDETAIL.DOWNLOAD_CNT
         FROM
             online_subject_schedule as schedule
-            left join contents_history as history
-                on history.user_manage_id = #{userManageId}
-                and history.delete_ornot ='N'
-            inner join contents as contents
-                on schedule.contents_id = contents.contents_id
-            inner join book as book
-                on contents.book_id = book.book_id
-            LEFT JOIN COMTNFILE
-                on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
-            LEFT JOIN COMTNFILEDETAIL
-                on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
-        WHERE schedule.`month`= #{month}
-        and schedule.delete_ornot ='N'
+        LEFT JOIN contents_history contents_history
+            on schedule.ONLINE_SUBJECT_SCHEDULE_ID = contents_history.online_subject_schedule_id
+            and contents_history.delete_ornot ='N'
+        LEFT JOIN contents as contents
+            on schedule.CONTENTS_ID = contents.contents_id
+        LEFT JOIN book as book
+            on contents.book_id = book.book_id
+        LEFT JOIN COMTNFILE
+            on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
+        LEFT JOIN COMTNFILEDETAIL
+            on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+        where schedule.`month`=#{month}
+            and schedule.active_ornot = 'Y'
+            and   history.user_manage_id = #{userManageId}
+        order by schedule.online_subject_schedule_id asc
     </select>
 
-    <!-- 나의진도 목록 조회 -->
+    <!-- 나의 책장 조회 -->
     <resultMap id="BookcaseMap" type="BookVO" autoMapping="true">
         <id property="bookId" column="book_id"/>
         <result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
@@ -64,8 +70,6 @@
     </resultMap>
     <select id="selectBookcaseList" resultMap="BookcaseMap">
         SELECT /* selectBookcaseList */
-            book.book_id,
-            book.book_title,
             book.book_thumbnail_file_id,
 
             labelManage.label_manage_id,
@@ -102,5 +106,143 @@
             and labelManage.delete_ornot = 'N'
         where history.delete_ornot = 'N'
         and   history.user_manage_id = #{userManageId}
+    </select>
+
+    <!-- 나의사전 목록 조회 -->
+    <resultMap id="MyDicMap" type="MyDicVO" autoMapping="true">
+        <id property="templateInstId" column="template_inst_id" />
+        <collection property="templateInstList" ofType="TemplateInstVO">
+            <id property="bookId" column="book_id" />
+            <result property="templateTitle" column="tempate_title"/>
+            <result property="json" column="json"/>
+            <association property="book" javaType = "BookVO" autoMapping="true">
+                <result property="bookTitle" column="book_title"/>
+            </association>
+        </collection>
+    </resultMap>
+    <select id="selectDicList" resultMap="MyDicMap">
+        SELECT /* selectDicList */
+            book.book_id,
+            book.book_title,
+
+            template_inst.template_inst_id,
+            template_inst.json,
+            template_inst.template_id,
+            template.template_title
+
+        FROM contents_history as history
+                 left join template_inst_history as tempate_inst_history
+                           on history.contents_history_id = tempate_inst_history.contents_history_id
+                 LEFT JOIN online_subject_schedule as schedule
+                           on history.online_subject_schedule_id = schedule.online_subject_schedule_id
+                 left JOIN contents as contents
+                           on schedule.contents_id = contents.contents_id
+                 LEFT JOIN template_inst as template_inst
+                           on contents.contents_id = template_inst.contents_id
+                    and tempate_inst_history.template_inst_id = template_inst.template_inst_id
+                               and template_inst.delete_ornot='N'
+                 LEFT JOIN template as template
+                           on template_inst.template_id = template.template_id
+                               and template.delete_ornot = 'N'
+                 INNER JOIN book as book
+                            on contents.book_id = book.book_id
+        where history.delete_ornot = 'N'
+          and   history.user_manage_id = #{userManageId}
+    </select>
+
+    <!-- 나의 포트폴리오 목록 조회 -->
+    <resultMap id="PortfilioMap" type="ResScheduleVO" autoMapping="true">
+        <id property="onlineSubjectScheduleId" column="online_subject_schedule_id" />
+        <id property="contentsId" column="contents_id"/>
+        <association property="contentsHistory" javaType="ContentsHistoryVO" autoMapping="true">
+            <result property="endDate" column="end_date"/>
+            <association property="drawingFile" javaType="FileVO" autoMapping="true">
+                <id property="atchFileId" column="summary_doing_drawing_file_id"/>
+            </association>
+            <association property="voiceFile" javaType="FileVO" autoMapping="true">
+                <id property="atchFileId" column="summary_doing_voice_file_id"/>
+            </association>
+        </association>
+        <association property="book" javaType="BookVO" autoMapping="true">
+            <id property="bookId" column="book_id"/>
+            <result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
+            <association property="bookThumbnail" javaType="FileVO" autoMapping="true">
+                <id property="atchFileId" column="book_thumbnail_file_id"/>
+            </association>
+        </association>
+    </resultMap>
+    <select id="selectportfolioList" resultMap="PortfilioMap">
+        SELECT /* selectmagnitudeList */
+            schedule.online_subject_schedule_id,
+
+            contents_history.contents_history_id,
+            contents_history.summary_doing_drawing_file_id ,
+            contents_history.summary_doing_voice_file_id,
+            contents_history.end_date,
+
+            DRAWING_COMTNFILE.ATCH_FILE_ID as DRAWING_ATCH_FILE_ID,
+            DRAWING_COMTNFILEDETAIL.FILE_CN as DRAWING_FILE_CN,
+            DRAWING_COMTNFILEDETAIL.FILE_SN as DRAWING,
+            DRAWING_COMTNFILEDETAIL.FILE_STRE_COURS as DRAWING,
+            DRAWING_COMTNFILEDETAIL.STRE_FILE_NM as DRAWING,
+            DRAWING_COMTNFILEDETAIL.FILE_EXTSN as DRAWING,
+            DRAWING_COMTNFILEDETAIL.ORIGNL_FILE_NM as DRAWING,
+            DRAWING_COMTNFILEDETAIL.FILE_SIZE as DRAWING,
+            DRAWING_COMTNFILE.CREAT_DT as DRAWING,
+            DRAWING_COMTNFILEDETAIL.DOWNLOAD_CNT as DRAWING,
+
+            VOICE_COMTNFILE.ATCH_FILE_ID as VOICE_,
+            VOICE_COMTNFILEDETAIL.FILE_CN,
+            VOICE_COMTNFILEDETAIL.FILE_SN,
+            VOICE_COMTNFILEDETAIL.FILE_STRE_COURS,
+            VOICE_COMTNFILEDETAIL.STRE_FILE_NM,
+            VOICE_COMTNFILEDETAIL.FILE_EXTSN,
+            VOICE_COMTNFILEDETAIL.ORIGNL_FILE_NM,
+            VOICE_COMTNFILEDETAIL.FILE_SIZE,
+            VOICE_COMTNFILE.CREAT_DT,
+            VOICE_COMTNFILEDETAIL.DOWNLOAD_CNT,
+
+            contents.contents_id,
+
+            book.book_id,
+            book.book_title,
+            book.book_thumbnail_file_id,
+
+            COMTNFILE.ATCH_FILE_ID,
+            COMTNFILEDETAIL.FILE_CN,
+            COMTNFILEDETAIL.FILE_SN,
+            COMTNFILEDETAIL.FILE_STRE_COURS,
+            COMTNFILEDETAIL.STRE_FILE_NM,
+            COMTNFILEDETAIL.FILE_EXTSN,
+            COMTNFILEDETAIL.ORIGNL_FILE_NM,
+            COMTNFILEDETAIL.FILE_SIZE,
+            COMTNFILE.CREAT_DT,
+            COMTNFILEDETAIL.DOWNLOAD_CNT
+        FROM
+            online_subject_schedule as schedule
+        LEFT JOIN contents_history contents_history
+            on schedule.ONLINE_SUBJECT_SCHEDULE_ID = contents_history.online_subject_schedule_id
+            and contents_history.delete_ornot ='N'
+        LEFT join COMTNFILE as DRAWING_COMTNFILE
+            on contents_history.summary_doing_drawing_file_id = DRAWING_COMTNFILE.ATCH_FILE_ID
+        LEFT JOIN COMTNFILEDETAIL as DRAWING_COMTNFILEDETAIL
+            on contents_history.summary_doing_drawing_file_id = DRAWING_COMTNFILEDETAIL.ATCH_FILE_ID
+        LEFT join COMTNFILE as VOICE_COMTNFILE
+            on contents_history.summary_doing_voice_file_id = VOICE_COMTNFILE.ATCH_FILE_ID
+        LEFT JOIN COMTNFILEDETAIL as VOICE_COMTNFILEDETAIL
+            on contents_history.summary_doing_voice_file_id = VOICE_COMTNFILEDETAIL.ATCH_FILE_ID
+        LEFT JOIN contents as contents
+            on schedule.CONTENTS_ID = contents.contents_id
+            and contents_history.user_manage_id = #{userManageId}
+        LEFT JOIN book as book
+            on contents.book_id = book.book_id
+        LEFT JOIN COMTNFILE
+            on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
+        LEFT JOIN COMTNFILEDETAIL
+            on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+        where schedule.`month`=#{month}
+            and schedule.active_ornot = 'Y'
+            and   contents_history.user_manage_id = #{userManageId}
+        order by schedule.online_subject_schedule_id asc
     </select>
 </mapper>

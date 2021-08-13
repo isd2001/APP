@@ -6,11 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 나의 책장 목록 요청 VO
+ * 나의 사전 목록 요청 VO
  */
 @Getter
 @Setter
-public class ReqBookcaseListVO extends ReqBaseVO {
+public class ReqDicListVO extends ReqBaseVO {
 
     @ApiModelProperty(hidden = true)
     private String userManageId;
