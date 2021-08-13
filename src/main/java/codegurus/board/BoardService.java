@@ -47,6 +47,8 @@ public class BoardService {
      * @return
      */
     public ResBoardDetailVO selectBoardDetail(ReqBoardDetailVO reqVo) {
+        boardDAO.updateLookupCount(reqVo);
+
         ResBoardDetailVO resVo = boardDAO.selectBoardDetail(reqVo); // 공지사항 목록 조회
 
         if(resVo == null) {

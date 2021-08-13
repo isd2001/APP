@@ -21,7 +21,7 @@ public class TemplateInstHistorySaveVo {
     private String correctanswerStatus;
 
     @ApiModelProperty(hidden = true)
-    private String regId;
+    private String userManageId;
 
 
 }

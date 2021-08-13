@@ -75,10 +75,25 @@ public class LearningController extends BaseController {
     public Res<ResLearningContentsHistorySaveVO> save(@RequestBody @Valid ReqLearningContentsHistorySaveVO reqVo) {
 
         ResLearningContentsHistorySaveVO resVo= new ResLearningContentsHistorySaveVO();
-        reqVo.setRegId(cacheService.getUserManageId());
+        reqVo.setUserManageId(cacheService.getUserManageId());
         learningService.saveLearningContentsHistory(reqVo, resVo);
 
         return new Res<ResLearningContentsHistorySaveVO>(resVo);
 
+    }
+
+    /**
+     * 학습 결과
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/result")
+    @ApiOperation(value = "학습 결과 조회")
+    public Res<ResLearningResultVO> result(@RequestBody @Valid ReqLearningResultVO reqVo) {
+
+        ResLearningResultVO resVo = new ResLearningResultVO();
+        learningService.selectLearningResult(reqVo, resVo);
+        return new Res<ResLearningResultVO>(resVo);
     }
 }

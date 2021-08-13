@@ -27,6 +27,10 @@
 		WHERE 1=1
 		  	and onelinereview.delete_ornot = 'N'
 			and onelinereview.book_id = #{bookId}
+			<if test = 'regId != null'>
+				and onelinerview.reg_id = #{regId}
+			</if>
+
 	</select>
 	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 한줄평 조회 -->
 	<select id="selectOneline" resultType="ResOnelineVO">

@@ -20,4 +20,5 @@ public interface AuthDAO {
     String selectConnectedFamilyYN(Map<String, String> qp);
     void insertFamilyRelation(Map<String, String> qp);
     List<ChildInfoVO> selectChildrenByParent(String userManageFamilyId);
+    List<ResContractInfoElemVO> selectContractInfo(ReqContractInfoVO reqVo);
 }

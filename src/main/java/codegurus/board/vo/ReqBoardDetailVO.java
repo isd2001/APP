@@ -15,6 +15,6 @@ public class ReqBoardDetailVO extends ReqBaseVO {
     @ApiModelProperty(notes = "게시판 id", example = "1")
     private String boardId = "";
 
-    @ApiModelProperty(notes = "유형", example = "공지사항")
+    @ApiModelProperty(notes = "유형", example = "공지사항", hidden = true)
     private String type = "";
 }

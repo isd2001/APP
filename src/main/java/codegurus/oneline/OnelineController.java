@@ -94,4 +94,18 @@ public class OnelineController extends BaseController {
         onelineService.saveMarkGood(reqVo, resVo);
         return new Res<ResOnelineMarkGoodVO>(resVo);
     }
+
+    /**
+     * 내가 쓴 한줄평 목록 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/myList")
+    @ApiOperation(value = "내가 쓴 한줄평")
+    public Res<ResOnelineListVO> myList(@RequestBody @Valid ReqOnelineListVO reqVo) {
+        ResOnelineListVO resVo = onelineService.selectOnelineList(reqVo);
+        reqVo.setRegId(cacheService.getUserManageId());
+        return new Res<ResOnelineListVO>(resVo);
+    }
 }

@@ -74,7 +74,7 @@ public class LearningService {
 
             for(int i = 0; i < reqVo.getTemplateInstHistorySaveList().size(); i++) {
                 reqVo.getTemplateInstHistorySaveList().get(i).setContentsHistoryId(reqVo.getContentsHistoryId());
-                reqVo.getTemplateInstHistorySaveList().get(i).setRegId(reqVo.getRegId());
+                reqVo.getTemplateInstHistorySaveList().get(i).setUserManageId(reqVo.getUserManageId());
                 insertTemplateInstHistoryList.add(reqVo.getTemplateInstHistorySaveList().get(i));
             }
 
@@ -85,5 +85,22 @@ public class LearningService {
         }
         // 응답에 contentsId 바인딩
         resVo.setContentsHistoryId(reqVo.getContentsHistoryId());
+    }
+
+    /**
+     * 학습 결과 조회
+     *
+     * @param reqVo
+     * @param resVO
+     * @return
+     */
+    public ResLearningResultVO selectLearningResult(ReqLearningResultVO reqVo, ResLearningResultVO resVO) {
+        ContentsHistoryVO item = learningDAO.selectLearningResult(reqVo);
+
+        if(item == null){ SystemUtil.returnNoSearchResult(); } // 조회 결과 없음 리턴
+
+        resVO.setItem(item);
+
+        return resVO;
     }
 }

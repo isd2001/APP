@@ -39,8 +39,8 @@ public class BookVO {
     @ApiModelProperty(notes = "교육 카테고리 ID", example = "{}")
     private String cateId; // 교육 카테고리
 
-    /*@ApiModelProperty(notes = "교육 카테고리 상세", example = "{}")
-    private CateVO cate;*/
+    @ApiModelProperty(notes = "교육 카테고리 상세", example = "{}")
+    private CateVO cate;
 
     @ApiModelProperty(notes = "작가", example = "박시연")
     private String author;

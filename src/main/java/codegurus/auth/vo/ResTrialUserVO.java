@@ -1,9 +1,14 @@
 package codegurus.auth.vo;
 
+import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.vo.res.ResBaseVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * 체험회원 정보 조회 응답 VO
@@ -33,6 +38,15 @@ public class ResTrialUserVO extends ResBaseVO {
     @ApiModelProperty(notes = "부모 핸드폰번호", example = "01056781234", position = 7)
 	private String parentCellphone;
 
+    @ApiModelProperty(notes = "우편번호", example = "05869", position = 8)
+    private String zipcode;
+
+    @ApiModelProperty(notes = "주소", example = "서울특별시 강동구 진황도로 189(둔촌동)", position = 9)
+    private String address;
+
+    @ApiModelProperty(notes = "상세주소", example = "101동 1405호", position = 10)
+    private String addressDetail;    
+    
     @ApiModelProperty(notes = "체험 시작일", example = "20210701", position = 8)
 	private String trialStartDate;
 

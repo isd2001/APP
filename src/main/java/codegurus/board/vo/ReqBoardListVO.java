@@ -12,6 +12,6 @@ import lombok.Setter;
 @Setter
 public class ReqBoardListVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "유형", example = "공지사항")
+    @ApiModelProperty(notes = "유형", example = "공지사항", hidden = true)
     String type = "";
 }

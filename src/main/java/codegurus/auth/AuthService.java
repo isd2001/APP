@@ -3,7 +3,6 @@ package codegurus.auth;
 import codegurus.auth.vo.*;
 import codegurus.cmm.CommonDAO;
 import codegurus.cmm.cache.CacheService;
-import codegurus.cmm.constants.AuthEnum;
 import codegurus.cmm.constants.Constants;
 import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.exception.CustomException;
@@ -15,7 +14,6 @@ import codegurus.cmm.vo.req.ReqAuthVO;
 import codegurus.cmm.vo.res.ResAuthVO;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus_ext.voc.VocDAO;
-import com.google.common.collect.ImmutableMap;
 import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -237,13 +235,38 @@ public class AuthService implements UserDetailsService {
     }
 
     /**
+     * 계약정보 조회 (정회원 인증 전)
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResContractInfoVO getContractInfo(ReqContractInfoVO reqVo) {
+
+        ResContractInfoVO resVo = new ResContractInfoVO();
+
+        List<ResContractInfoElemVO> list = authDAO.selectContractInfo(reqVo);
+        resVo.setList(list);
+
+        return resVo;
+    }
+
+    /**
      * 정회원 인증
      *
      * @param reqVo
      * @return
      */
-    public ResFullMemberAuthVO fullmemberAuth(ReqFullMemberAuthVO reqVo) {
+    public ResContractInfoVO fullmemberAuth(ReqContractInfoVO reqVo) {
 
+        // 교육계약 사본 조회
+
+        // 조회 결과가 없을 경우 종료
+
+        // 토큰의 개인정보와 대조
+
+        // 사용자과목 레코드 생성
+
+        // 사용자권한 변경 (학생일반회원 -> 학생정회원)
 
 
         return null;
