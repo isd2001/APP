@@ -15,7 +15,6 @@ import javax.validation.constraints.Size;
 /**
  * 계약정보 조회 (정회원 인증 전) 요청 VO
  */
-@Getter
 @Setter
 public class ReqContractInfoVO extends ReqBaseVO {
 
@@ -42,6 +41,23 @@ public class ReqContractInfoVO extends ReqBaseVO {
     @ApiModelProperty(notes = "부모 핸드폰번호", required = true, example = "01071858850", position = 5)
     @Pattern(regexp= StringUtil.REGEX_CELLPHONE)
     private String parentCellphone;
+
+    // 여백 때문에 실패하지 않도록 trim 보강.
+    public String getName() {
+        return StringUtil.trim(name);
+    }
+    public String getBirth() {
+        return StringUtil.trim(birth);
+    }
+    public String getParentName() {
+        return StringUtil.trim(parentName);
+    }
+    public String getParentBirth() {
+        return StringUtil.trim(parentBirth);
+    }
+    public String getParentCellphone() {
+        return StringUtil.trim(parentCellphone);
+    }
 
     // 교육계약 테이블에 비교할 만한 필드가 없어서 주석처리
 //    @ApiModelProperty(notes = "성별", required = true, example = "M", position = 5)

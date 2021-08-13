@@ -259,12 +259,20 @@ public class AuthService implements UserDetailsService {
     public ResContractInfoVO fullmemberAuth(ReqContractInfoVO reqVo) {
 
         // 교육계약 사본 조회
+        List<ResContractInfoElemVO> list = authDAO.selectContractInfo(reqVo);
+        if (list.size() == 0) {
+            throw new CustomException(ResCodeEnum.INFO_0016);
+        }
 
-        // 조회 결과가 없을 경우 종료
-
-        // 토큰의 개인정보와 대조
+        // 토큰의 개인정보와 대조 - TODO: 이 제약조건이 과하면 삭제하자.
+        UserVO userVo = cacheService.getTokenUser();
+        log.debug("## 정회원인증 > 토큰 개인정보 대조 - 토큰 사용자명:[{}], 파라미터 사용자 명:[{}], 토큰 생년월일:[{}], 파라미터 생년월일:[{}]", userVo.getName(), reqVo.getName(), userVo.getBirth(), reqVo.getBirth());
+        if(! (userVo.getName().equals(reqVo.getName()) && userVo.getBirth().equals(reqVo.getBirth()))){
+            throw new CustomException(ResCodeEnum.INFO_0017);
+        }
 
         // 사용자과목 레코드 생성
+
 
         // 사용자권한 변경 (학생일반회원 -> 학생정회원)
 

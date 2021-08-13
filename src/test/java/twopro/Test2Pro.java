@@ -25,7 +25,31 @@ public class Test2Pro {
 //        test05();
 //        test06();
 //        test07();
-        test08();
+//        test08();
+        test09();
+    }
+
+    private static void test09() {
+
+
+//          int pgressNum = 10;
+        int pgressNum = 40;
+//        int pgressNum = 60;
+//        int pgressNum = 130;
+//        int pgressNum = 160;
+//        int pgressNum = 170;
+//        int pgressNum = 500;
+//        int pgressNum = 1910;
+
+        int quotient = pgressNum / 40;
+        int remaining = pgressNum % 40;
+
+        int month = (remaining == 0) ? quotient : quotient + 1;
+
+        int grade = 0;
+
+        System.out.println("pgressNum:["+ pgressNum +"], 몫:["+ quotient +"], 나머지:["+ remaining +"], 학년:["+ grade +"], 월:["+ month +"]");
+
     }
 
     private static void test08() {

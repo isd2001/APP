@@ -18,9 +18,9 @@ public class ResContractInfoElemVO extends ResBaseVO {
     @ApiModelProperty(notes = "자녀 이름", example = "김승주", position = 2)
     private String name;
 
-    @ApiModelProperty(notes = "과목 명", example = "", position = 3) // TODO: 과목 명인지 상품 명인지, 오프라인/온라인 여부 확인
+    @ApiModelProperty(notes = "과목 명", example = "", position = 3) // 기획이 좀 헷갈리지만 주석을 따르도록 하자
     private String sapSubjectTitle;
 
-    @ApiModelProperty(notes = "상태", example = "", position = 4) // TODO: 어떤 값을 뿌려줄 것인지 확인
+    @ApiModelProperty(notes = "상태", example = "", position = 4) // 교육상태를 출력해 주는 것이라 한다.
     private String eduStatCdNm;
 }

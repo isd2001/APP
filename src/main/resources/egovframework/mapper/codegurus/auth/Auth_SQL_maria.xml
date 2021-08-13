@@ -283,7 +283,7 @@
 
     <!-- 정회원 인증 전 계약내용 조회 -->
     <select id="selectContractInfo" resultType="ResContractInfoElemVO">
-        SELECT /* selectFullMemberCheck */
+        SELECT /* selectContractInfo */
              intg_edu_cntr_id
             ,intg_cust_id
             ,intg_parent_cust_id
@@ -307,6 +307,7 @@
         AND parent_handphone = #{parentCellphone}
         AND a.sap_subj_id = b.sap_subject_id
         AND b.online_subject_id = c.online_subject_id
+        AND a.delete_ornot = 'N'
     </select>
 
 </mapper>
