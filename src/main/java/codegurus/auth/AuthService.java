@@ -121,7 +121,8 @@ public class AuthService implements UserDetailsService {
 //                .build();
 //        refreshTokenRepository.save(refreshToken);
 
-//         5. 토큰 발급
+        // TODO: 이 회원이 사용할 수 있는 온라인상품/과목/월 조회
+
         return resVo;
 
     }

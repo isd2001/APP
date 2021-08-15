@@ -1,8 +1,11 @@
 package twopro;
 
+import codegurus.cmm.constants.PgressNumEnumRC;
 import codegurus.cmm.util.StringUtil;
+import codegurus.cmm.vo.PgressVO;
 import egovframework.rte.fdl.idgnr.impl.Base64;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.util.SystemOutLogger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -31,25 +34,19 @@ public class Test2Pro {
 
     private static void test09() {
 
-
 //          int pgressNum = 10;
-        int pgressNum = 40;
+//        int pgressNum = 40;
+//        int pgressNum = 50;
 //        int pgressNum = 60;
 //        int pgressNum = 130;
 //        int pgressNum = 160;
 //        int pgressNum = 170;
-//        int pgressNum = 500;
+        int pgressNum = 500;
+//        int pgressNum = 1010;
 //        int pgressNum = 1910;
 
-        int quotient = pgressNum / 40;
-        int remaining = pgressNum % 40;
-
-        int month = (remaining == 0) ? quotient : quotient + 1;
-
-        int grade = 0;
-
-        System.out.println("pgressNum:["+ pgressNum +"], 몫:["+ quotient +"], 나머지:["+ remaining +"], 학년:["+ grade +"], 월:["+ month +"]");
-
+        PgressVO vo = PgressNumEnumRC.getOnlinePgressInfo(pgressNum);
+        System.out.println(vo);
     }
 
     private static void test08() {
