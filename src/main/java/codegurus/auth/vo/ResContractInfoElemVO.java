@@ -1,6 +1,7 @@
 package codegurus.auth.vo;
 
 import codegurus.cmm.vo.res.ResBaseVO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,4 +24,38 @@ public class ResContractInfoElemVO extends ResBaseVO {
 
     @ApiModelProperty(notes = "상태", example = "", position = 4) // 교육상태를 출력해 주는 것이라 한다.
     private String eduStatCdNm;
+
+    @JsonIgnore
+    private String intgEduCntrId;
+
+    @JsonIgnore
+    private String intgCustId;
+
+    @JsonIgnore
+    private String intgParentCustId;
+
+    @JsonIgnore
+    private String intgSubjId;
+
+    @JsonIgnore
+    private String sapSubjId;
+
+    @JsonIgnore
+    private String eduStatCd;
+
+    @JsonIgnore
+    private String intgProdtId;/*SAP 데이터가 거의 없음 */
+
+    @JsonIgnore
+    private String prodtNm;
+
+    @JsonIgnore
+    private String serviceTitle;
+
+    @JsonIgnore
+    private String subjectTitle;
+
+    @JsonIgnore
+    private String svcChagDate;
+
 }

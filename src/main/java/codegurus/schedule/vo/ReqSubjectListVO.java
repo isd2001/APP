@@ -11,6 +11,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReqSubjectListVO extends ReqBaseVO {
-    @ApiModelProperty(notes = "서비스코드 PRC:스마트독서, P2.0:플라톤2.0", example ="PRC")
-    private String serviceCode;
+
+    // 구버전
+//    @ApiModelProperty(notes = "서비스코드 PRC:스마트독서, P2.0:플라톤2.0", example ="PRC")
+//    private String serviceCode;
+
+    // 신버전
+    @ApiModelProperty(notes = "1:스마트독서, 2:플라톤2.0", example ="PRC")
+    private String productId;
+
 }

@@ -22,7 +22,7 @@
 		WHERE 1=1
 		and use_ornot = 'Y'
 		and delete_ornot = 'N'
-		and service_code = #{serviceCode}
+		and product_id = #{productId}
 		ORDER BY online_subject_id
 	</select>
 

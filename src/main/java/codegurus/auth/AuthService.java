@@ -273,7 +273,9 @@ public class AuthService implements UserDetailsService {
         }
 
         // 사용자과목 레코드 생성
-
+//        for(ResContractInfoElemVO vo : list){
+//            authDAO.insert
+//        }
 
         // 사용자권한 변경 (학생일반회원 -> 학생정회원)
 

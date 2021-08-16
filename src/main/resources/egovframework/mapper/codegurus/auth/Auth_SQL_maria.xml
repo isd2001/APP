@@ -289,6 +289,7 @@
             ,intg_parent_cust_id
             ,intg_subj_id
             ,sap_subj_id
+            ,edu_stat_cd
             ,edu_stat_cd_nm
             ,cust_nm as name
             ,parent_cust_nm as parentName
@@ -297,7 +298,6 @@
             ,b.sap_subject_title
             ,c.service_title
             ,c.subject_title
-            ,edu_stat_cd_nm
             ,svc_chag_date
         FROM svc_mh_edu_cntr_cp a, online_subject_sap_mapping b, online_subject c
         WHERE cust_nm = #{name}
@@ -309,5 +309,36 @@
         AND b.online_subject_id = c.online_subject_id
         AND a.delete_ornot = 'N'
     </select>
+
+    <!-- 사용자과목 insert -->
+    <insert id="insertUserSubject">
+        INSERT /* insertUserSubject */
+        INTO user_subject
+        (
+            user_manage_id,
+            intg_cust_id,
+            intg_edu_cntr_id,
+            intg_subj_id,
+            sap_subj_id,
+            online_subject_id,
+            online_subject_start_dt,
+            online_subject_end_dt,
+            reg_id,
+            modify_id
+        )
+        VALUES
+        (
+            #{userManageId},
+            #{intgCustId},
+            #{intgEduCntrId},
+            #{intgSubjId},
+            #{sapSubjId},
+            #{onlineSubjectId},
+            #{onlineSubjectStartDt},
+            #{onlineSubjectEndDt},
+            #{regId},
+            #{regId}
+        )
+    </insert>
 
 </mapper>
