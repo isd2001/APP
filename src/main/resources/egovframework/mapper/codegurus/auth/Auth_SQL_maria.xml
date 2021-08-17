@@ -287,7 +287,7 @@
              intg_edu_cntr_id
             ,intg_cust_id
             ,intg_parent_cust_id
-            ,intg_subj_id
+            ,a.intg_subj_id
             ,sap_subj_id
             ,edu_stat_cd
             ,edu_stat_cd_nm
@@ -305,9 +305,11 @@
         AND parent_cust_nm = #{parentName}
         AND parent_birthdt = #{parentBirth}
         AND parent_handphone = #{parentCellphone}
-        AND a.sap_subj_id = b.sap_subject_id
+        -- AND a.sap_subj_id = b.sap_subject_id -- 구버전
+        AND a.intg_subj_id = b.intg_subj_id
         AND b.online_subject_id = c.online_subject_id
         AND a.delete_ornot = 'N'
+        GROUP BY intg_edu_cntr_id
     </select>
 
     <!-- 사용자과목 insert -->
@@ -340,5 +342,17 @@
             #{regId}
         )
     </insert>
+
+	<!-- 온라인과목정보 프로시저 호출 -->
+	<select id="callGetOnlineSubjInfo" statementType="CALLABLE" resultType="LHMap">
+		{
+			CALL GET_ONLINE_SUBJ_INFO(
+				#{intgEduCntrId},
+				#{productId, mode=OUT, jdbcType=INTEGER},
+				#{onlineSubjectId, mode=OUT, jdbcType=INTEGER},
+				#{month, mode=OUT, jdbcType=VARCHAR}
+			)
+		}
+	</select>
 
 </mapper>

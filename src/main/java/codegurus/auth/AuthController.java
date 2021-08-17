@@ -130,7 +130,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "계약정보 조회 (정회원 인증 전)")
+	@ApiOperation(value = "계약정보 조회 (정회원 인증 직전)")
 	@PostMapping("/contractInfo")
 	public Res<ResContractInfoVO> contractInfo(@RequestBody @Valid ReqContractInfoVO reqVo) {
 
@@ -144,12 +144,12 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "정회원 인증 (작업중)")
+	@ApiOperation(value = "정회원 인증")
 	@PostMapping("/fullmemberAuth")
-	public Res<ResContractInfoVO> fullmemberAuth(@RequestBody @Valid ReqContractInfoVO reqVo) {
+	public Res<ResFullmemberAuthVO> fullmemberAuth(@RequestBody @Valid ReqFullmemberAuthVO reqVo) {
 
-		ResContractInfoVO resVo = authService.fullmemberAuth(reqVo);
-		return new Res<ResContractInfoVO>(resVo);
+		ResFullmemberAuthVO resVo = authService.fullmemberAuth(reqVo);
+		return new Res<ResFullmemberAuthVO>(resVo);
 	}
 
 	/**

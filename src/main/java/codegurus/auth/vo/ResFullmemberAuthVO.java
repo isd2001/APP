@@ -4,12 +4,14 @@ import codegurus.cmm.vo.res.ResBaseVO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
- * 회원가입 (학생) 응답 VO
+ * 정회원 인증 응답 VO
  */
 @Getter
 @Setter
-public class ResRegisterVO extends ResBaseVO {
+public class ResFullmemberAuthVO extends ResBaseVO {
 
-    private String userManageIdEnc;
+
 }

@@ -28,10 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -199,8 +196,8 @@ public class AuthService implements UserDetailsService {
         // INSERT (사용자 권한 매핑)
         authDAO.insertUserAuth(reqVo);
 
-        // 응답에 PK 바인딩
-        resVo.setUserManageId(reqVo.getUserManageId());
+        // 웅답에 암호화된 사용자관리ID 바인딩 (이후 정회원인증을 위해서)
+        resVo.setUserManageIdEnc(cryptoService.encrypt(reqVo.getUserManageId()));
 
         return resVo;
     }
@@ -257,7 +254,12 @@ public class AuthService implements UserDetailsService {
      * @param reqVo
      * @return
      */
-    public ResContractInfoVO fullmemberAuth(ReqContractInfoVO reqVo) {
+    public ResFullmemberAuthVO fullmemberAuth(ReqFullmemberAuthVO reqVo) {
+
+        ResFullmemberAuthVO resVo = new ResFullmemberAuthVO();
+
+        String userManageId = cryptoService.decrypt(reqVo.getUserManageIdEnc());
+        log.debug("## userManageId:[{}]", userManageId);
 
         // 교육계약 사본 조회
         List<ResContractInfoElemVO> list = authDAO.selectContractInfo(reqVo);
@@ -265,22 +267,39 @@ public class AuthService implements UserDetailsService {
             throw new CustomException(ResCodeEnum.INFO_0016);
         }
 
+        // 토큰 대신 userManageIdEnc 를 사용하자.
         // 토큰의 개인정보와 대조 - TODO: 이 제약조건이 과하면 삭제하자.
-        UserVO userVo = cacheService.getTokenUser();
-        log.debug("## 정회원인증 > 토큰 개인정보 대조 - 토큰 사용자명:[{}], 파라미터 사용자 명:[{}], 토큰 생년월일:[{}], 파라미터 생년월일:[{}]", userVo.getName(), reqVo.getName(), userVo.getBirth(), reqVo.getBirth());
+//        UserVO userVo = cacheService.getTokenUser();
+//        log.debug("## 정회원인증 > 토큰 개인정보 대조 - 토큰 사용자명:[{}], 파라미터 사용자 명:[{}], 토큰 생년월일:[{}], 파라미터 생년월일:[{}]", userVo.getName(), reqVo.getName(), userVo.getBirth(), reqVo.getBirth());
+//        if(! (userVo.getName().equals(reqVo.getName()) && userVo.getBirth().equals(reqVo.getBirth()))){
+//            throw new CustomException(ResCodeEnum.INFO_0017);
+//        }
+
+        // 방급 가입한 회원정보와 대조 - TODO: 이 제약조건이 과하면 삭제하자.
+        UserVO userVo = commonDAO.selectUserByUserManageId(userManageId);
+        log.debug("## userVo:[{}]", JsonUtil.toJson(userVo));
+        log.debug("## 정회원인증 > 개인정보 대조 - 회원정보 사용자명:[{}], 파라미터 사용자 명:[{}], 회원정보 생년월일:[{}], 파라미터 생년월일:[{}]", userVo.getName(), reqVo.getName(), userVo.getBirth(), reqVo.getBirth());
         if(! (userVo.getName().equals(reqVo.getName()) && userVo.getBirth().equals(reqVo.getBirth()))){
             throw new CustomException(ResCodeEnum.INFO_0017);
         }
 
         // 사용자과목 레코드 생성
-//        for(ResContractInfoElemVO vo : list){
-//            authDAO.insert
-//        }
+        for(ResContractInfoElemVO vo : list){
+
+            // 교육계약ID로 온라인과목 정보 조회
+            Map<String, Object> params = new LinkedHashMap<>();
+            params.put("intgEduCntrId", vo.getIntgEduCntrId());
+            authDAO.callGetOnlineSubjInfo(params); // procedure call
+            log.debug("## params:[{}]", JsonUtil.toJson(params));
+
+            // TODO: 교육계약상태코드에 따른 온라인과목/시작,종료일을 어떻게? => 프로시저에서 처리?
+
+        }
 
         // 사용자권한 변경 (학생일반회원 -> 학생정회원)
 
 
-        return null;
+        return resVo;
     }
 
     /**

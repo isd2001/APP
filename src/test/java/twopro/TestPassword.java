@@ -51,8 +51,10 @@ public class TestPassword {
     @Test
     public void testEgovEncDec(){
 
-        String pw = "parent01!@";
-        pw = StringUtil.maskPW(pw); // 패스워드 마스킹
+//        String pw = "parent01!@";
+//        pw = StringUtil.maskPW(pw); // 패스워드 마스킹
+
+        String pw = "1";
 
         String encPw = cryptoService.encrypt(pw);
         log.debug("## 전자정부 암호화 결과:[{}]", encPw);
