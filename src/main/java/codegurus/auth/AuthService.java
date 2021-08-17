@@ -233,6 +233,37 @@ public class AuthService implements UserDetailsService {
     }
 
     /**
+     * 상담 신청
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResCounselVO reqCounsel(ReqCounselVO reqVo) {
+
+        ResCounselVO resVo = new ResCounselVO();
+
+        log.debug("## reqVo:[{}]", JsonUtil.toJson(reqVo));
+
+        // smsToken 체크
+        SmsToken smsToken = JsonUtil.toObject(cryptoService.decrypt(reqVo.getSmsToken()), SmsToken.class);
+        log.debug("## smsToken:[{}]", JsonUtil.toJson(smsToken));
+        if(! smsToken.getName().equals(StringUtil.trim(reqVo.getParentName()))){
+            throw new CustomException(ResCodeEnum.INFO_0013);
+        }
+        if(! smsToken.getCellphone().equals(StringUtil.trim(reqVo.getParentCellphone()))){
+            throw new CustomException(ResCodeEnum.INFO_0014);
+        }
+
+        // db 조회 테스트 코드 - TODO: 삭제
+        List<Map<String, String>> vocTestList = vocDAO.selectVocDbTest();
+        log.debug("## vocTestList:[{}]", JsonUtil.toJson(vocTestList));
+
+        // TODO: VOC 프로시저 호출
+
+        return resVo;
+    }
+
+    /**
      * 계약정보 조회 (정회원 인증 전)
      *
      * @param reqVo
@@ -298,35 +329,6 @@ public class AuthService implements UserDetailsService {
 
         // 사용자권한 변경 (학생일반회원 -> 학생정회원)
 
-
-        return resVo;
-    }
-
-    /**
-     * 상담 신청
-     *
-     * @param reqVo
-     * @return
-     */
-    public ResCounselVO reqCounsel(ReqCounselVO reqVo) {
-
-        ResCounselVO resVo = new ResCounselVO();
-
-        log.debug("## reqVo:[{}]", JsonUtil.toJson(reqVo));
-
-        // smsToken 체크
-        SmsToken smsToken = JsonUtil.toObject(cryptoService.decrypt(reqVo.getSmsToken()), SmsToken.class);
-        log.debug("## smsToken:[{}]", JsonUtil.toJson(smsToken));
-        if(! smsToken.getName().equals(StringUtil.trim(reqVo.getParentName()))){
-            throw new CustomException(ResCodeEnum.INFO_0013);
-        }
-        if(! smsToken.getCellphone().equals(StringUtil.trim(reqVo.getParentCellphone()))){
-            throw new CustomException(ResCodeEnum.INFO_0014);
-        }
-
-        // db 조회 테스트 코드 - TODO: 삭제
-        List<Map<String, String>> vocTestList = vocDAO.selectVocDbTest();
-        log.debug("## vocTestList:[{}]", JsonUtil.toJson(vocTestList));
 
         return resVo;
     }

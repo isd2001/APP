@@ -125,6 +125,20 @@ public class AuthController extends BaseController {
 	}
 
 	/**
+	 * 상담 신청
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "상담 신청 (파라미터 변경 가능성 있음)")
+	@PostMapping("/counselReq")
+	public Res<ResCounselVO> counselReq(@RequestBody @Valid ReqCounselVO reqVo) {
+
+		ResCounselVO resVo = authService.reqCounsel(reqVo);
+		return new Res<ResCounselVO>(resVo);
+	}
+
+	/**
 	 * 계약정보 조회 (정회원 인증 전)
 	 *
 	 * @param reqVo
@@ -150,20 +164,6 @@ public class AuthController extends BaseController {
 
 		ResFullmemberAuthVO resVo = authService.fullmemberAuth(reqVo);
 		return new Res<ResFullmemberAuthVO>(resVo);
-	}
-
-	/**
-	 * 상담 신청
-	 *
-	 * @param reqVo
-	 * @return
-	 */
-	@ApiOperation(value = "상담 신청 (파라미터 변경 가능성 있음)")
-	@PostMapping("/counselReq")
-	public Res<ResCounselVO> counselReq(@RequestBody @Valid ReqCounselVO reqVo) {
-
-		ResCounselVO resVo = authService.reqCounsel(reqVo);
-		return new Res<ResCounselVO>(resVo);
 	}
 
 	/**
