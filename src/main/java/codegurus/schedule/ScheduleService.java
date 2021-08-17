@@ -58,7 +58,7 @@ public class ScheduleService {
      * @param reqVo
      * @return
      */
-    public ResScheduleListVO selectThisMonthBookList(ReqScheduleListVO reqVo) {
+    public ResScheduleListVO selectThisMonthBookList(ReqThisMonthBookVO reqVo) {
 
         ResScheduleListVO resVo = new ResScheduleListVO();
         resVo.setList(scheduleDAO.selectThisMonthBookList(reqVo));

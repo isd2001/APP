@@ -35,16 +35,19 @@ public class ResScheduleVO extends BaseVO {
     @ApiModelProperty(notes = "활성화 여부", example = "Y", position = 7)
     private String activeOrnot;
 
-    @ApiModelProperty(notes = "등록 ID", example = "1", position = 8)
+    @ApiModelProperty(notes = "위치 (현재는 1~8의 값으로 위치별 번호가 있음)", example = "1", position = 8)
+    private String position;
+
+    @ApiModelProperty(notes = "등록 ID", example = "1", position = 9)
     private int regId;
 
-    @ApiModelProperty(notes = "등록 날짜", example = "", position = 9)
+    @ApiModelProperty(notes = "등록 날짜", example = "", position = 10)
     private String regDate;
 
-    @ApiModelProperty(notes = "수정 ID", example = "1", position = 10)
+    @ApiModelProperty(notes = "수정 ID", example = "1", position = 11)
     private int modifyId;
 
-    @ApiModelProperty(notes = "수정 날짜", example = "", position = 11)
+    @ApiModelProperty(notes = "수정 날짜", example = "", position = 12)
     private String modifyDate;
 
     @ApiModelProperty(notes = "책 정보")
