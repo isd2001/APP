@@ -17,7 +17,7 @@ public class ReqSubjectListVO extends ReqBaseVO {
 //    private String serviceCode;
 
     // 신버전
-    @ApiModelProperty(notes = "1:스마트독서, 2:플라톤2.0", example ="PRC")
+    @ApiModelProperty(notes = "1:스마트독서, 2:플라톤2.0", example ="1")
     private String productId;
 
 }

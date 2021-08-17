@@ -22,4 +22,6 @@ public interface AuthDAO {
     List<ChildInfoVO> selectChildrenByParent(String userManageFamilyId);
     List<ResContractInfoElemVO> selectContractInfo(ReqContractInfoVO reqVo);
     Map<String, Object> callGetOnlineSubjInfo(Map<String, Object> map);
+    void insertUserSubject(Map<String, String> map);
+    int updateUserAuth(Map<String, Object> map);
 }

@@ -3,17 +3,18 @@ package codegurus.auth;
 import codegurus.auth.vo.*;
 import codegurus.cmm.CommonDAO;
 import codegurus.cmm.cache.CacheService;
-import codegurus.cmm.constants.Constants;
-import codegurus.cmm.constants.ResCodeEnum;
+import codegurus.cmm.constants.*;
 import codegurus.cmm.exception.CustomException;
 import codegurus.cmm.jwt.TokenProvider;
 import codegurus.cmm.util.JsonUtil;
 import codegurus.cmm.util.StringUtil;
+import codegurus.cmm.util.SystemUtil;
 import codegurus.cmm.util.WebUtil;
 import codegurus.cmm.vo.req.ReqAuthVO;
 import codegurus.cmm.vo.res.ResAuthVO;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus_ext.voc.VocDAO;
+import com.google.common.collect.ImmutableMap;
 import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -314,21 +315,28 @@ public class AuthService implements UserDetailsService {
             throw new CustomException(ResCodeEnum.INFO_0017);
         }
 
+        // 정회원 여부 판단
+        boolean isFullmember = false;
+        for(ResContractInfoElemVO vo : list){
+            if(EduStatCdEnum.수업중.getCode().equals(vo.getEduStatCd())){
+                isFullmember = true;
+                break;
+            }
+        }
+
+        // 정회원이 아닐 경우 흐름 중단
+        if (! isFullmember) {
+            throw new CustomException(ResCodeEnum.INFO_1000.name(), ProjectConstants.PRODUCT_NAME+ " 관련 오프라인 상품중 수업중인 건이 존재하지 않으므로 정회원인증을 중단합니다.");
+        }
+
         // 사용자과목 레코드 생성
         for(ResContractInfoElemVO vo : list){
-
-            // 교육계약ID로 온라인과목 정보 조회
-            Map<String, Object> params = new LinkedHashMap<>();
-            params.put("intgEduCntrId", vo.getIntgEduCntrId());
-            authDAO.callGetOnlineSubjInfo(params); // procedure call
-            log.debug("## params:[{}]", JsonUtil.toJson(params));
-
-            // TODO: 교육계약상태코드에 따른 온라인과목/시작,종료일을 어떻게? => 프로시저에서 처리?
-
+            authDAO.insertUserSubject(ImmutableMap.of("userManageId", userManageId, "intgEduCntrId", vo.getIntgEduCntrId(), "regId", userManageId));
         }
 
         // 사용자권한 변경 (학생일반회원 -> 학생정회원)
-
+        int updated = authDAO.updateUserAuth(ImmutableMap.of("authId", AuthEnum.학생정회원.getAuthId(), "modifyId", userManageId, "userManageId", userManageId, "productId", ProjectConstants.PRODUCT_ID));
+        SystemUtil.checkUpdatedCount(updated, 1);
 
         return resVo;
     }

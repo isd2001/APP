@@ -296,10 +296,10 @@
             ,intg_prodt_id /* SAP 데이터가 거의 없음 */
             ,prodt_nm
             ,b.sap_subject_title
-            ,c.service_title
+            ,d.product_name as service_title
             ,c.subject_title
             ,svc_chag_date
-        FROM svc_mh_edu_cntr_cp a, online_subject_sap_mapping b, online_subject c
+        FROM svc_mh_edu_cntr_cp a, online_subject_sap_mapping b, online_subject c, product d
         WHERE cust_nm = #{name}
         AND birthdt  = #{birth}
         AND parent_cust_nm = #{parentName}
@@ -308,6 +308,8 @@
         -- AND a.sap_subj_id = b.sap_subject_id -- 구버전
         AND a.intg_subj_id = b.intg_subj_id
         AND b.online_subject_id = c.online_subject_id
+        AND c.product_id = #{productId}
+        AND c.product_id = d.product_id
         AND a.delete_ornot = 'N'
         GROUP BY intg_edu_cntr_id
     </select>
@@ -318,29 +320,21 @@
         INTO user_subject
         (
             user_manage_id,
-            intg_cust_id,
             intg_edu_cntr_id,
-            intg_subj_id,
-            sap_subj_id,
-            online_subject_id,
-            online_subject_start_dt,
-            online_subject_end_dt,
             reg_id,
             modify_id
         )
         VALUES
         (
             #{userManageId},
-            #{intgCustId},
             #{intgEduCntrId},
-            #{intgSubjId},
-            #{sapSubjId},
-            #{onlineSubjectId},
-            #{onlineSubjectStartDt},
-            #{onlineSubjectEndDt},
             #{regId},
             #{regId}
         )
+		ON DUPLICATE KEY <!-- update 상황시 에러 방지를 위해 놓았을 뿐 특별히 update의 의미는 없다. -->
+		UPDATE
+			modify_id   = #{regId},
+			modify_date = CURRENT_TIMESTAMP
     </insert>
 
 	<!-- 온라인과목정보 프로시저 호출 -->
@@ -354,5 +348,23 @@
 			)
 		}
 	</select>
+
+    <!-- 사용자 권한 변경 -->
+    <update id="updateUserAuth">
+        UPDATE /* updateUserAuth */
+            user_auth
+        SET
+            auth_id = #{authId},
+            MODIFY_ID = #{modifyID},
+            MODIFY_DATE = CURRENT_TIMESTAMP
+        WHERE user_auth_id = (
+            SELECT
+                user_auth_id
+            FROM user_auth a, auth b
+            WHERE user_manage_id = #{userManageId}
+            AND a.auth_id = b.auth_id
+            AND b.product_id = #{productId}
+        )
+    </update>
 
 </mapper>

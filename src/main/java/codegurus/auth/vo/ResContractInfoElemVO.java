@@ -58,4 +58,7 @@ public class ResContractInfoElemVO extends ResBaseVO {
     @JsonIgnore
     private String svcChagDate;
 
+    @JsonIgnore
+    private String userManageId;
+
 }

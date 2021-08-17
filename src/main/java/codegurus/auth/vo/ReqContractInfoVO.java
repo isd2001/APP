@@ -1,9 +1,11 @@
 package codegurus.auth.vo;
 
 import codegurus.cmm.constants.Constants;
+import codegurus.cmm.constants.ProjectConstants;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.validation.DateCheck;
 import codegurus.cmm.vo.req.ReqBaseVO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -69,6 +71,9 @@ public class ReqContractInfoVO extends ReqBaseVO {
     @Size(min = 0, max = 200)
     protected String addressDetail;
 
+    @JsonIgnore
+    protected String productId = ProjectConstants.PRODUCT_ID;
+
 
     // 여백 때문에 정회원인증이 실패하지 않도록 trim 보강.
     public String getName() {
@@ -106,5 +111,7 @@ public class ReqContractInfoVO extends ReqBaseVO {
     public String getAddressDetail() {
         return addressDetail;
     }
-
+    public String getProductId() {
+        return productId;
+    }
 }

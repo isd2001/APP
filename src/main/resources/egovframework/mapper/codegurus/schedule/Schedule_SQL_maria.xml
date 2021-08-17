@@ -6,24 +6,25 @@
 	<!-- 온라인 과목 목록 조회 -->
 	<select id="selectSubjectList" resultType="ResSubjectListElemVO">
 		SELECT /* selectSubjectList */
-			online_subject_id,
-		    service_title,
-		    subject_title,
-		    use_ornot,
-		    apply_start_date,
-		    apply_end_date,
-			reg_id,
-			DF14(reg_date) as reg_date,
-			modify_id,
-	        DF14(modify_date) as modify_date,
-			delete_ornot
+			a.online_subject_id,
+		    b.product_name as service_title,
+		    a.subject_title,
+		    a.use_ornot,
+		    a.apply_start_date,
+		    a.apply_end_date,
+			a.reg_id,
+			DF14(a.reg_date) as reg_date,
+			a.modify_id,
+	        DF14(a.modify_date) as modify_date,
+			a.delete_ornot
 		FROM
-			online_subject
+			online_subject a, product b
 		WHERE 1=1
-		and use_ornot = 'Y'
-		and delete_ornot = 'N'
-		and product_id = #{productId}
-		ORDER BY online_subject_id
+		and a.use_ornot = 'Y'
+		and a.delete_ornot = 'N'
+		and a.product_id = #{productId}
+		and a.product_id = b.product_id
+		ORDER BY a.online_subject_id
 	</select>
 
 	<resultMap id="ScheduleMap" type="ResScheduleVO" autoMapping="true">
