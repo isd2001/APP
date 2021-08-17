@@ -194,62 +194,102 @@
 		</foreach>
 	</insert>
 
-	<!-- 학습 결과 조회 -->
-	<resultMap id="LearningResultMap" type="ContentsHistoryVO" autoMapping="true">
-		<id property="onlineSubjectScheduleId" column="online_subject_schedule_id"/>
-		<association property="contents" javaType="ContentsVO" autoMapping="true">
-			<id property="onlineSubjectScheduleId" column="online_subject_schedule_id"/>
-			<association property="book" javaType="BookVO" autoMapping="true">
-				<id property="bookId" column="book_id"/>
-				<result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
-				<association property="bookThumbnail" javaType="FileVO" autoMapping="true">
-					<id property="atchFileId" column="book_thumbnail_file_id"/>
-				</association>
-				<collection property="labelList" ofType="LabelVO" autoMapping="true" />
-			</association>
+	<!-- 학습 결과 조회(콘텐츠 이력) -->
+	<resultMap id="ContentsHistoryMap" type="ContentsHistoryVO" autoMapping="true">
+		<id property="contentsHistoryId" column="contents_history_id"/>
+		<result property="onlineSubjectScheduleId" column="online_subject_schedule_id" />
+		<result property="userManageId" column="user_manage_id" />
+		<association property="drawingFile" javaType="FileVO" autoMapping="true">
+			<id property="atchFileId" column="summary_doing_drawing_file_id"/>
+			<result property="fileCn" column="DRAWING_FILE_CN" />
+			<result property="fileSn" column="DRAWING_FILE_SN" />
+			<result property="fileStreCours" column="DRAWING_FILE_STRE_COURS" />
+			<result property="streFileNm" column="DRAWING_STRE_FILE_NM" />
+			<result property="fileExtsn" column="DRAWING_FILE_EXTSN" />
+			<result property="orignlFileNm" column="DRAWING_ORIGNL_FILE_NM" />
+			<result property="fieSize" column="DRAWING_FILE_SIZE" />
+			<result property="createDt" column="DRAWING_CREAT_DT" />
+			<result property="downloadCnt" column="DOWNLOAD_CNT" />
 		</association>
+		<association property="voiceFile" javaType="FileVO" autoMapping="true">
+			<id property="atchFileId" column="summary_doing_voice_file_id"/>
+			<result property="fileCn" column="VOICE_FILE_CN" />
+			<result property="fileSn" column="VOICE_FILE_SN" />
+			<result property="fileStreCours" column="VOICE_FILE_STRE_COURS" />
+			<result property="streFileNm" column="VOICE_STRE_FILE_NM" />
+			<result property="fileExtsn" column="VOICE_FILE_EXTSN" />
+			<result property="orignlFileNm" column="VOICE_ORIGNL_FILE_NM" />
+			<result property="fieSize" column="VOICE_FILE_SIZE" />
+			<result property="createDt" column="VOICE_CREAT_DT" />
+			<result property="downloadCnt" column="VOICE_DOWNLOAD_CNT" />
+		</association>
+		<association property="book" column="online_subject_schedule_id" javaType="BookVO" select="selectBook"/>
+		<collection property="questionScoreList" column="contents_history_id" ofType="QuestionScoreVO" select="selectScoreList"/>
+		<collection property="templateInstList" column="contents_history_id" ofType="TemplateInstVO" select="selectDicList">
+			<id property="templateInstId" column="template_inst_id" />
+			<result property="templateTitle" column="tempate_title"/>
+			<result property="json" column="json"/>
+		</collection>
 	</resultMap>
-	<select id="selectLearningResult" resultMap="LearningResultMap">
-		SELECT /* selectLearningResult */
-			contents_history.contents_history_id,
-		    contents_history.online_subject_schedule_id,
-		    contents_history.summary_doing_drawing_file_id,
-		    contents_history.summary_doing_voice_file_id,
+	<select id="selectContentsHistory" resultMap="ContentsHistoryMap">
+		SELECT /* selectContentsHistory */
+			contents_history.contents_history_id ,
+			contents_history.online_subject_schedule_id,
+			contents_history.end_date,
+			contents_history.summary_doing_drawing_file_id ,
+			contents_history.summary_doing_voice_file_id,
+		    contents_history.user_manage_id,
 
-		    contents.contents_id,
+			DRAWING_COMTNFILE.ATCH_FILE_ID as DRAWING_ATCH_FILE_ID,
+			DRAWING_COMTNFILEDETAIL.FILE_CN as DRAWING_FILE_CN,
+			DRAWING_COMTNFILEDETAIL.FILE_SN as DRAWING_FILE_SN,
+			DRAWING_COMTNFILEDETAIL.FILE_STRE_COURS as DRAWING_FILE_STRE_COURS,
+			DRAWING_COMTNFILEDETAIL.STRE_FILE_NM as DRAWING_STRE_FILE_NM,
+			DRAWING_COMTNFILEDETAIL.FILE_EXTSN as DRAWING_FILE_EXTSN,
+			DRAWING_COMTNFILEDETAIL.ORIGNL_FILE_NM as DRAWING_ORIGNL_FILE_NM,
+			DRAWING_COMTNFILEDETAIL.FILE_SIZE as DRAWING_FILE_SIZE,
+			DRAWING_COMTNFILE.CREAT_DT as DRAWING_CREAT_DT,
+			DRAWING_COMTNFILEDETAIL.DOWNLOAD_CNT as DRAWING_DOWNLOAD_CNT,
 
-		    book.book_id,
+			VOICE_COMTNFILE.ATCH_FILE_ID as VOICE_ATCH_FILE_ID,
+			VOICE_COMTNFILEDETAIL.FILE_CN as VOICE_FILE_CN,
+			VOICE_COMTNFILEDETAIL.FILE_SN as VOICE_FILE_SN,
+			VOICE_COMTNFILEDETAIL.FILE_STRE_COURS as VOICE_FILE_STRE_COURS,
+			VOICE_COMTNFILEDETAIL.STRE_FILE_NM as VOICE_STRE_FILE_NM,
+			VOICE_COMTNFILEDETAIL.FILE_EXTSN as VOICE_FILE_EXTSN,
+			VOICE_COMTNFILEDETAIL.ORIGNL_FILE_NM as VOICE_ORIGNL_FILE_NM,
+			VOICE_COMTNFILEDETAIL.FILE_SIZE as VOICE_FILE_SIZE,
+			VOICE_COMTNFILE.CREAT_DT as VOICE_CREAT_DT,
+			VOICE_COMTNFILEDETAIL.DOWNLOAD_CNT as VOICE_DOWNLOAD_CNT
+		from contents_history as contents_history
+		LEFT join COMTNFILE as DRAWING_COMTNFILE
+			on contents_history.summary_doing_drawing_file_id = DRAWING_COMTNFILE.ATCH_FILE_ID
+		LEFT JOIN COMTNFILEDETAIL as DRAWING_COMTNFILEDETAIL
+			on contents_history.summary_doing_drawing_file_id = DRAWING_COMTNFILEDETAIL.ATCH_FILE_ID
+		LEFT join COMTNFILE as VOICE_COMTNFILE
+			on contents_history.summary_doing_voice_file_id = VOICE_COMTNFILE.ATCH_FILE_ID
+		LEFT JOIN COMTNFILEDETAIL as VOICE_COMTNFILEDETAIL
+			on contents_history.summary_doing_voice_file_id = VOICE_COMTNFILEDETAIL.ATCH_FILE_ID
+		where 1=1
+			and contents_history.user_manage_id = #{userManageId}
+		  	and contents_history.online_subject_schedule_id = #{onlineSubjectScheduleId}
+		  	and contents_history.delete_ornot = 'N';
+	</select>
+
+	<!-- 학습 결과 조회(책 정보 조회) -->
+	<resultMap id="BookcaseMap" type="BookVO" autoMapping="true">
+		<id property="bookId" column="book_id"/>
+		<result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
+		<association property="bookThumbnail" javaType="FileVO" autoMapping="true">
+			<id property="atchFileId" column="book_thumbnail_file_id"/>
+		</association>
+		<collection property="labelList" ofType="LabelVO" autoMapping="true" />
+	</resultMap>
+	<select id="selectBook" resultMap="BookcaseMap">
+		select /* selectBook */
+			book.book_id,
 		    book.book_title,
-		    book.author,
-		    book.illustrator,
 			book.book_thumbnail_file_id,
-		    book.book_introduction,
-			book.cate_id as book_cate_id,
-
-			book_cate.parents_id as book_cate_parents_id,
-			book_cate.depth as book_cate_depth,
-			book_cate.`order` as book_cate_order,
-			book_cate.cate_title as book_cate_cate_title,
-			book_cate.first_cate_title as book_cate_first_cate_title,
-			book_cate.second_cate_title as book_cate_second_cate_title,
-			book_cate.third_cate_title as book_cate_third_cate_title,
-			book_cate.fourth_cate_title as book_cate_fourth_cate_title,
-			book_cate.fifth_cate_title as book_cate_fifth_cate_title,
-			book_cate.sixth_cate_title as book_cate_sixth_cate_title,
-			book_cate.seventh_cate_title as book_cate_seventh_cate_title,
-			book_cate.eight_cate_title as book_cate_eight_cate_title,
-			book_cate.ninth_cate_title as book_cate_ninth_cate_title,
-			book_cate.tenth_cate_title as book_cate_tenth_cate_title,
-			book_cate.first_cate_id as book_cate_first_cate_id,
-			book_cate.second_cate_id as book_cate_second_cate_id,
-			book_cate.third_cate_id as book_cate_third_cate_id,
-			book_cate.fourth_cate_id as book_cate_fourth_cate_id,
-			book_cate.fifth_cate_id as book_cate_fifth_cate_id,
-			book_cate.sixth_cate_id as book_cate_sixth_cate_id,
-			book_cate.seventh_cate_id as book_cate_seventh_cate_id,
-			book_cate.eight_cate_id as book_cate_eight_cate_id,
-			book_cate.ninth_cate_id as book_cate_ninth_cate_id,
-			book_cate.tenth_cate_id as book_cate_tenth_cate_id,
 
 			labelManage.label_manage_id,
 			labelManage.label_title,
@@ -264,29 +304,116 @@
 			COMTNFILEDETAIL.FILE_SIZE,
 			COMTNFILE.CREAT_DT,
 			COMTNFILEDETAIL.DOWNLOAD_CNT
-
-		FROM contents_history
-		LEFT JOIN online_subject_schedule as schedule
-		    on contents_history.online_subject_schedule_id = schedule.online_subject_schedule_id
-		LEFT JOIN contents contents
+		FROM online_subject_schedule as schedule
+        INNER JOIN contents as contents
 			on schedule.contents_id = contents.contents_id
-		LEFT JOIN book book
+		INNER JOIN book as book
 			on contents.book_id = book.book_id
-		LEFT JOIN cate book_cate
-		    on book.cate_id = book_cate.cate_id
+		LEFT JOIN COMTNFILE
+			on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
+		LEFT JOIN COMTNFILEDETAIL
+			on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
 		LEFT JOIN label_mapping labelMapping
-			on 	labelMapping.label_domain_manage_id = 1 /* 1:책 */
+			on  labelMapping.label_domain_manage_id = 1 /* 1:책 */
 			and labelMapping.object_manage_id = book.book_id
 			and labelMapping.delete_ornot = 'N'
 		LEFT JOIN label_manage labelManage
 			on 	labelManage.label_manage_id = labelMapping.label_manage_id
 			and labelManage.label_domain_manage_id = labelMapping.label_domain_manage_id
 			and labelManage.delete_ornot = 'N'
-		LEFT JOIN COMTNFILE
-			on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
-		LEFT JOIN COMTNFILEDETAIL
-			on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
-		WHERE 1=1
-		  AND contents_history.contents_history_id = #{contentsHistoryId}
+		where schedule.online_subject_schedule_id = #{onlineSubjectScheduleId}
+	</select>
+
+	<!-- 학습 결과 조회(문항 점수) -->
+	<resultMap id="QuestionScoreMap" type="QuestionScoreVO" autoMapping="true">
+		<association property="cate" javaType="CateVO" autoMapping="true" />
+	</resultMap>
+	<select id="selectScoreList" resultMap="QuestionScoreMap">
+		select /* selectScore */
+			sum(score.assignment_score) as assignment_score,
+			sum(score.calculation_score) as calculation_score,
+			(sum(score.calculation_score) / sum(score.assignment_score))*100 as score_percent,
+			score_cate.cate_id,
+			score_cate.parents_id,
+			score_cate.depth,
+			score_cate.`order`,
+			score_cate.cate_title,
+			score_cate.first_cate_title,
+			score_cate.second_cate_title,
+			score_cate.third_cate_title,
+			score_cate.fourth_cate_title,
+			score_cate.fifth_cate_title,
+			score_cate.sixth_cate_title,
+			score_cate.seventh_cate_title,
+			score_cate.eight_cate_title,
+			score_cate.ninth_cate_title,
+			score_cate.tenth_cate_title,
+			score_cate.first_cate_id ,
+			score_cate.second_cate_id,
+			score_cate.third_cate_id ,
+			score_cate.fourth_cate_id ,
+			score_cate.fifth_cate_id ,
+			score_cate.sixth_cate_id,
+			score_cate.seventh_cate_id ,
+			score_cate.eight_cate_id ,
+			score_cate.ninth_cate_id ,
+			score_cate.tenth_cate_id
+		FROM contents_history as contents_history
+		left join template_inst_history as template_inst_history
+			on contents_history.contents_history_id = template_inst_history.contents_history_id
+			and template_inst_history.delete_ornot ='N'
+		left join template_inst as template_inst
+			on template_inst_history.template_inst_id = template_inst.template_inst_id
+		left join online_subject_schedule as schedule
+			on contents_history.online_subject_schedule_id = schedule.online_subject_schedule_id
+		inner join question_score as score
+			on schedule.online_subject_id = score.online_subject_id
+			and template_inst_history.correctanswer_status = score.correctanswer_status
+			and template_inst.cate_id = score.cate_id
+		LEFT JOIN cate as score_cate
+			on score.cate_id = score_cate.cate_id
+		where contents_history.delete_ornot = 'N'
+			and contents_history.contents_history_id =#{contentsHistoryId}
+		group by score.cate_id;
+	</select>
+
+	<!-- 어휘 조회 -->
+	<resultMap id="MyDicMap" type="ContentsHistoryVO" autoMapping="true">
+		<id property="contentsHistoryId" column="contents_history_id"/>
+		<collection property="templateInstList" ofType="TemplateInstVO" autoMapping="true">
+			<id property="templateInstId" column="template_inst_id" />
+			<result property="templateTitle" column="tempate_title"/>
+			<result property="json" column="json"/>
+		</collection>
+	</resultMap>
+	<select id="selectDicList" resultMap="MyDicMap">
+		SELECT /* selectDicList */
+			history.contents_history_id,
+			book.book_id,
+			book.book_title,
+
+			template_inst.template_inst_id,
+			template_inst.json,
+			template_inst.template_id,
+			template.template_title
+
+		FROM contents_history as history
+				 left join template_inst_history as tempate_inst_history
+						   on history.contents_history_id = tempate_inst_history.contents_history_id
+				 LEFT JOIN online_subject_schedule as schedule
+						   on history.online_subject_schedule_id = schedule.online_subject_schedule_id
+				 left JOIN contents as contents
+						   on schedule.contents_id = contents.contents_id
+				 LEFT JOIN template_inst as template_inst
+						   on contents.contents_id = template_inst.contents_id
+							   and tempate_inst_history.template_inst_id = template_inst.template_inst_id
+							   and template_inst.delete_ornot='N'
+				 LEFT JOIN template as template
+						   on template_inst.template_id = template.template_id
+							   and template.delete_ornot = 'N'
+				 INNER JOIN book as book
+							on contents.book_id = book.book_id
+		where history.delete_ornot = 'N'
+		  and history.contents_history_id =#{contentsHistoryId}
 	</select>
 </mapper>

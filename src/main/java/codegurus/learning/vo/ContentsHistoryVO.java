@@ -21,7 +21,7 @@ public class ContentsHistoryVO {
     private String onlineSubjectScheduleId;
 
     @ApiModelProperty(notes = "회원 ID")
-    private String regId;
+    private String userManageId;
 
     @ApiModelProperty(notes = "요약하기 그리기 파일 ID")
     private String summaryDoingDrawingFileId;
@@ -46,4 +46,7 @@ public class ContentsHistoryVO {
 
     @ApiModelProperty(notes = "책 정보")
     private BookVO book;
+
+    @ApiModelProperty(notes = "문항 점수")
+    private List<QuestionScoreVO> questionScoreList;
 }

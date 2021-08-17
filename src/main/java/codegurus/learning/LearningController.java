@@ -93,6 +93,7 @@ public class LearningController extends BaseController {
     public Res<ResLearningResultVO> result(@RequestBody @Valid ReqLearningResultVO reqVo) {
 
         ResLearningResultVO resVo = new ResLearningResultVO();
+        reqVo.setUserManageId(cacheService.getUserManageId());
         learningService.selectLearningResult(reqVo, resVo);
         return new Res<ResLearningResultVO>(resVo);
     }

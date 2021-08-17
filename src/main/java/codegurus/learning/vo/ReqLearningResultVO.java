@@ -12,6 +12,9 @@ import lombok.Setter;
 @Setter
 public class ReqLearningResultVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "콘텐츠 이력 ID", example = "1")
-    private String contentsHistoryId;
+    @ApiModelProperty(notes = "온라인 과목 스케줄 ID", example = "1")
+    private String onlineSubjectScheduleId;
+
+    @ApiModelProperty(hidden = true)
+    private String userManageId;
 }

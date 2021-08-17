@@ -85,6 +85,7 @@ public class LearningService {
         }
         // 응답에 contentsId 바인딩
         resVo.setContentsHistoryId(reqVo.getContentsHistoryId());
+        resVo.setOnlineSubjectScheduleId(reqVo.getOnlineSubjectScheduleId());
     }
 
     /**
@@ -95,9 +96,12 @@ public class LearningService {
      * @return
      */
     public ResLearningResultVO selectLearningResult(ReqLearningResultVO reqVo, ResLearningResultVO resVO) {
-        ContentsHistoryVO item = learningDAO.selectLearningResult(reqVo);
+        //학습 결과 조회 (콘텐츠 이력 조회)
+        ContentsHistoryVO item = learningDAO.selectContentsHistory(reqVo);
 
         if(item == null){ SystemUtil.returnNoSearchResult(); } // 조회 결과 없음 리턴
+
+        //
 
         resVO.setItem(item);
 
