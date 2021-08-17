@@ -9,14 +9,15 @@
 			board_id,
 		    boardtitle,
 		    content,
-		    type,
-		    lookup_count,
-		    reg_id,
-			DF14(reg_date) as reg_date
-		FROM board
-		WHERE 1=1
-		and type = #{type}
+			`type`,
+            lookup_count,
+            reg_id,
+            DF14(reg_date) as reg_date
+        FROM board
+        WHERE 1=1
+        and `type` = #{type}
 		and delete_ornot = 'N'
+		ORDER BY fix_ornot DESC, reg_date DESC
 	</select>
 
 	<!-- 게시판 상세 조회 -->
@@ -25,13 +26,13 @@
 			board_id,
 			boardtitle,
 			content,
-			type,
+			`type`,
 			lookup_count,
 			reg_id,
 			DF14(reg_date) as reg_date
 		FROM board
 		WHERE 1=1
-		  and type = #{type}
+		  and `type` = #{type}
 		  and board_id = #{boardId}
 		  and delete_ornot = 'N'
 	</select>
@@ -42,7 +43,7 @@
 		UPDATE board
 		SET lookup_count = lookup_count + 1
 		WHERE 1=1
-		  and type = #{type}
+		  and `type` = #{type}
 		  and board_id = #{boardId}
 	</update>
 </mapper>

@@ -54,7 +54,7 @@ public class ScheduleController extends BaseController {
     @ApiOperation(value = "도서 일정 목록 조회(도서 일정 우측)")
     public Res<ResScheduleListVO> bookScheduleList(@RequestBody @Valid ReqScheduleListVO reqVo) {
 
-        // 일단 연도를 안쓰고 있어서 rcms에서 넣어주는 9999ㄹ 세팅
+        // 일단 연도를 안쓰고 있어서 rcms에서 넣어주는 9999로 세팅
         reqVo.setYear("9999");
 
         ResScheduleListVO resVo = scheduleService.selectBookScheduleList(reqVo);
@@ -69,7 +69,7 @@ public class ScheduleController extends BaseController {
      */
     @PostMapping("/thisMonthBookList")
     @ApiOperation(value = "이달의 도서 조회")
-    public Res<ResScheduleListVO> selectThisMonthBookList(@RequestBody @Valid ReqScheduleListVO reqVo) {
+    public Res<ResScheduleListVO> selectThisMonthBookList(@RequestBody @Valid ReqThisMonthBookVO reqVo) {
         ResScheduleListVO resVo = scheduleService.selectThisMonthBookList(reqVo);
         return new Res<ResScheduleListVO>(resVo);
     }

@@ -14,7 +14,7 @@ public interface ScheduleDAO {
 
     List<ResSubjectListElemVO> selectSubjectList(ReqSubjectListVO reqVo);
     List<ResScheduleVO> selectBookScheduleList(ReqScheduleListVO reqVo);
-    List<ResScheduleVO> selectThisMonthBookList(ReqScheduleListVO reqVo);
+    List<ResScheduleVO> selectThisMonthBookList(ReqThisMonthBookVO reqVo);
 
     ResScheduleVO selectPopup(ReqSchedulePopupVO reqVo);
 
