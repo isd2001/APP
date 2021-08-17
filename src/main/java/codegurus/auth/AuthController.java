@@ -130,7 +130,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "상담 신청 (파라미터 변경 가능성 있음)")
+	@ApiOperation(value = "상담 신청")
 	@PostMapping("/counselReq")
 	public Res<ResCounselVO> counselReq(@RequestBody @Valid ReqCounselVO reqVo) {
 
