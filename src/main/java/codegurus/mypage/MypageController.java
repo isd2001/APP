@@ -92,4 +92,22 @@ public class MypageController extends BaseController {
 
         return new Res<ResPortfolioListVO>(resVo);
     }
+
+    /**
+     * 회원정보 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("userInfo")
+    @ApiOperation(value = "회원정보 조회")
+    public Res<ResDicListVO> userInfo(@RequestBody @Valid ReqDicListVO reqVo) {
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        ResDicListVO resVo = mypageService.selectDicList(reqVo);
+
+        return new Res<ResDicListVO>(resVo);
+    }
+
+
 }
