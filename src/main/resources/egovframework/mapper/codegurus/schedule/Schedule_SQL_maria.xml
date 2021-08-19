@@ -82,8 +82,8 @@
 			`position`
         FROM online_subject_schedule
         WHERE 1=1
-          AND online_subject_id = #{onlineSubjectId} -- 원래는 사용자 정보에서 불러와야하는데 테스트용으로 넣어둠
-          AND `month` = #{month} -- DATE_FORMAT(CURRENT_DATE , '%m') 테스트용으로 원하는 월을 불러오게 하기 위해 임시로 주석처리
+          AND online_subject_id = #{onlineSubjectId} /* 원래는 사용자 정보에서 불러와야하는데 테스트용으로 넣어둠 */
+          AND `month` = #{month} /* DATE_FORMAT(CURRENT_DATE , '%m') 테스트용으로 원하는 월을 불러오게 하기 위해 임시로 주석처리 */
 		  AND active_ornot = 'Y'
 		  AND delete_ornot = 'N'
 		ORDER BY seq asc
