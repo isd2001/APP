@@ -1,6 +1,7 @@
 package codegurus.auth;
 
 import codegurus.auth.vo.*;
+import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.exception.CustomException;
@@ -88,7 +89,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "회원가입 (학부모)")
+	@ApiOperation(value = "회원가입 (학부모) [프렌즈몬 전용]")
 	@PostMapping("/registerParent")
 	public Res<ResRegisterVO> registerParent(@RequestBody @Valid ReqRegisterParentVO reqVo) {
 
@@ -102,7 +103,7 @@ public class AuthController extends BaseController {
 	 * @param reqVo
 	 * @return
 	 */
-	@ApiOperation(value = "자녀 연결 (학부모 회원이 기 등록 자녀회원과의 가족관계 연결을 설정하는 작업)")
+	@ApiOperation(value = "자녀 연결 (학부모 회원이 기 등록 자녀회원과의 가족관계 연결을 설정하는 작업) [프렌즈몬 전용]")
 	@PostMapping("/connectChild")
 	public Res<ResConnectChildVO> connectChild(@RequestBody @Valid ReqConnectChildVO reqVo) {
 
@@ -221,6 +222,77 @@ public class AuthController extends BaseController {
 		ResFindPWVO resVo = authService.findPw(reqVo);
 		return new Res<ResFindPWVO>(resVo);
 	}
+
+	/**
+	 * 패스워드 변경
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "패스워드 변경")
+	@PostMapping("/updatePW")
+	public Res<ResBaseVO> updatePW(@RequestBody @Valid ReqUpdatePWVO reqVo) {
+
+		ResBaseVO resVo = authService.updatePW(reqVo);
+		return new Res<ResBaseVO>(resVo);
+	}
+
+	/**
+	 * 패스워드 확인
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "패스워드 확인 (중요한 작업 전 본인의 패스워드 한 번 더 확인)")
+	@PostMapping("/makeSurePW")
+	public Res<ResBaseVO> makeSurePW(@RequestBody @Valid ReqUpdatePWVO reqVo) {
+
+		ResBaseVO resVo = authService.makeSurePW(reqVo);
+		return new Res<ResBaseVO>(resVo);
+	}
+
+	/**
+	 * 계정 삭제
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "계정 삭제")
+	@PostMapping("/deleteUser")
+	public Res<ResBaseVO> deleteUser(@RequestBody @Valid ReqBaseVO reqVo) {
+
+		ResBaseVO resVo = authService.deleteUser(reqVo);
+		return new Res<ResBaseVO>(resVo);
+	}
+
+	/**
+	 * 사용 가능 상품(스마트독서, 플라톤..) 목록 출력
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "사용 가능 상품(스마트독서, 플라톤..) 목록 출력")
+	@PostMapping("/availProds")
+	public Res<ResAvailProdsVO> availProds(@RequestBody @Valid ReqBaseVO reqVo) {
+
+		ResAvailProdsVO resVo = authService.getAvailProds(reqVo);
+		return new Res<ResAvailProdsVO>(resVo);
+	}
+
+	// 만들 것인가 /bookScheduleList에 녹일 것인가?
+//	/**
+//	 * 현재 오프라인진도의 온라인과목ID/월 조회
+//	 *
+//	 * @param reqVo
+//	 * @return
+//	 */
+//	@ApiOperation(value = "사용 가능 상품(스마트독서, 플라톤..) 목록 출력")
+//	@PostMapping("/curOnlineSubj")
+//	public Res<ResAvailProdsVO> curOnlineSubj(@RequestBody @Valid ReqBaseVO reqVo) {
+//
+//		ResAvailProdsVO resVo = authService.getCurOnlineSubj(reqVo);
+//		return new Res<ResAvailProdsVO>(resVo);
+//	}
 
 
 }

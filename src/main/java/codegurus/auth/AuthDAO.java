@@ -24,4 +24,7 @@ public interface AuthDAO {
     Map<String, Object> callGetOnlineSubjInfo(Map<String, Object> map);
     void insertUserSubject(Map<String, String> map);
     int updateUserAuth(Map<String, Object> map);
+    List<String> selectUserSubjectList(String userManageId);
+    int updateUserPassword(ReqUpdatePWVO reqVo);
+    int deleteUser(String userManageId);
 }

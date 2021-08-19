@@ -11,6 +11,7 @@ import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.SystemUtil;
 import codegurus.cmm.util.WebUtil;
 import codegurus.cmm.vo.req.ReqAuthVO;
+import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.ResAuthVO;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus_ext.voc.VocDAO;
@@ -387,6 +388,69 @@ public class AuthService implements UserDetailsService {
     }
 
     /**
+     * 패스워드 변경
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBaseVO updatePW(ReqUpdatePWVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        String passwordRaw = reqVo.getPassword();
+        reqVo.setPasswordMask(cryptoService.encrypt(StringUtil.maskPW(passwordRaw))); // 패스워드 마스킹
+        reqVo.setPassword(passwordEncoder.encode(passwordRaw)); // 패스워드 해싱
+        reqVo.setUserManageId(cacheService.getUserManageId());
+
+        int updated = authDAO.updateUserPassword(reqVo);
+        SystemUtil.checkUpdatedCount(updated, 1);
+
+        return resVo;
+    }
+
+    /**
+     * 패스워드 확인
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBaseVO makeSurePW(ReqUpdatePWVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        // 사용자정보 조회
+        UserVO userVo = commonDAO.selectUserByUserManageId(cacheService.getUserManageId());
+        if (userVo == null) {
+            throw new CustomException(ResCodeEnum.INFO_0009);
+        }
+
+        // 패스워드 대조
+        boolean match = passwordEncoder.matches(StringUtil.trim(reqVo.getPassword()), userVo.getPassword());
+        log.debug("## 패스워드 대조 결과:[{}]", match);
+        if (! match) {
+            throw new CustomException(ResCodeEnum.INFO_0010);
+        }
+
+        return resVo;
+    }
+
+    /**
+     * 계정 삭제
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBaseVO deleteUser(ReqBaseVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        int updated = authDAO.deleteUser(cacheService.getUserManageId());
+        SystemUtil.checkUpdatedCount(updated, 1);
+
+        return resVo;
+    }
+
+    /**
      * SMS 인증번호 요청
      *
      * @param reqVo
@@ -513,4 +577,32 @@ public class AuthService implements UserDetailsService {
 
         return resVo;
     }
+
+    /**
+     * 사용 가능 상품(스마트독서, 플라톤..) 목록 출력
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResAvailProdsVO getAvailProds(ReqBaseVO reqVo) {
+
+        ResAvailProdsVO resVo = new ResAvailProdsVO();
+        List<String> eduCntrIdList = authDAO.selectUserSubjectList(cacheService.getUserManageId());
+        log.debug("## eduCntrIdList:{}", JsonUtil.toJson(eduCntrIdList));
+
+        for(String eduCntrId : eduCntrIdList){
+
+            Map<String, Object> qp = new HashMap<>();
+            qp.put("intgEduCntrId", eduCntrId);
+            authDAO.callGetOnlineSubjInfo(qp);
+            log.debug("## qp:{}", JsonUtil.toJson(qp));
+            String eduStatCd = StringUtil.trim(qp.get("eduStatCd"));
+            if (EduStatCdEnum.수업중.getCode().equals(eduStatCd)) {
+                resVo.getProdIdList().add(StringUtil.trim(qp.get("productId")));
+            }
+        }
+
+        return resVo;
+    }
+
 }

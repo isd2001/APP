@@ -222,13 +222,35 @@
 
     <!-- 패스워드 찾기 -->
     <select id="selectUserPassword" resultType="String">
-        SELECT
+        SELECT /* selectUserPassword */
             password_mask
         FROM user_manage
         WHERE user_id = #{username}
         AND name = #{name}
         AND birth = #{birth}
     </select>
+
+    <!-- 패스워드 변경 -->
+    <update id="updateUserPassword">
+        UPDATE /* updateUserPassword */
+            user_manage
+        SET
+            password = #{password},
+            password_mask = #{passwordMask},
+            modify_id = #{userManageId},
+            modify_date = CURRENT_TIMESTAMP
+        WHERE user_manage_id = #{userManageId}
+    </update>
+
+    <!-- 계정 삭제 -->
+    <update id="deleteUser">
+        UPDATE /* deleteUser */
+            user_manage
+        SET delete_ornot = 'Y',
+            modify_id = #{value},
+            modify_date = CURRENT_TIMESTAMP
+        WHERE user_manage_id = #{value}
+    </update>
 
     <!-- 가족관계가 매핑이 되어 있는 상태이면 Y, 관계가 없으면 N 리턴 -->
     <select id="selectConnectedFamilyYN" resultType="String">
@@ -337,6 +359,14 @@
 			modify_date = CURRENT_TIMESTAMP
     </insert>
 
+    <!-- 해당 사용자와 계약되어 있는 오프라인과목 목록을 리턴한다. -->
+    <select id="selectUserSubjectList" resultType="String">
+        SELECT /* selectUserSubjectList */
+            intg_edu_cntr_id
+        FROM user_subject
+        WHERE user_manage_id = #{value}
+    </select>
+
 	<!-- 온라인과목정보 프로시저 호출 -->
 	<select id="callGetOnlineSubjInfo" statementType="CALLABLE" resultType="LHMap">
 		{
@@ -344,7 +374,8 @@
 				#{intgEduCntrId},
 				#{productId, mode=OUT, jdbcType=INTEGER},
 				#{onlineSubjectId, mode=OUT, jdbcType=INTEGER},
-				#{month, mode=OUT, jdbcType=VARCHAR}
+				#{month, mode=OUT, jdbcType=VARCHAR},
+				#{eduStatCd, mode=OUT, jdbcType=VARCHAR}
 			)
 		}
 	</select>
