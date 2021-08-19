@@ -230,28 +230,6 @@
         AND birth = #{birth}
     </select>
 
-    <!-- 패스워드 변경 -->
-    <update id="updateUserPassword">
-        UPDATE /* updateUserPassword */
-            user_manage
-        SET
-            password = #{password},
-            password_mask = #{passwordMask},
-            modify_id = #{userManageId},
-            modify_date = CURRENT_TIMESTAMP
-        WHERE user_manage_id = #{userManageId}
-    </update>
-
-    <!-- 계정 삭제 -->
-    <update id="deleteUser">
-        UPDATE /* deleteUser */
-            user_manage
-        SET delete_ornot = 'Y',
-            modify_id = #{value},
-            modify_date = CURRENT_TIMESTAMP
-        WHERE user_manage_id = #{value}
-    </update>
-
     <!-- 가족관계가 매핑이 되어 있는 상태이면 Y, 관계가 없으면 N 리턴 -->
     <select id="selectConnectedFamilyYN" resultType="String">
         SELECT

@@ -388,69 +388,6 @@ public class AuthService implements UserDetailsService {
     }
 
     /**
-     * 패스워드 변경
-     *
-     * @param reqVo
-     * @return
-     */
-    public ResBaseVO updatePW(ReqUpdatePWVO reqVo) {
-
-        ResBaseVO resVo = new ResBaseVO();
-
-        String passwordRaw = reqVo.getPassword();
-        reqVo.setPasswordMask(cryptoService.encrypt(StringUtil.maskPW(passwordRaw))); // 패스워드 마스킹
-        reqVo.setPassword(passwordEncoder.encode(passwordRaw)); // 패스워드 해싱
-        reqVo.setUserManageId(cacheService.getUserManageId());
-
-        int updated = authDAO.updateUserPassword(reqVo);
-        SystemUtil.checkUpdatedCount(updated, 1);
-
-        return resVo;
-    }
-
-    /**
-     * 패스워드 확인
-     *
-     * @param reqVo
-     * @return
-     */
-    public ResBaseVO makeSurePW(ReqUpdatePWVO reqVo) {
-
-        ResBaseVO resVo = new ResBaseVO();
-
-        // 사용자정보 조회
-        UserVO userVo = commonDAO.selectUserByUserManageId(cacheService.getUserManageId());
-        if (userVo == null) {
-            throw new CustomException(ResCodeEnum.INFO_0009);
-        }
-
-        // 패스워드 대조
-        boolean match = passwordEncoder.matches(StringUtil.trim(reqVo.getPassword()), userVo.getPassword());
-        log.debug("## 패스워드 대조 결과:[{}]", match);
-        if (! match) {
-            throw new CustomException(ResCodeEnum.INFO_0010);
-        }
-
-        return resVo;
-    }
-
-    /**
-     * 계정 삭제
-     *
-     * @param reqVo
-     * @return
-     */
-    public ResBaseVO deleteUser(ReqBaseVO reqVo) {
-
-        ResBaseVO resVo = new ResBaseVO();
-
-        int updated = authDAO.deleteUser(cacheService.getUserManageId());
-        SystemUtil.checkUpdatedCount(updated, 1);
-
-        return resVo;
-    }
-
-    /**
      * SMS 인증번호 요청
      *
      * @param reqVo

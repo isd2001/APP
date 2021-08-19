@@ -1,5 +1,6 @@
 package codegurus.mypage;
 
+import codegurus.auth.vo.ReqUpdatePWVO;
 import codegurus.learning.vo.BookVO;
 import codegurus.learning.vo.ContentsHistoryVO;
 import codegurus.mypage.vo.*;
@@ -22,4 +23,6 @@ public interface MypageDAO {
     List<ContentsHistoryVO> selectDicList(ReqDicListVO reqVo);
     Map<String, String> selectParentInfo(ReqUserInfoVO reqVo);
     int updateUserInfo(ReqUserUpdateVO reqVo);
+    int updateUserPassword(ReqUpdatePWVO reqVo);
+    int deleteUser(String userManageId);
 }

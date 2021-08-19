@@ -1,7 +1,10 @@
 package codegurus.mypage;
 
+import codegurus.auth.vo.ReqDeleteUserVO;
+import codegurus.auth.vo.ReqUpdatePWVO;
 import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.controller.BaseController;
+import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.Res;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.mypage.vo.*;
@@ -126,5 +129,49 @@ public class MypageController extends BaseController {
         return new Res<ResBaseVO>(resVo);
     }
 
+	/**
+	 * 회원정보 > 패스워드 변경
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "회원정보 > 패스워드 변경")
+	@PostMapping("/updatePW")
+	public Res<ResBaseVO> updatePW(@RequestBody @Valid ReqUpdatePWVO reqVo) {
+
+	    reqVo.setUserManageId(cacheService.getUserManageId());
+		ResBaseVO resVo = mypageService.updatePW(reqVo);
+		return new Res<ResBaseVO>(resVo);
+	}
+
+	/**
+	 * 회원정보 > 계정 삭제 > 패스워드 확인
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "회원정보 > 계정 삭제 > 패스워드 확인 (중요한 작업 전 본인의 패스워드 한 번 더 확인)")
+	@PostMapping("/makeSurePW")
+	public Res<ResBaseVO> makeSurePW(@RequestBody @Valid ReqUpdatePWVO reqVo) {
+
+	    reqVo.setUserManageId(cacheService.getUserManageId());
+		ResBaseVO resVo = mypageService.makeSurePW(reqVo);
+		return new Res<ResBaseVO>(resVo);
+	}
+
+	/**
+	 * 회원정보 > 계정 삭제
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "회원정보 > 계정 삭제")
+	@PostMapping("/deleteUser")
+	public Res<ResBaseVO> deleteUser(@RequestBody @Valid ReqDeleteUserVO reqVo) {
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
+		ResBaseVO resVo = mypageService.deleteUser(reqVo);
+		return new Res<ResBaseVO>(resVo);
+	}
 
 }

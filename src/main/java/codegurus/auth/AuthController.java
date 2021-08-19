@@ -224,48 +224,6 @@ public class AuthController extends BaseController {
 	}
 
 	/**
-	 * 패스워드 변경
-	 *
-	 * @param reqVo
-	 * @return
-	 */
-	@ApiOperation(value = "패스워드 변경")
-	@PostMapping("/updatePW")
-	public Res<ResBaseVO> updatePW(@RequestBody @Valid ReqUpdatePWVO reqVo) {
-
-		ResBaseVO resVo = authService.updatePW(reqVo);
-		return new Res<ResBaseVO>(resVo);
-	}
-
-	/**
-	 * 패스워드 확인
-	 *
-	 * @param reqVo
-	 * @return
-	 */
-	@ApiOperation(value = "패스워드 확인 (중요한 작업 전 본인의 패스워드 한 번 더 확인)")
-	@PostMapping("/makeSurePW")
-	public Res<ResBaseVO> makeSurePW(@RequestBody @Valid ReqUpdatePWVO reqVo) {
-
-		ResBaseVO resVo = authService.makeSurePW(reqVo);
-		return new Res<ResBaseVO>(resVo);
-	}
-
-	/**
-	 * 계정 삭제
-	 *
-	 * @param reqVo
-	 * @return
-	 */
-	@ApiOperation(value = "계정 삭제")
-	@PostMapping("/deleteUser")
-	public Res<ResBaseVO> deleteUser(@RequestBody @Valid ReqBaseVO reqVo) {
-
-		ResBaseVO resVo = authService.deleteUser(reqVo);
-		return new Res<ResBaseVO>(resVo);
-	}
-
-	/**
 	 * 사용 가능 상품(스마트독서, 플라톤..) 목록 출력
 	 *
 	 * @param reqVo

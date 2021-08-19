@@ -1,18 +1,25 @@
 package codegurus.mypage;
 
+import codegurus.auth.vo.ReqDeleteUserVO;
+import codegurus.auth.vo.ReqUpdatePWVO;
 import codegurus.auth.vo.UserVO;
 import codegurus.cmm.CommonDAO;
 import codegurus.cmm.constants.Constants;
+import codegurus.cmm.constants.ResCodeEnum;
+import codegurus.cmm.exception.CustomException;
 import codegurus.cmm.util.DateUtil;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.SystemUtil;
+import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.learning.vo.BookVO;
 import codegurus.learning.vo.ContentsHistoryVO;
 import codegurus.mypage.vo.*;
 import codegurus.schedule.vo.ResScheduleVO;
+import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +40,12 @@ public class MypageService {
 
     @Autowired
     private CommonDAO commonDAO;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+    @Autowired
+	private EgovEnvCryptoService cryptoService;
 
     /**
      * 나의 진도 목록 조회
@@ -159,5 +172,67 @@ public class MypageService {
         SystemUtil.checkUpdatedCount(updated, 1);
 
         return vo;
+    }
+
+    /**
+     * 회원정보 > 패스워드 변경
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBaseVO updatePW(ReqUpdatePWVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        String passwordRaw = reqVo.getPassword();
+        reqVo.setPasswordMask(cryptoService.encrypt(StringUtil.maskPW(passwordRaw))); // 패스워드 마스킹
+        reqVo.setPassword(passwordEncoder.encode(passwordRaw)); // 패스워드 해싱
+
+        int updated = mypageDAO.updateUserPassword(reqVo);
+        SystemUtil.checkUpdatedCount(updated, 1);
+
+        return resVo;
+    }
+
+    /**
+     * 회원정보 > 계정 삭제 > 패스워드 확인
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBaseVO makeSurePW(ReqUpdatePWVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        // 사용자정보 조회
+        UserVO userVo = commonDAO.selectUserByUserManageId(reqVo.getUserManageId());
+        if (userVo == null) {
+            throw new CustomException(ResCodeEnum.INFO_0009);
+        }
+
+        // 패스워드 대조
+        boolean match = passwordEncoder.matches(StringUtil.trim(reqVo.getPassword()), userVo.getPassword());
+        log.debug("## 패스워드 대조 결과:[{}]", match);
+        if (! match) {
+            throw new CustomException(ResCodeEnum.INFO_0010);
+        }
+
+        return resVo;
+    }
+
+    /**
+     * 회원정보 > 계정 삭제
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBaseVO deleteUser(ReqDeleteUserVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        int updated = mypageDAO.deleteUser(reqVo.getUserManageId());
+        SystemUtil.checkUpdatedCount(updated, 1);
+
+        return resVo;
     }
 }
