@@ -315,7 +315,8 @@ public class AuthService implements UserDetailsService {
             throw new CustomException(ResCodeEnum.INFO_0017);
         }
 
-        // 정회원 여부 판단
+        // 20210819 요건 변경 - 정회원 여부는 수업중 여부와 무관하다.
+/*        // 정회원 여부 판단
         boolean isFullmember = false;
         for(ResContractInfoElemVO vo : list){
             if(EduStatCdEnum.수업중.getCode().equals(vo.getEduStatCd())){
@@ -323,11 +324,10 @@ public class AuthService implements UserDetailsService {
                 break;
             }
         }
-
         // 정회원이 아닐 경우 흐름 중단
         if (! isFullmember) {
             throw new CustomException(ResCodeEnum.INFO_1000.name(), ProjectConstants.PRODUCT_NAME+ " 관련 오프라인 상품중 수업중인 건이 존재하지 않으므로 정회원인증을 중단합니다.");
-        }
+        }*/
 
         // 사용자과목 레코드 생성
         for(ResContractInfoElemVO vo : list){
