@@ -3,6 +3,7 @@ package codegurus.mypage;
 import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.res.Res;
+import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.mypage.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -94,19 +95,35 @@ public class MypageController extends BaseController {
     }
 
     /**
-     * 회원정보 조회
+     * 회원정보 > 회원정보 조회
      *
      * @param reqVo
      * @return
      */
     @PostMapping("userInfo")
-    @ApiOperation(value = "회원정보 조회")
-    public Res<ResDicListVO> userInfo(@RequestBody @Valid ReqDicListVO reqVo) {
+    @ApiOperation(value = "회원정보 > 회원정보 조회")
+    public Res<ResUserInfoVO> userInfo(@RequestBody @Valid ReqUserInfoVO reqVo) {
 
         reqVo.setUserManageId(cacheService.getUserManageId());
-        ResDicListVO resVo = mypageService.selectDicList(reqVo);
+        ResUserInfoVO resVo = mypageService.selectUserInfo(reqVo);
 
-        return new Res<ResDicListVO>(resVo);
+        return new Res<ResUserInfoVO>(resVo);
+    }
+
+    /**
+     * 회원정보 > 회원정보 수정
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("userUpdate")
+    @ApiOperation(value = "회원정보 > 회원정보 수정")
+    public Res<ResBaseVO> userUpdate(@RequestBody @Valid ReqUserUpdateVO reqVo) {
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        ResBaseVO resVo = mypageService.updateUserInfo(reqVo);
+
+        return new Res<ResBaseVO>(resVo);
     }
 
 

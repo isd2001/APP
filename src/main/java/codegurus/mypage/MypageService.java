@@ -1,20 +1,22 @@
 package codegurus.mypage;
 
+import codegurus.auth.vo.UserVO;
+import codegurus.cmm.CommonDAO;
+import codegurus.cmm.constants.Constants;
+import codegurus.cmm.util.DateUtil;
+import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.SystemUtil;
+import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.learning.vo.BookVO;
 import codegurus.learning.vo.ContentsHistoryVO;
 import codegurus.mypage.vo.*;
 import codegurus.schedule.vo.ResScheduleVO;
-import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 /**
  *  마이페이지 서비스
@@ -28,6 +30,9 @@ public class MypageService {
 
     @Autowired
     private MypageDAO mypageDAO;
+
+    @Autowired
+    private CommonDAO commonDAO;
 
     /**
      * 나의 진도 목록 조회
@@ -108,5 +113,51 @@ public class MypageService {
         resVo.setList(list);
 
         return resVo;
+    }
+
+    /**
+     * 회원정보 > 회원정보 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResUserInfoVO selectUserInfo(ReqUserInfoVO reqVo) {
+
+        ResUserInfoVO resVo = new ResUserInfoVO();
+
+        // 회원정보(학생) 조회
+        UserVO vo = commonDAO.selectUserByUserManageId(reqVo.getUserManageId());
+        if(vo == null){ SystemUtil.returnNoSearchResult(); }
+        resVo.setUsername(vo.getUsername());
+        resVo.setName(vo.getName());
+        // resVo.setBirth(DateUtil.convertDateFormat(vo.getBirth(), Constants.DF8, Constants.DF8_HAN_NO_ZEROS)); // 화면에 출력하는 건 한글이 좋은데, 수정UI에서 datepicker가 없는 이상 혼선이 예상되므로 DF8을 사용함.
+        resVo.setBirth(vo.getBirth());
+
+        // 부모 회원정보 조회
+        Map<String, String> parentInfo = mypageDAO.selectParentInfo(reqVo);
+        if(parentInfo != null){
+            resVo.setParentName(parentInfo.get("parent_cust_nm"));
+            String parentBirth = parentInfo.get("parent_birthdt");
+            if(StringUtil.isNotBlank(parentBirth)){
+                resVo.setParentBirth(parentBirth);
+            }
+        }
+
+        return resVo;
+    }
+
+    /**
+     * 회원정보 > 회원정보 수정
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBaseVO updateUserInfo(ReqUserUpdateVO reqVo) {
+
+        ResBaseVO vo = new ResBaseVO();
+        int updated = mypageDAO.updateUserInfo(reqVo);
+        SystemUtil.checkUpdatedCount(updated, 1);
+
+        return vo;
     }
 }

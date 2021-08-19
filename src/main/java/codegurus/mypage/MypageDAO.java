@@ -20,4 +20,6 @@ public interface MypageDAO {
     List<BookVO> selectBookcaseList(ReqBookcaseListVO reqVo);
     List<BookVO> selectportfolioList(ReqPortfolioListVO reqVo);
     List<ContentsHistoryVO> selectDicList(ReqDicListVO reqVo);
+    Map<String, String> selectParentInfo(ReqUserInfoVO reqVo);
+    int updateUserInfo(ReqUserUpdateVO reqVo);
 }

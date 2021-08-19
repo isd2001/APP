@@ -249,4 +249,29 @@
             and   contents_history.user_manage_id = #{userManageId}
         order by schedule.online_subject_schedule_id asc
     </select>
+
+    <!-- 회원정보 조회 > 부모정보 조회 -->
+    <select id="selectParentInfo" resultType="LHMap">
+        SELECT /* electParentInfo */
+            c.intg_parent_cust_id,
+            c.parent_sap_cust_id,
+            c.parent_cust_nm ,
+            c.parent_birthdt ,
+            c.parent_handphone
+        FROM user_manage a, user_subject b, svc_mh_edu_cntr_cp c
+        WHERE a.user_manage_id = #{userManageId}
+        AND a.user_manage_id = b.user_manage_id
+        AND b.intg_edu_cntr_id = c.intg_edu_cntr_id
+    </select>
+
+    <!-- 회원정보 수정 -->
+    <update id="updateUserInfo">
+        UPDATE
+            user_manage
+        SET
+            name = #{name},
+            birth = #{birth}
+        WHERE USER_MANAGE_ID = #{userManageId}
+    </update>
+
 </mapper>
