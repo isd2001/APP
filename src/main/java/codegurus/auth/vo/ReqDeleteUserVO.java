@@ -1,5 +1,6 @@
 package codegurus.auth.vo;
 
+import codegurus.cmm.vo.req.ReqBaseVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ReqDeleteUserVO extends ReqSmsCertBaseVO {
+public class ReqDeleteUserVO extends ReqBaseVO {
 
     @JsonIgnore
     private String userManageId;
