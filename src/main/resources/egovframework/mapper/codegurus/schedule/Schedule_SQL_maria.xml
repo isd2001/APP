@@ -38,7 +38,7 @@
 		SELECT /* selectBookScheduleList */
 			schedule.online_subject_schedule_id,
 		    schedule.online_subject_id,
-		    -- schedule.`year`, 지금 구현상에는 연도를 안쓰고 있어서 주석 처리
+			/* schedule.`year`, 지금 구현상에는 연도를 안쓰고 있어서 주석 처리 */
 		    schedule.`month`,
 		    schedule.seq,
 		    schedule.active_ornot,
@@ -69,7 +69,7 @@
 		AND schedule.online_subject_id = #{onlineSubjectId}
 		AND schedule.active_ornot = 'Y'
 		AND schedule.delete_ornot = 'N'
-	  	-- AND schedule.year = #{year} 지금 구현상에는 연도를 안쓰고 있어서 주석 처리
+	  	/* AND schedule.year = #{year} 지금 구현상에는 연도를 안쓰고 있어서 주석 처리 */
 		AND schedule.month = #{month}
 		ORDER BY schedule.`year`, schedule.`month`, schedule.seq
 	</select>
