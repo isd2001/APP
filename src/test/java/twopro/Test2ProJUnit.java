@@ -19,7 +19,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,7 +53,8 @@ public class Test2ProJUnit {
     @Test
     public void testCallVocProcedure(){
 
-        Map<String, Object> qp = new LinkedHashMap<>();
+        Map<String, Object> qp = new HashMap<>();
+
         qp.put("type", "A");
         qp.put("cust_nm", "박주리");
         qp.put("zipcode", "05869");
@@ -65,7 +68,38 @@ public class Test2ProJUnit {
         qp.put("prod_id1", "Z001");
         qp.put("acpt_dt", "스마트독서 VOC 테스트");
 
+//        qp.put("rsltcode", "");
+//        qp.put("rsltmsg", "");
+//        qp.put("type", "A");
+//        qp.put("cust_nm", "박주리");
+//        qp.put("reg_num", "");
+//        qp.put("ipin", "");
+//        qp.put("web_id", "");
+//        qp.put("zipcode", "05869");
+//        qp.put("zipcode_sq", "Constants.우편번호시퀀스_기본값");
+//        qp.put("addr1", "서울특별시 강동구 진황도로 189(둔촌동)");
+//        qp.put("addr2", "101동 1405호");
+//        qp.put("email", "");
+//        qp.put("hdph", "01012345678");
+//        qp.put("hsph", "");
+//        qp.put("child_nm1", "이지은");
+//        qp.put("child_brt1", "20151111");
+//        qp.put("child_sx1", "F");
+//        qp.put("child_nm2", "");
+//        qp.put("child_brt2", "");
+//        qp.put("child_sx2", "");
+//        qp.put("prod_id1", "Z001");
+//        qp.put("prod_id2", "");
+//        qp.put("prod_gb", "");
+//        qp.put("vcher_yn", "");
+//        qp.put("acpt_dt", "스마트독서 VOC 테스트");
+//        qp.put("choice_item1", "");
+//        qp.put("choice_item2", "");
+//        qp.put("suppl_addr", "");
+        
         vocDAO.callSpSetAcpt(qp);
+//        vocDAO.callSpSetAcpt2(qp);
+//        vocDAO.callSpSetAcpt3(qp);
 
         log.debug("## 프로시저 호출 후 파라미터:[{}]", JsonUtil.toJson(qp));
     }
