@@ -12,7 +12,7 @@
     </select>
 
     <!-- VOC 등록 프로시저 호출 -->
-    <select id="callSpSetAcpt" statementType="CALLABLE" resultType="LHMap">
+    <select id="callSpSetAcpt" statementType="CALLABLE">
     { CALL PKG_WEB.SP_SET_ACPT(
             #{rsltcode, mode=OUT, jdbcType=VARCHAR},
             #{rsltmsg, mode=OUT, jdbcType=VARCHAR},
@@ -44,75 +44,5 @@
             #{suppl_addr}
         ) }
     </select>
-
-    <insert id="callSpSetAcpt2" statementType="CALLABLE" parameterType="HMap">
-        {
-            CALL PKG_WEB.SP_SET_ACPT(
-                #{rsltcode, mode=OUT, jdbcType=VARCHAR},
-                #{rsltmsg, mode=OUT, jdbcType=VARCHAR},
-                #{type, mode=IN, jdbcType=VARCHAR},
-                #{cust_nm, mode=IN, jdbcType=VARCHAR},
-                #{reg_num, mode=IN, jdbcType=VARCHAR},
-                #{ipin, mode=IN, jdbcType=VARCHAR},
-                #{web_id, mode=IN, jdbcType=VARCHAR},
-                #{zipcode, mode=IN, jdbcType=VARCHAR},
-                #{zipcode_sq, mode=IN, jdbcType=VARCHAR},
-                #{addr1, mode=IN, jdbcType=VARCHAR},
-                #{addr2, mode=IN, jdbcType=VARCHAR},
-                #{email, mode=IN, jdbcType=VARCHAR},
-                #{hdph, mode=IN, jdbcType=VARCHAR},
-                #{hsph, mode=IN, jdbcType=VARCHAR},
-                #{child_nm1, mode=IN, jdbcType=VARCHAR},
-                #{child_brt1, mode=IN, jdbcType=VARCHAR},
-                #{child_sx1, mode=IN, jdbcType=VARCHAR},
-                #{child_nm2, mode=IN, jdbcType=VARCHAR},
-                #{child_brt2, mode=IN, jdbcType=VARCHAR},
-                #{child_sx2, mode=IN, jdbcType=VARCHAR},
-                #{prod_id1, mode=IN, jdbcType=VARCHAR},
-                #{prod_id2, mode=IN, jdbcType=VARCHAR},
-                #{prod_gb, mode=IN, jdbcType=VARCHAR},
-                #{vcher_yn, mode=IN, jdbcType=VARCHAR},
-                #{acpt_dt, mode=IN, jdbcType=VARCHAR},
-                #{choice_item1, mode=IN, jdbcType=VARCHAR},
-                #{choice_item2, mode=IN, jdbcType=VARCHAR},
-                #{suppl_addr, mode=IN, jdbcType=VARCHAR}
-            )
-        }
-    </insert>
-
-    <parameterMap id="callSpSetAcptParamMap" type="HMap">
-        <parameter property="rsltcode" jdbcType="VARCHAR" javaType="String" mode="OUT" />
-        <parameter property="rsltmsg" jdbcType="VARCHAR" javaType="String" mode="OUT" />
-        <parameter property="type" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="cust_nm" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="reg_num" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="ipin" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="web_id" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="zipcode" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="zipcode_sq" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="addr1" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="addr2" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="email" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="hdph" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="hsph" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="child_nm1" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="child_brt1" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="child_sx1" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="child_nm2" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="child_brt2" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="child_sx2" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="prod_id1" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="prod_id2" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="prod_gb" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="vcher_yn" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="acpt_dt" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="choice_item1" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="choice_item2" jdbcType="VARCHAR" javaType="String" mode="IN" />
-        <parameter property="suppl_addr" jdbcType="VARCHAR" javaType="String" mode="IN" />
-    </parameterMap>
-    <select id="callSpSetAcpt3" statementType="CALLABLE" parameterMap="callSpSetAcptParamMap">
-    { CALL PKG_WEB.SP_SET_ACPT(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }
-    </select>
-
 
 </mapper>
