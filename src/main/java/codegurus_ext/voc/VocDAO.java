@@ -6,4 +6,5 @@ import java.util.Map;
 public interface VocDAO {
 
     List<Map<String, String>> selectVocDbTest();
+    Map<String, Object> callSpSetAcpt(Map<String, Object> params);
 }

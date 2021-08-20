@@ -11,5 +11,40 @@
         where rownum &lt; 10
     </select>
 
+    <!-- VOC 등록 프로시저 호출 -->
+    <select id="callSpSetAcpt" statementType="CALLABLE" resultType="LHMap">
+    {
+        CALL PKG_WEB.SP_SET_ACPT(
+            #{rsltcode, mode=OUT, jdbcType=VARCHAR},
+            #{rsltmsg, mode=OUT, jdbcType=VARCHAR},
+            #{type},
+            #{cust_nm},
+            #{reg_num},
+            #{ipin},
+            #{web_id},
+            #{zipcode},
+            #{zipcode_sq},
+            #{addr1},
+            #{addr2},
+            #{email},
+            #{hdph},
+            #{hsph},
+            #{child_nm1},
+            #{child_brt1},
+            #{child_sx1},
+            #{child_nm2},
+            #{child_brt2},
+            #{child_sx2},
+            #{prod_id1},
+            #{prod_id2},
+            #{prod_gb},
+            #{vcher_yn},
+            #{acpt_dt},
+            #{choice_item1},
+            #{choice_item2},
+            #{suppl_addr}
+        )
+    }
+    </select>
 
 </mapper>
