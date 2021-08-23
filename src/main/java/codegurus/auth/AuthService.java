@@ -15,6 +15,7 @@ import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.ResAuthVO;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus_ext.voc.VocDAO;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
 import lombok.extern.slf4j.Slf4j;
@@ -543,6 +544,10 @@ public class AuthService implements UserDetailsService {
                 resVo.getProdIdList().add(StringUtil.trim(qp.get("productId")));
             }
         }
+
+        // TODO: 테스트용 - 삭제할 것
+        resVo.getProdIdList().clear();
+        resVo.setProdIdList(ImmutableList.of(ProductEnum.상품_스마트독서.getProductId())); // 스마트독서 무조건 활성화
 
         return resVo;
     }
