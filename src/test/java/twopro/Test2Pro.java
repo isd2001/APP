@@ -1,12 +1,8 @@
 package twopro;
 
-import codegurus.cmm.constants.PgressNumEnumRC;
 import codegurus.cmm.util.StringUtil;
-import codegurus.cmm.vo.PgressVO;
 import egovframework.rte.fdl.idgnr.impl.Base64;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.util.SystemOutLogger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.regex.Pattern;
@@ -41,12 +37,12 @@ public class Test2Pro {
 //        int pgressNum = 130;
 //        int pgressNum = 160;
 //        int pgressNum = 170;
-        int pgressNum = 500;
+//        int pgressNum = 500;
 //        int pgressNum = 1010;
 //        int pgressNum = 1910;
 
-        PgressVO vo = PgressNumEnumRC.getOnlinePgressInfo(pgressNum);
-        System.out.println(vo);
+//        PgressVO vo = PgressNumEnumRC.getOnlinePgressInfo(pgressNum);
+//        System.out.println(vo);
     }
 
     private static void test08() {
