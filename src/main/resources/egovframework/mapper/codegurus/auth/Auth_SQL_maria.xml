@@ -321,6 +321,8 @@
         (
             user_manage_id,
             intg_edu_cntr_id,
+            intg_cust_id,
+            intg_subj_id,
             reg_id,
             modify_id
         )
@@ -328,6 +330,8 @@
         (
             #{userManageId},
             #{intgEduCntrId},
+            #{intgCustId},
+            #{intgSubjId},
             #{regId},
             #{regId}
         )

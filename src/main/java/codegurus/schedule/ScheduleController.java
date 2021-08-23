@@ -1,5 +1,6 @@
 package codegurus.schedule;
 
+import codegurus.cmm.cache.CacheService;
 import codegurus.schedule.vo.*;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.res.Res;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sun.misc.Cache;
 
 import javax.validation.Valid;
 
@@ -29,6 +31,9 @@ public class ScheduleController extends BaseController {
 
     @Autowired
     private ScheduleService scheduleService;
+
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * 온라인 과목 목록 조회
@@ -70,6 +75,7 @@ public class ScheduleController extends BaseController {
     @PostMapping("/thisMonthBookList")
     @ApiOperation(value = "이달의 도서 조회")
     public Res<ResScheduleListVO> selectThisMonthBookList(@RequestBody @Valid ReqThisMonthBookVO reqVo) {
+        reqVo.setUserManageId(cacheService.getUserManageId());
         ResScheduleListVO resVo = scheduleService.selectThisMonthBookList(reqVo);
         return new Res<ResScheduleListVO>(resVo);
     }

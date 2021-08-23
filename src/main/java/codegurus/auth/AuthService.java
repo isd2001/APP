@@ -332,7 +332,12 @@ public class AuthService implements UserDetailsService {
 
         // 사용자과목 레코드 생성
         for(ResContractInfoElemVO vo : list){
-            authDAO.insertUserSubject(ImmutableMap.of("userManageId", userManageId, "intgEduCntrId", vo.getIntgEduCntrId(), "regId", userManageId));
+            authDAO.insertUserSubject(ImmutableMap.of(
+                    "userManageId", userManageId,
+                    "intgEduCntrId", vo.getIntgEduCntrId(),
+                    "intgCustId", vo.getIntgCustId(),
+                    "intgSubjId", vo.getIntgSubjId(),
+                    "regId", userManageId));
         }
 
         // 사용자권한 변경 (학생일반회원 -> 학생정회원)

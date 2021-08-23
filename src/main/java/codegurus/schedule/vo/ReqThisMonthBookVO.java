@@ -1,6 +1,7 @@
 package codegurus.schedule.vo;
 
 import codegurus.cmm.vo.req.ReqBaseVO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,4 +21,8 @@ public class ReqThisMonthBookVO extends ReqBaseVO {
 
     @ApiModelProperty(notes = "월 (01~12), 원래는 지금 해당하는 월을 조회해야하는데 테스트용으로 넣어둠", example ="01")
     private String month;
+
+    @JsonIgnore
+    private String userManageId;
+
 }

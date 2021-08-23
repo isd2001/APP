@@ -237,20 +237,4 @@ public class AuthController extends BaseController {
 		return new Res<ResAvailProdsVO>(resVo);
 	}
 
-	// 만들 것인가 /bookScheduleList에 녹일 것인가?
-//	/**
-//	 * 현재 오프라인진도의 온라인과목ID/월 조회
-//	 *
-//	 * @param reqVo
-//	 * @return
-//	 */
-//	@ApiOperation(value = "사용 가능 상품(스마트독서, 플라톤..) 목록 출력")
-//	@PostMapping("/curOnlineSubj")
-//	public Res<ResAvailProdsVO> curOnlineSubj(@RequestBody @Valid ReqBaseVO reqVo) {
-//
-//		ResAvailProdsVO resVo = authService.getCurOnlineSubj(reqVo);
-//		return new Res<ResAvailProdsVO>(resVo);
-//	}
-
-
 }
