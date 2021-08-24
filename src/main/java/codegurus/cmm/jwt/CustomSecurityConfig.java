@@ -52,6 +52,8 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * spring security를 아예 타지 않도록 처리 (web ignore)
+     *
+     *  - AuthInterceptor 를 구축하게 됨에 따라 CustomWebMvcConfig와 url 패턴을 공유할 필요가 있어서 상수로 정의함.
      */
     public static final String[] ANT_MATCHERS_WEB_IGNORE = { "/css/**", "/html/**", "/images/**", "/js/**", "/resource/**", "/resources/**", "" +
             "/v2/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/download/**", "/index.jsp" }; // TODO: 파일 다운로드(/download)에 대한 권한제어 필요 여부 검토

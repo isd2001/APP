@@ -113,6 +113,7 @@
         INSERT /* insertTrialRegister */
         INTO trial_manage
         (
+            product_id,
             name,
             birth,
             birth_year,
@@ -128,6 +129,7 @@
         )
         VALUES
         (
+            #{productId},
             #{name},
             #{birth},
             SUBSTR(#{birth}, 1, 4),
@@ -147,6 +149,7 @@
     <select id="selectTrialUser" resultType="ResTrialUserVO">
         SELECT /* selectTrialUser */
             trial_manage_id,
+            product_id,
             name,
             birth,
             gender,
