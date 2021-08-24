@@ -24,14 +24,14 @@
             birth,
             birth_year,
             gender,
-            <if test='authId == "4"'><!-- 학부모 회원가입일 경우 -->
+            <if test='authCode == "11"'><!-- 학부모 회원가입일 경우 -->
                 cellphone,
                 email,
                 zipcode,
                 address,
                 address_detail,
             </if>
-            <if test='authId != "4"'><!-- 학부모 회원가입이 아닐 경우 --><!-- 프렌즈몬의 기획에 따라 사용하게 될 수도 있음 -->
+            <if test='authCode != "11"'><!-- 학부모 회원가입이 아닐 경우 --><!-- 프렌즈몬의 기획에 따라 사용하게 될 수도 있음 -->
                 termofuse_agree_ornot,
                 personalinfo_agree_ornot,
                 promotion_agree_ornot,
@@ -55,14 +55,14 @@
            #{birth},
            SUBSTR(#{birth}, 1, 4),
            #{gender},
-           <if test='authId == "4"'><!-- 학부모 회원가입일 경우 -->
+           <if test='authCode == "11"'><!-- 학부모 회원가입일 경우 -->
               #{cellphone},
               #{email},
               #{zipcode},
               #{address},
               #{addressDetail},
            </if>
-           <if test='authId != "4"'><!-- 학부모 회원가입이 아닐 경우 -->
+           <if test='authCode != "11"'><!-- 학부모 회원가입이 아닐 경우 -->
                #{termofuseAgreeOrnot},
                #{personalinfoAgreeOrnot},
                #{promotionAgreeOrnot},
