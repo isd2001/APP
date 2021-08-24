@@ -270,7 +270,8 @@
             user_manage
         SET
             name = #{name},
-            birth = #{birth}
+            birth = #{birth},
+            birth_year = SUBSTR(#{birth}, 1, 4)
         WHERE USER_MANAGE_ID = #{userManageId}
     </update>
 

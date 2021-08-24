@@ -342,7 +342,7 @@ public class AuthService implements UserDetailsService {
         }
 
         // 사용자권한 변경 (학생일반회원 -> 학생정회원)
-        int updated = authDAO.updateUserAuth(ImmutableMap.of("authId", AuthEnum.학생정회원.getAuthId(), "modifyId", userManageId, "userManageId", userManageId, "productId", ProjectConstants.PRODUCT_ID));
+        int updated = authDAO.updateUserAuth(ImmutableMap.of("authId", AuthEnum.스마트독서_학생정회원.getAuthId(), "modifyId", userManageId, "userManageId", userManageId, "productId", ProjectConstants.PRODUCT_ID));
         SystemUtil.checkUpdatedCount(updated, 1);
 
         return resVo;

@@ -26,9 +26,7 @@ public class ReqRegisterParentVO extends ReqRegisterBaseVO {
 
     // 권한구분
     @JsonIgnore
-    private final int authId = AuthEnum.학부모.getAuthId();   // user_auth insert용
-    @JsonIgnore
-    private final String authCode = AuthEnum.학부모.getAuthCode(); // mybatis 분기 처리용
+    private final int authId = AuthEnum.스마트독서_학부모.getAuthId();   // user_auth insert용
 
     @ApiModelProperty(notes = "이름", required = false, example = "김수현", position = 3)
     @Size(min = 0, max = 20)
