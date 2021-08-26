@@ -55,11 +55,46 @@
 	</select>
 
 	<!-- 학습 콘텐츠 조회 -->
-	<resultMap id="ContentsMap" type="ContentsVO" autoMapping="true">
-		<id property="contentsId" column="contents_id"/>
+	<resultMap id="contentsMap" type="ContentsVO" autoMapping="true">
+		<id property="contentsId" column="contents_contents_id"/>
+		<association property="book" javaType="BookVO" autoMapping="true">
+			<id property="bookId" column="book_id"/>
+			<result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
+			<result property="cateId" column="book_cate_id"/>
+			<association property="bookThumbnail" javaType="FileVO" autoMapping="true">
+				<id property="atchFileId" column="book_thumbnail_file_id"/>
+			</association>
+			<association property="cate" javaType="CateVO" autoMapping="true">
+				<id property="cateId" column="book_cate_id"/>
+				<result property="parentsId" column="book_cate_parents_id"/>
+				<result property="depth" column="book_cate_depth"/>
+				<result property="order" column="book_cate_order"/>
+				<result property="cateTitle" column="book_cate_cate_title"/>
+				<result property="firstCateTitle" column="book_cate_first_cate_title"/>
+				<result property="secondCateTitle" column="book_cate_second_cate_title"/>
+				<result property="thirdCateTitle" column="book_cate_third_cate_title"/>
+				<result property="fourthCateTitle" column="book_cate_fourth_cate_title"/>
+				<result property="fifthCateTitle" column="book_cate_fifth_cate_title"/>
+				<result property="sixthCateTitle" column="book_cate_sixth_cate_title"/>
+				<result property="seventhCateTitle" column="book_cate_seventh_cate_title"/>
+				<result property="eightCateTitle" column="book_cate_eight_cate_title"/>
+				<result property="ninthCateTitle" column="book_cate_ninth_cate_title"/>
+				<result property="tenthCateTitle" column="book_cate_tenth_cate_title"/>
+				<result property="firstCateId" column="book_cate_first_cate_id"/>
+				<result property="secondCateId" column="book_cate_second_cate_id"/>
+				<result property="thirdCateId" column="book_cate_third_cate_id"/>
+				<result property="fourthCateId" column="book_cate_fourth_cate_id"/>
+				<result property="fifthCateId" column="book_cate_fifth_cate_id"/>
+				<result property="sixthCateId" column="book_cate_sixth_cate_id"/>
+				<result property="seventhCateId" column="book_cate_seventh_cate_id"/>
+				<result property="eightCateId" column="book_cate_eight_cate_id"/>
+				<result property="ninthCateId" column="book_cate_ninth_cate_id"/>
+				<result property="tenthCateId" column="book_cate_tenth_cate_id"/>
+			</association>
+		</association>
 		<collection property="templateInstList" ofType="TemplateInstVO" autoMapping="true">
 			<id property="templateInstId" column="template_inst_id"/>
-			<result property="contentsId" column="contents_id"/>
+			<result property="contentsId" column="template_inst_contents_id"/>
 			<result property="templateId" column="template_id"/>
 			<result property="cateId" column="template_inst_cate_id"/>
 			<result property="order" column="template_inst_order"/>
@@ -92,18 +127,64 @@
 			</association>
 		</collection>
 	</resultMap>
-	<select id="selectLearningContents" resultMap="ContentsMap">
-		SELECT /* selectContents */
+	<select id="selectLearningContents" resultMap="contentsMap">
+		SELECT /* selectLearningContents */
 			schedule.online_subject_schedule_id,
 
-			template_inst.contents_id,
-		    template_inst.template_inst_id,
-		    template_inst.template_id,
-		    template_inst.json,
-		    template_inst.`order` as template_inst_order,
-		    template_inst.type,
-		    template_inst.difficulty,
-		    template_inst.cate_id as template_inst_cate_id,
+			contents.contents_id as contents_contents_id,
+			contents.contents_title,
+			contents.inspection_status,
+			contents.book_id,
+
+			book.book_title,
+			book.book_thumbnail_file_id,
+
+			COMTNFILE.ATCH_FILE_ID,
+			COMTNFILEDETAIL.FILE_CN,
+			COMTNFILEDETAIL.FILE_SN,
+			COMTNFILEDETAIL.FILE_STRE_COURS,
+			COMTNFILEDETAIL.STRE_FILE_NM,
+			COMTNFILEDETAIL.FILE_EXTSN,
+			COMTNFILEDETAIL.ORIGNL_FILE_NM,
+			COMTNFILEDETAIL.FILE_SIZE,
+			COMTNFILE.CREAT_DT,
+			COMTNFILEDETAIL.DOWNLOAD_CNT,
+
+			book.cate_id as book_cate_id,
+
+			book_cate.parents_id as book_cate_parents_id,
+			book_cate.depth as book_cate_depth,
+			book_cate.`order` as book_cate_order,
+			book_cate.cate_title as book_cate_cate_title,
+			book_cate.first_cate_title as book_cate_first_cate_title,
+			book_cate.second_cate_title as book_cate_second_cate_title,
+			book_cate.third_cate_title as book_cate_third_cate_title,
+			book_cate.fourth_cate_title as book_cate_fourth_cate_title,
+			book_cate.fifth_cate_title as book_cate_fifth_cate_title,
+			book_cate.sixth_cate_title as book_cate_sixth_cate_title,
+			book_cate.seventh_cate_title as book_cate_seventh_cate_title,
+			book_cate.eight_cate_title as book_cate_eight_cate_title,
+			book_cate.ninth_cate_title as book_cate_ninth_cate_title,
+			book_cate.tenth_cate_title as book_cate_tenth_cate_title,
+			book_cate.first_cate_id as book_cate_first_cate_id,
+			book_cate.second_cate_id as book_cate_second_cate_id,
+			book_cate.third_cate_id as book_cate_third_cate_id,
+			book_cate.fourth_cate_id as book_cate_fourth_cate_id,
+			book_cate.fifth_cate_id as book_cate_fifth_cate_id,
+			book_cate.sixth_cate_id as book_cate_sixth_cate_id,
+			book_cate.seventh_cate_id as book_cate_seventh_cate_id,
+			book_cate.eight_cate_id as book_cate_eight_cate_id,
+			book_cate.ninth_cate_id as book_cate_ninth_cate_id,
+			book_cate.tenth_cate_id as book_cate_tenth_cate_id,
+
+			template_inst.template_inst_id,
+			template_inst.template_id,
+			template_inst.contents_id as template_inst_contents_id,
+			template_inst.json,
+			template_inst.`order` as template_inst_order,
+			template_inst.type,
+			template_inst.difficulty,
+			template_inst.cate_id as template_inst_cate_id,
 
 			template_inst_cate.cate_id as template_inst_cate_cate_id,
 			template_inst_cate.parents_id as template_inst_cate_parents_id,
@@ -130,13 +211,20 @@
 			template_inst_cate.eight_cate_id as template_inst_cate_eight_cate_id,
 			template_inst_cate.ninth_cate_id as template_inst_cate_ninth_cate_id,
 			template_inst_cate.tenth_cate_id as template_inst_cate_tenth_cate_id
-
 		FROM online_subject_schedule schedule
 		LEFT JOIN contents
 			on schedule.contents_id = contents.contents_id
+		LEFT JOIN book
+			on contents.book_id = book.book_id
+		LEFT JOIN COMTNFILE
+			on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
+		LEFT JOIN COMTNFILEDETAIL
+			on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+		LEFT JOIN cate book_cate
+			on book.cate_id = book_cate.cate_id
 		LEFT JOIN template_inst
 			on contents.contents_id = template_inst.contents_id AND template_inst.delete_ornot = 'N'
-		LEFT JOIN cate as template_inst_cate
+		LEFT JOIN cate template_inst_cate
 			on template_inst.cate_id = template_inst_cate.cate_id
 		WHERE
 			1=1
