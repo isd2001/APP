@@ -104,8 +104,9 @@ public class OnelineController extends BaseController {
     @PostMapping("/myList")
     @ApiOperation(value = "내가 쓴 한줄평")
     public Res<ResOnelineListVO> myList(@RequestBody @Valid ReqOnelineListVO reqVo) {
-        ResOnelineListVO resVo = onelineService.selectOnelineList(reqVo);
         reqVo.setRegId(cacheService.getUserManageId());
+        ResOnelineListVO resVo = onelineService.selectOnelineList(reqVo);
+
         return new Res<ResOnelineListVO>(resVo);
     }
 }

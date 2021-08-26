@@ -28,7 +28,7 @@
 		  	and onelinereview.delete_ornot = 'N'
 			and onelinereview.book_id = #{bookId}
 			<if test = 'regId != null'>
-				and onelinerview.reg_id = #{regId}
+				and onelinereview.reg_id = #{regId}
 			</if>
 
 	</select>
