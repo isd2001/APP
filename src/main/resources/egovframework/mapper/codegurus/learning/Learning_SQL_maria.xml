@@ -135,7 +135,7 @@
 		LEFT JOIN contents
 			on schedule.contents_id = contents.contents_id
 		LEFT JOIN template_inst
-			on contents.contents_id = template_inst.contents_id
+			on contents.contents_id = template_inst.contents_id AND template_inst.delete_ornot = 'N'
 		LEFT JOIN cate as template_inst_cate
 			on template_inst.cate_id = template_inst_cate.cate_id
 		WHERE
