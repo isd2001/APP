@@ -186,6 +186,8 @@
 			template_inst.difficulty,
 			template_inst.cate_id as template_inst_cate_id,
 
+			template.template_title,
+
 			template_inst_cate.cate_id as template_inst_cate_cate_id,
 			template_inst_cate.parents_id as template_inst_cate_parents_id,
 			template_inst_cate.depth as template_inst_cate_depth,
@@ -224,6 +226,8 @@
 			on book.cate_id = book_cate.cate_id
 		LEFT JOIN template_inst
 			on contents.contents_id = template_inst.contents_id AND template_inst.delete_ornot = 'N'
+		LEFT JOIN template
+			on template_inst.template_id = template.template_id
 		LEFT JOIN cate template_inst_cate
 			on template_inst.cate_id = template_inst_cate.cate_id
 		WHERE
