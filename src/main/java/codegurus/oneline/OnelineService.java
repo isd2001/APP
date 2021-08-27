@@ -49,13 +49,15 @@ public class OnelineService {
         /* 회원 ID 하나에 한줄평 테이블에 한줄평 내용, 별점은 한번만 등록 할 수 있어서 등록되어 있는 한줄평 내용 또는 별점이 있는지 확인 */
         ResOnelineVO resOnelineVo = onelineDAO.selectOneline(reqVo);
 
+        if(resOnelineVo != null) reqVo.setOnelinereviewId(resOnelineVo.getOnelinereviewId());
+
         // 등록 유형이 한줄평 내용일 경우
         if(reqVo.getSaveType().equals("C")) {
-            if(StringUtil.isNotBlank(resOnelineVo.getOnelinereviewContent())) { // 한줄평 내용이 등록되어 있으면
-                throw new CustomException(ResCodeEnum.INFO_1000.name(), "이미 한줄평을 등록하셨습니다.");
-            } else if(resOnelineVo == null) { // 별점, 한줄평 내용 모두 등록되어 있지 않으면 별점 없이 한줄평 내용만 등록
+            if(resOnelineVo == null) { // 별점, 한줄평 내용 모두 등록되어 있지 않으면 별점 없이 한줄평 내용만 등록
                 onelineDAO.insertOnelineContent(reqVo);
                 resVo.setResMsg("한줄평 등록 완료");
+            } else if(StringUtil.isNotBlank(resOnelineVo.getOnelinereviewContent())) { // 한줄평 내용이 등록되어 있으면
+                throw new CustomException(ResCodeEnum.INFO_1000.name(), "이미 한줄평을 등록하셨습니다.");
             } else { // 별점은 등록되어 있고 한줄평 내용이 등록되어 있지 않으면 한줄평 내용만 업데이트
                 int updated = onelineDAO.updateOnelineContent(reqVo);
                 SystemUtil.checkUpdatedCount(updated, 1);
@@ -63,15 +65,15 @@ public class OnelineService {
             }
         // 등록 유형이 별점일 경우
         } else if(reqVo.getSaveType().equals("S")){
-            if(StringUtil.isNotBlank(resOnelineVo.getScore())) { // 별점이 등록되어 있으면
-                throw new CustomException(ResCodeEnum.INFO_1000.name(), "이미 별점을 등록하셨습니다.");
-            } else if(resOnelineVo == null) { // 별점, 한줄평 내용 모두 등록되어 있지 않으면 한줄평 내용 없이 별점만 등록
+            if(resOnelineVo == null) { // 별점, 한줄평 내용 모두 등록되어 있지 않으면 한줄평 내용 없이 별점만 등록
                 onelineDAO.insertOnelineScore(reqVo);
-                resVo.setResMsg("한줄평 등록 완료");
+                resVo.setResMsg("별점 등록 완료");
+            } else if(StringUtil.isNotBlank(resOnelineVo.getScore())) { // 별점이 등록되어 있으면
+                throw new CustomException(ResCodeEnum.INFO_1000.name(), "이미 별점을 등록하셨습니다.");
             } else { // 한줄평 내용은 등록되어 있고 별점이 등록되어 있지 않으면 별점만 업데이트
                 int updated = onelineDAO.updateOnelineScore(reqVo);
                 SystemUtil.checkUpdatedCount(updated, 1);
-                resVo.setResMsg("한줄평 등록 완료");
+                resVo.setResMsg("별점 등록 완료");
             }
         }
 

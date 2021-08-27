@@ -54,11 +54,16 @@ public class OnelineController extends BaseController {
      */
     @PostMapping("/content")
     @ApiOperation(value = "오늘의 학습 책 한줄평 내용 등록")
-    public Res<ResOnelineSaveVO> saveOnline(@RequestBody @Valid ReqOnelineSaveVO reqVo) {
+    public Res<ResOnelineSaveVO> saveOnline(@RequestBody @Valid ReqOnelineContentSaveVO reqVo) {
         ResOnelineSaveVO resVo = new ResOnelineSaveVO();
-        reqVo.setRegId(cacheService.getUserManageId());
-        reqVo.setSaveType("C");
-        onelineService.saveOneline(reqVo, resVo);
+
+        ReqOnelineSaveVO vo = new ReqOnelineSaveVO();
+        vo.setRegId(cacheService.getUserManageId());
+        vo.setSaveType("C");
+        vo.setBookId(reqVo.getBookId());
+        vo.setOnelinereviewContent(reqVo.getOnelinereviewContent());
+
+        onelineService.saveOneline(vo, resVo);
 
         return new Res<ResOnelineSaveVO>(resVo);
     }
@@ -71,11 +76,16 @@ public class OnelineController extends BaseController {
      */
     @PostMapping("/score")
     @ApiOperation(value = "오늘의 학습 책 별점 등록")
-    public Res<ResOnelineSaveVO> saveScore(@RequestBody @Valid ReqOnelineSaveVO reqVo) {
+    public Res<ResOnelineSaveVO> saveScore(@RequestBody @Valid ReqOnelineScoreVO reqVo) {
         ResOnelineSaveVO resVo = new ResOnelineSaveVO();
-        reqVo.setRegId(cacheService.getUserManageId());
-        reqVo.setSaveType("S");
-        onelineService.saveOneline(reqVo, resVo);
+
+        ReqOnelineSaveVO vo = new ReqOnelineSaveVO();
+        vo.setRegId(cacheService.getUserManageId());
+        vo.setSaveType("S");
+        vo.setBookId(reqVo.getBookId());
+        vo.setScore(reqVo.getScore());
+
+        onelineService.saveOneline(vo, resVo);
 
         return new Res<ResOnelineSaveVO>(resVo);
     }
