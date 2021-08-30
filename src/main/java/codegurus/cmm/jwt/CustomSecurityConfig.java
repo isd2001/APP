@@ -56,13 +56,13 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
      *  - AuthInterceptor 를 구축하게 됨에 따라 CustomWebMvcConfig와 url 패턴을 공유할 필요가 있어서 상수로 정의함.
      */
     public static final String[] ANT_MATCHERS_WEB_IGNORE = { "/css/**", "/html/**", "/images/**", "/js/**", "/resource/**", "/resources/**", "" +
-            "/v2/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/download/**", "/index.jsp" }; // TODO: 파일 다운로드(/download)에 대한 권한제어 필요 여부 검토
+            "/v2/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/index.jsp" };
     public static final String[] REGEX_MATCHERS_WEB_IGNORE = { "\\A/WEB-INF/jsp/.*\\Z" };
 
     /**
      * spring security를 아예 타지 않는 것은 아니고, 모든 사용자에 대해 권한 허용 예외처리 (http permit all)
      */
-    public static final String[] ANT_MATCHERS_HTTP_PERMIT_ALL = { "/auth/login", "/auth/checkUserDup", "/auth/register*", "/auth/trialRegister", "/auth/sms*", "/auth/counselReq", "/auth/find*", "/auth/fullmemberAuth", "/auth/contractInfo" };
+    public static final String[] ANT_MATCHERS_HTTP_PERMIT_ALL = { "/auth/login", "/auth/checkUserDup", "/auth/register*", "/auth/trialRegister", "/auth/sms*", "/auth/counselReq", "/auth/find*", "/auth/fullmemberAuth", "/auth/contractInfo", "/download/**" };
 
     /**
      * WebSecurity configure
