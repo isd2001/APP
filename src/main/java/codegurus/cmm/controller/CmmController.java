@@ -97,6 +97,11 @@ public class CmmController extends BaseController {
 		fileVO.setFileSn(String.valueOf(fileSn)); // 컴파일 오류 수정 (20210603 이프로)
 		FileVO fvo = fileService.downloadFile(fileVO);
 
+		if (fvo == null) {
+			log.debug("## 다운로드할 파일이 존재하지 않습니다.");
+			return;
+		}
+
 		File uFile = new File(fvo.getFileStreCours(), fvo.getStreFileNm());
 		long fSize = uFile.length();
 
