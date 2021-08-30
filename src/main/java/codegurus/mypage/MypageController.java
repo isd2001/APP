@@ -8,6 +8,11 @@ import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.Res;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.mypage.vo.*;
+import codegurus.oneline.OnelineService;
+import codegurus.oneline.vo.ReqOnelineContentSaveVO;
+import codegurus.oneline.vo.ReqOnelineSaveVO;
+import codegurus.oneline.vo.ReqOnelineUpdateVO;
+import codegurus.oneline.vo.ResOnelineSaveVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +40,9 @@ public class MypageController extends BaseController {
     private MypageService mypageService;
 
     @Autowired
+    private OnelineService onelineService;
+
+    @Autowired
     private CacheService cacheService;
 
     /**
@@ -43,7 +51,7 @@ public class MypageController extends BaseController {
      * @param reqVo
      * @return
      */
-    @PostMapping("magnitudeList")
+    @PostMapping("/magnitudeList")
     @ApiOperation(value = "나의 진도 목록 조회")
     public Res<ResMagnitudeListVO> magnitudeList(@RequestBody @Valid ReqMagnitudeListVO reqVo) {
         reqVo.setUserManageId(cacheService.getUserManageId());
@@ -58,7 +66,7 @@ public class MypageController extends BaseController {
      * @param reqVo
      * @return
      */
-    @PostMapping("bookcaseList")
+    @PostMapping("/bookcaseList")
     @ApiOperation(value = "나의 책장 목록 조회")
     public Res<ResBookcaseListVO> bookcaseList(@RequestBody @Valid ReqBookcaseListVO reqVo) {
         reqVo.setUserManageId(cacheService.getUserManageId());
@@ -73,7 +81,7 @@ public class MypageController extends BaseController {
      * @param reqVo
      * @return
      */
-    @PostMapping("dicList")
+    @PostMapping("/dicList")
     @ApiOperation(value = "나의 사전 목록 조회")
     public Res<ResDicListVO> dicList(@RequestBody @Valid ReqDicListVO reqVo) {
         reqVo.setUserManageId(cacheService.getUserManageId());
@@ -88,13 +96,38 @@ public class MypageController extends BaseController {
      * @param reqVo
      * @return
      */
-    @PostMapping("portfolioList")
+    @PostMapping("/portfolioList")
     @ApiOperation(value = "나의 포트폴리오 목록 조회")
     public Res<ResPortfolioListVO> portfolioList(@RequestBody @Valid ReqPortfolioListVO reqVo) {
         reqVo.setUserManageId(cacheService.getUserManageId());
         ResPortfolioListVO resVo = mypageService.selectportfolioList(reqVo);
 
         return new Res<ResPortfolioListVO>(resVo);
+    }
+
+    /**
+     * 한줄평, 별점 수정
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/updateOneline")
+    @ApiOperation(value = "한줄평 등록/수정")
+    public Res<ResOnelineSaveVO> updateOneline(@RequestBody @Valid ReqOnelineUpdateVO reqVo) {
+        ResOnelineSaveVO resVo = new ResOnelineSaveVO();
+
+        ReqOnelineSaveVO vo = new ReqOnelineSaveVO();
+
+        vo.setRegId(cacheService.getUserManageId());
+        vo.setModifyId(cacheService.getUserManageId());
+        vo.setOnelinereviewId(reqVo.getOnelinereviewId());
+        vo.setBookId(reqVo.getBookId());
+        vo.setOnelinereviewContent(reqVo.getOnelinereviewContent());
+        vo.setScore(reqVo.getScore());
+
+        onelineService.updateOneline(vo, resVo);
+
+        return new Res<ResOnelineSaveVO>(resVo);
     }
 
     /**

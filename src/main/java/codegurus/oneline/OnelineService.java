@@ -83,6 +83,27 @@ public class OnelineService {
     }
 
     /**
+     * 오늘의 학습 책 한줄평/별점 수정
+     *
+     * @param reqVo
+     * @param resVo
+     * @return
+     */
+    public void updateOneline(ReqOnelineSaveVO reqVo, ResOnelineSaveVO resVo) {
+
+        int updatedContent = onelineDAO.updateOnelineContent(reqVo);
+        int updatedScore = onelineDAO.updateOnelineScore(reqVo);
+
+        SystemUtil.checkUpdatedCount(updatedContent, 1);
+        SystemUtil.checkUpdatedCount(updatedScore, 1);
+
+        resVo.setResMsg("한줄평 / 별점수정 완료");
+
+        // 응답에 한줄평 ID 바인딩
+        resVo.setOnelinereviewId(reqVo.getOnelinereviewId());
+    }
+
+    /**
      * 한줄평 좋아요 추가/제거
      *
      * @param reqVo

@@ -1,5 +1,6 @@
 package codegurus.oneline.vo;
 
+import codegurus.learning.vo.BookVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,8 +17,11 @@ public class OnelineVO {
     @ApiModelProperty(notes = "한줄평 ID", example = "1", position = 1)
     private String onelinereviewId;
 
-    @ApiModelProperty(notes = "책 ID", example = "1", position = 2)
+    @ApiModelProperty(notes = "책 ID", example = "1")
     private String bookId;
+
+    @ApiModelProperty(notes = "책 정보",  position = 2)
+    private BookVO book;
 
     @ApiModelProperty(notes = "한줄평 내용", example = "그것은 좋은 책이었습니다. ^^", position = 3)
     private String onelinereviewContent;
