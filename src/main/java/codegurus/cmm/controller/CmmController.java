@@ -81,11 +81,12 @@ public class CmmController extends BaseController {
 	
 	@RequestMapping(value = "/download/{id}")
 	public void download(@PathVariable("id") final String id, @RequestParam Map<String, Object> commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
-			
+
+		log.debug("## 파일 다운로드 id:[{}]", id);
+
 		long fileSn = commandMap.get("fileSn") == null ? 0 : Long.parseLong((String) commandMap.get("fileSn"));
 		String disposition = (String) commandMap.get("disposition");
-		
-		
+
 		if(disposition == null || disposition.equals("")) {
 			disposition = "attachment;";
 		}
