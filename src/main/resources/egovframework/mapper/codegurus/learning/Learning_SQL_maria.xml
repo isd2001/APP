@@ -299,8 +299,8 @@
 			<result property="streFileNm" column="DRAWING_STRE_FILE_NM" />
 			<result property="fileExtsn" column="DRAWING_FILE_EXTSN" />
 			<result property="orignlFileNm" column="DRAWING_ORIGNL_FILE_NM" />
-			<result property="fieSize" column="DRAWING_FILE_SIZE" />
-			<result property="createDt" column="DRAWING_CREAT_DT" />
+			<result property="fileMg" column="DRAWING_FILE_SIZE" />
+			<result property="creatDt" column="DRAWING_CREAT_DT" />
 			<result property="downloadCnt" column="DOWNLOAD_CNT" />
 		</association>
 		<association property="voiceFile" javaType="FileVO" autoMapping="true">
@@ -311,8 +311,8 @@
 			<result property="streFileNm" column="VOICE_STRE_FILE_NM" />
 			<result property="fileExtsn" column="VOICE_FILE_EXTSN" />
 			<result property="orignlFileNm" column="VOICE_ORIGNL_FILE_NM" />
-			<result property="fieSize" column="VOICE_FILE_SIZE" />
-			<result property="createDt" column="VOICE_CREAT_DT" />
+			<result property="fileMg" column="VOICE_FILE_SIZE" />
+			<result property="creatDt" column="VOICE_CREAT_DT" />
 			<result property="downloadCnt" column="VOICE_DOWNLOAD_CNT" />
 		</association>
 		<association property="book" column="online_subject_schedule_id" javaType="BookVO" select="selectBook"/>
