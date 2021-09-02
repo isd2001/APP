@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class TemplateInstHistorySaveVo {
 
-    @ApiModelProperty(notes = "콘텐츠 이력 ID", example="1")
+    @ApiModelProperty(notes = "콘텐츠 이력 ID", hidden=true)
     private String contentsHistoryId;
 
     @ApiModelProperty(notes = "템플릿 인스턴스 ID", example="71")

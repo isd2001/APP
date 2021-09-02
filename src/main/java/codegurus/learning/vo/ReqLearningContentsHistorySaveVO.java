@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 public class ReqLearningContentsHistorySaveVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "콘텐츠 이력 ID",  required = false)
+    @ApiModelProperty(notes = "콘텐츠 이력 ID",  required = false, hidden=true)
     private String contentsHistoryId;
 
     @ApiModelProperty(notes = "온라인 과목 스케줄 ID", example = "1")
