@@ -16,8 +16,8 @@ import java.util.List;
 @Setter
 public class ReqLearningContentsHistorySaveVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "콘텐츠 이력 ID", example = "1")
-    private String contentsHistoryId;
+    //@ApiModelProperty(notes = "콘텐츠 이력 ID", example = "1") //콘텐츠 이력은 저장만 있고 수정은 없어서 주석처리
+    //private String contentsHistoryId;
 
     @ApiModelProperty(notes = "온라인 과목 스케줄 ID", example = "1")
     private String onlineSubjectScheduleId;
