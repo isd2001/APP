@@ -12,7 +12,7 @@
     </select>
 
     <!-- VOC 등록 프로시저 호출 -->
-    <select id="callSpSetAcpt" statementType="CALLABLE">
+    <insert id="callSpSetAcpt" statementType="CALLABLE">
     { CALL PKG_WEB.SP_SET_ACPT(
             #{rsltcode, mode=OUT, jdbcType=VARCHAR},
             #{rsltmsg, mode=OUT, jdbcType=VARCHAR},
@@ -43,6 +43,6 @@
             #{choice_item2},
             #{suppl_addr}
         ) }
-    </select>
+    </insert>
 
 </mapper>

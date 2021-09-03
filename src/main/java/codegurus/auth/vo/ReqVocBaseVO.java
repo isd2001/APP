@@ -70,10 +70,15 @@ public class ReqVocBaseVO extends ReqBaseVO {
 
     // 제품번호
     @JsonIgnore
-    protected String prodId1 = "AAAA"; // 답변 대기중
+    protected String prodId1 = "Z001"; // 답변 대기중
 
     // 우편번호시퀀스
     @JsonIgnore
     protected String zipcodeSq = Constants.우편번호시퀀스_기본값;
 
+    // VOC 프로시저 호출결과
+    @JsonIgnore
+    protected String vocRsltCode;
+    @JsonIgnore
+    protected String vocRsltMsg;
 }

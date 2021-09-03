@@ -1,18 +1,14 @@
 package codegurus.auth.vo;
 
 import codegurus.cmm.constants.Constants;
-import codegurus.cmm.util.StringUtil;
+import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.validation.DateCheck;
-import codegurus.cmm.vo.req.ReqBaseVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 /**
  * 체험회원 등록 요청 VO
@@ -31,6 +27,9 @@ public class ReqTrialRegisterVO extends ReqVocBaseVO {
 
     @JsonIgnore
     private int trialPeriod;
+
+    @JsonIgnore
+    private String productId = ProductEnum.상품_스마트독서.getProductId();
 
     // 상담내용상세
     @JsonIgnore

@@ -216,12 +216,15 @@ public class AuthService implements UserDetailsService {
         ResTrialRegisterVO resVo = new ResTrialRegisterVO();
         reqVo.setTrialPeriod(Constants.TRIAL_PERIOD);
 
+        log.debug("## reqVo:[{}]", JsonUtil.toJson(reqVo));
+
         // TODO: 계속 체험회원 등록을 하는 것을 막아야 할 경우 추가 구현
 
         // INSERT
         authDAO.insertTrialRegister(reqVo);
 
-        // TODO: VOC 호출
+        // VOC 프로시저 호출
+        callVocProcedure(reqVo, reqVo.getAcptDt());
 
         // 체험회원 전용 토큰 생성
         Map<String, Object> params = new HashMap<>();
@@ -258,10 +261,11 @@ public class AuthService implements UserDetailsService {
         }
 
         // db 조회 테스트 코드 - TODO: 삭제
-        List<Map<String, String>> vocTestList = vocDAO.selectVocDbTest();
-        log.debug("## vocTestList:[{}]", JsonUtil.toJson(vocTestList));
+//        List<Map<String, String>> vocTestList = vocDAO.selectVocDbTest();
+//        log.debug("## vocTestList:[{}]", JsonUtil.toJson(vocTestList));
 
-        // TODO: VOC 프로시저 호출
+        // VOC 프로시저 호출
+        callVocProcedure(reqVo, reqVo.getAcptDt());
 
         return resVo;
     }
@@ -365,10 +369,6 @@ public class AuthService implements UserDetailsService {
         }
 
         resVo.setUsername(StringUtil.maskID(userId));
-
-        // 예전 기획에서 생각하던 부분.
-        // TODO: SAP 테이블 조회 => 자녀 개인정보 조회 => 자녀 ID 획득
-        // TODO: 일반회원은 어떻게 할 것인가?
 
         return resVo;
     }
@@ -545,11 +545,43 @@ public class AuthService implements UserDetailsService {
             }
         }
 
-        // TODO: 테스트용 - 삭제할 것
+        // TODO: 테스트용 - 삭제할 것 (SAP 학생 데이터가 부실하므로 테스트단계에서는 이렇게 운용)
         resVo.getProdIdList().clear();
         resVo.setProdIdList(ImmutableList.of(ProductEnum.상품_스마트독서.getProductId())); // 스마트독서 무조건 활성화
 
         return resVo;
+    }
+
+    /**
+     * VOC 프로시저 호출
+     *
+     * @param reqVo
+     * @param acptDt
+     */
+    private void callVocProcedure(ReqVocBaseVO reqVo, String acptDt){
+
+        Map<String, Object> vp = new LinkedHashMap<>();
+        vp.put("type", reqVo.getType());
+        vp.put("cust_nm", reqVo.getParentName());
+        vp.put("zipcode", reqVo.getZipcode());
+        vp.put("zipcode_sq", reqVo.getZipcodeSq());
+        vp.put("addr1", reqVo.getAddress());
+        vp.put("addr2", reqVo.getAddressDetail());
+        vp.put("hdph", reqVo.getParentCellphone());
+        vp.put("child_nm1", reqVo.getName());
+        vp.put("child_brt1", reqVo.getBirth());
+        vp.put("child_sx1", reqVo.getGender());
+        vp.put("prod_id1", reqVo.getProdId1());
+        vp.put("acpt_dt", acptDt);
+        vocDAO.callSpSetAcpt(vp); // 호출
+        reqVo.setVocRsltCode(StringUtil.trim(vp.get("rsltcode")));
+        reqVo.setVocRsltMsg(StringUtil.trim(vp.get("rsltmsg")));
+        log.debug("## VOC 프로시저 호출결과:[{}]", JsonUtil.toJson(vp));
+
+        // 호출결과가 정상이 아닐 경우
+        if(! "0".equals(reqVo.getVocRsltCode())){
+            throw new CustomException(ResCodeEnum.ERROR_0011, reqVo.getVocRsltMsg());
+        }
     }
 
 }
