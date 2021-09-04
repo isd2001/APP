@@ -321,7 +321,7 @@
         GROUP BY intg_edu_cntr_id
     </select>
 
-    <!-- 사용자과목 insert -->
+    <!-- 정회원 인증 (사용자과목 insert) -->
     <insert id="insertUserSubject">
         INSERT /* insertUserSubject */
         INTO user_subject
@@ -342,8 +342,9 @@
             #{regId},
             #{regId}
         )
-		ON DUPLICATE KEY <!-- update 상황시 에러 방지를 위해 놓았을 뿐 특별히 update의 의미는 없다. -->
+		ON DUPLICATE KEY
 		UPDATE
+            delete_ornot = 'N', /* 삭제 복구 */
 			modify_id   = #{regId},
 			modify_date = CURRENT_TIMESTAMP
     </insert>
@@ -375,7 +376,7 @@
             user_auth
         SET
             auth_id = #{authId},
-            MODIFY_ID = #{modifyID},
+            MODIFY_ID = #{modifyId},
             MODIFY_DATE = CURRENT_TIMESTAMP
         WHERE user_auth_id = (
             SELECT
