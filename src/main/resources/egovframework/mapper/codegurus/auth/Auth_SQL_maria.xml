@@ -388,4 +388,17 @@
         )
     </update>
 
+    <!-- 정회원인증시, 정회원인증에 불필요한 UI에 입력된 필드들을 학생회원 레코드에 임시 저장한다. (어떻게 사용할지는 추후 논의) -->
+    <update id="updateUserInfoByFullmemberAuth">
+        update /* updateUserInfoByFullmemberAuth */
+            user_manage
+        set
+             cellphone = #{parentCellphone}
+            ,email = #{email}
+            ,zipcode = #{zipcode}
+            ,address = #{address}
+            ,address_detail = #{addressDetail}
+        where user_manage_id = #{userManageId}
+    </update>
+
 </mapper>

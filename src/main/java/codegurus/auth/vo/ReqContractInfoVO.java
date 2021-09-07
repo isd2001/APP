@@ -74,6 +74,8 @@ public class ReqContractInfoVO extends ReqBaseVO {
     @JsonIgnore
     protected String productId = ProjectConstants.PRODUCT_ID;
 
+    @JsonIgnore
+    protected String userManageId;
 
     // 여백 때문에 정회원인증이 실패하지 않도록 trim 보강.
     public String getName() {
@@ -113,5 +115,8 @@ public class ReqContractInfoVO extends ReqBaseVO {
     }
     public String getProductId() {
         return productId;
+    }
+    public String getUserManageId() {
+        return userManageId;
     }
 }
