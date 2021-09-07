@@ -71,7 +71,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         // 체험회원이 아닐 경우
         }else{
             log.debug("## 체험회원이 아닐 경우");
-
+            String username = StringUtil.trim(claims.get("sub"));
+            log.debug("## username:[{}]", username);
         }
 
 
