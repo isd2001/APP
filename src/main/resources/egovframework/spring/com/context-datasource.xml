@@ -38,7 +38,7 @@
 		<property name="numTestsPerEvictionRun" value="3"/>
 		<property name="timeBetweenEvictionRunsMillis" value="600000"/>
 		<property name="minEvictableIdleTimeMillis" value="-1"/>
-		<property name="softMinEvictableIdleTimeMillis" value="300000"/>
+		<property name="validationQuery" value="select 1"/>
 
 		<property name="defaultAutoCommit" value="false"/>
 		<property name="poolPreparedStatements" value="true"/>

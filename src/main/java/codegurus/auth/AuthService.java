@@ -349,6 +349,11 @@ public class AuthService implements UserDetailsService {
         int updated = authDAO.updateUserAuth(ImmutableMap.of("authId", AuthEnum.스마트독서_학생정회원.getAuthId(), "modifyId", userManageId, "userManageId", userManageId, "productId", ProjectConstants.PRODUCT_ID));
         SystemUtil.checkUpdatedCount(updated, 1);
 
+        // 현재 정회원인증시 정회원 인증에 필요한 값들을 제외한 값 (이메일, 주소 관련 정보)등은 따로 어디에 저장할 것인지 정의된 것이 없다.
+        // 그래서 해당 정보를 그냥 날려버리는 대신 학생회원 레코드에 저장하도록 하였다. (추후에 어떻게 할 것인지는 논의 필요)
+        reqVo.setUserManageId(userManageId);
+        authDAO.updateUserInfoByFullmemberAuth(reqVo);
+
         return resVo;
     }
 
