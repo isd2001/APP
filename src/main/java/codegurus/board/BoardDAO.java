@@ -17,5 +17,8 @@ public interface BoardDAO {
 
     List<ResBoardListElemVO> selectBoardList(ReqBoardListVO reqVo);
     ResBoardDetailVO selectBoardDetail(ReqBoardDetailVO reqVo);
+
+    ResBoardDetailVO selectBoardOne(ReqBoardDetailVO reqVo);
+
     int updateLookupCount(ReqBoardDetailVO reqVo);
 }

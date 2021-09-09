@@ -90,4 +90,49 @@ public class BoardController extends BaseController {
         ResBoardDetailVO resVo = boardService.selectBoardDetail(reqVo);
         return new Res<ResBoardDetailVO>(resVo);
     }
+
+    /**
+     * 이용약관 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/termOfUse")
+    @ApiOperation(value = "이용약관 조회")
+    public Res<ResBoardDetailVO> termOfUse (@RequestBody @Valid ReqBoardDetailVO reqVo) {
+
+        reqVo.setType("이용약관");
+        ResBoardDetailVO resVo = boardService.selectBoardOne(reqVo);
+        return new Res<ResBoardDetailVO>(resVo);
+    }
+
+    /**
+     * 개인정보 수집 및 이용동의 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/personalInfo")
+    @ApiOperation(value = "개인정보 수집 및 이용동의")
+    public Res<ResBoardDetailVO> personalInfo (@RequestBody @Valid ReqBoardDetailVO reqVo) {
+
+        reqVo.setType("개인정보");
+        ResBoardDetailVO resVo = boardService.selectBoardOne(reqVo);
+        return new Res<ResBoardDetailVO>(resVo);
+    }
+
+    /**
+     * 마케팅 활용 동의 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/promotion")
+    @ApiOperation(value = "마케팅 활용 동의 조회")
+    public Res<ResBoardDetailVO> promotion (@RequestBody @Valid ReqBoardDetailVO reqVo) {
+
+        reqVo.setType("마케팅");
+        ResBoardDetailVO resVo = boardService.selectBoardOne(reqVo);
+        return new Res<ResBoardDetailVO>(resVo);
+    }
 }

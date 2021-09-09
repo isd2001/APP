@@ -30,7 +30,7 @@ public class BoardService {
     public ResBoardListVO selectBoardList(ReqBoardListVO reqVo) {
         ResBoardListVO resVo = new ResBoardListVO();
 
-        List<ResBoardListElemVO> list = boardDAO.selectBoardList(reqVo); // 공지사항 목록 조회
+        List<ResBoardListElemVO> list = boardDAO.selectBoardList(reqVo);
         if(list.size() == 0) {
             SystemUtil.returnNoSearchResult();
         } // 조회결과 없음 리턴
@@ -49,7 +49,24 @@ public class BoardService {
     public ResBoardDetailVO selectBoardDetail(ReqBoardDetailVO reqVo) {
         boardDAO.updateLookupCount(reqVo);
 
-        ResBoardDetailVO resVo = boardDAO.selectBoardDetail(reqVo); // 공지사항 목록 조회
+        ResBoardDetailVO resVo = boardDAO.selectBoardDetail(reqVo);
+
+        if(resVo == null) {
+            SystemUtil.returnNoSearchResult();
+        } // 조회결과 없음 리턴
+
+        return resVo;
+    }
+
+    /**
+     * 이용약관, 개인정보, 마케팅활용 동의 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBoardDetailVO selectBoardOne(ReqBoardDetailVO reqVo) {
+
+        ResBoardDetailVO resVo = boardDAO.selectBoardOne(reqVo); // 이용약관, 개인정보, 마케팅활용 동의 조회
 
         if(resVo == null) {
             SystemUtil.returnNoSearchResult();
