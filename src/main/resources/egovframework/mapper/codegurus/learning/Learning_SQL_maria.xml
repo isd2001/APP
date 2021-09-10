@@ -365,7 +365,9 @@
 		where 1=1
 			and contents_history.user_manage_id = #{userManageId}
 		  	and contents_history.online_subject_schedule_id = #{onlineSubjectScheduleId}
-		  	and contents_history.delete_ornot = 'N';
+		  	and contents_history.delete_ornot = 'N'
+		ORDER BY end_date DESC
+		LIMIT 1;
 	</select>
 
 	<!-- 학습 결과 조회(책 정보 조회) -->
