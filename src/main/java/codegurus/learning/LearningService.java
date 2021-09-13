@@ -66,6 +66,8 @@ public class LearningService {
      */
     public void saveLearningContentsHistory(ReqLearningContentsHistorySaveVO reqVo, ResLearningContentsHistorySaveVO resVo) {
 
+        learningDAO.deleteOldContentsHistory(reqVo);
+
         learningDAO.insertLearningContentsHistory(reqVo);
         resVo.setResMsg("학습 콘텐츠 이력 저장");
 

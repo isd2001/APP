@@ -236,6 +236,15 @@
 		AND contents.delete_ornot = 'N'
 		ORDER BY template_inst.`order`
 	</select>
+	
+	<!-- 같은 스케줄ID, 유저ID 이력 삭제 -->
+	<update id="deleteOldContentsHistory" >
+		/* deleteOldContentsHistory */
+		UPDATE contents_history
+		SET delete_ornot = 'Y'
+		WHERE online_subject_schedule_id = #{onlineSubjectScheduleId}
+			AND user_manage_id = #{userManageId}
+	</update>
 
 	<!-- 학습 콘텐츠 이력 등록 -->
 	<insert id="insertLearningContentsHistory" useGeneratedKeys="true" keyProperty="contentsHistoryId">

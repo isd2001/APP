@@ -56,7 +56,7 @@ public class LearningController extends BaseController {
      * @return
      */
     @PostMapping("/contents")
-    @ApiOperation(value = "학습 콘텐츠")
+    @ApiOperation(value = "학습 콘텐츠 조회")
     public Res<ResLearningContentsVO> contents(@RequestBody @Valid ReqLearningContentsVO reqVo) {
 
         ResLearningContentsVO resVo = new ResLearningContentsVO();

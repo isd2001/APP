@@ -15,6 +15,8 @@ public interface LearningDAO {
     BookVO selectBookDetail(ReqLearningBookVO reqVo);
     ContentsVO selectLearningContents(ReqLearningContentsVO reqVo);
 
+    int deleteOldContentsHistory(ReqLearningContentsHistorySaveVO reqVo);
+
     void insertLearningContentsHistory(ReqLearningContentsHistorySaveVO reqVo);
     void insertTemplateInstHistory(List<TemplateInstHistorySaveVo> insertTemplateInstList);
 

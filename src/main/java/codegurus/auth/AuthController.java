@@ -224,6 +224,20 @@ public class AuthController extends BaseController {
 	}
 
 	/**
+	 * 패스워드 찾기 후 패스워드 변경
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@ApiOperation(value = "패스워드 찾기 후 변경")
+	@PostMapping("/findPwUpdate")
+	public Res<ResBaseVO> findPwUpdate(@RequestBody @Valid ReqFindPWUpdateVO reqVo) {
+
+		ResBaseVO resVo = authService.findPwUpdate(reqVo);
+		return new Res<ResBaseVO>(resVo);
+	}
+
+	/**
 	 * 사용 가능 상품(스마트독서, 플라톤..) 목록 출력
 	 *
 	 * @param reqVo

@@ -14,6 +14,7 @@ import codegurus.cmm.vo.req.ReqAuthVO;
 import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.ResAuthVO;
 import codegurus.cmm.vo.res.ResBaseVO;
+import codegurus.mypage.MypageDAO;
 import codegurus_ext.voc.VocDAO;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -87,6 +88,8 @@ public class AuthService implements UserDetailsService {
 	@Value("#{new Boolean('${rest.response.sms.certnumber}')}")
 	private boolean restResponseSmsCertnumber;
 
+    @Autowired
+    private MypageDAO mypageDAO;
 
     /**
      * 로그인
@@ -388,12 +391,39 @@ public class AuthService implements UserDetailsService {
 
         ResFindPWVO resVo = new ResFindPWVO();
 
-        String pw = authDAO.selectUserPassword(reqVo);
-        if (pw == null) {
+        UserVO userVO = authDAO.selectUserPassword(reqVo);
+        if (userVO == null) {
             throw new CustomException(ResCodeEnum.INFO_0009);
         }
 
-        resVo.setPassword(cryptoService.decrypt(pw));
+        resVo.setPassword(cryptoService.decrypt(userVO.getPasswordMask()));
+
+        return resVo;
+    }
+
+    /**
+     * 패스워드 찾기 후 변경
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBaseVO findPwUpdate(ReqFindPWUpdateVO reqVo) {
+        ResBaseVO resVo = new ResBaseVO();
+
+        UserVO userVO = authDAO.selectUserPassword(reqVo);
+        if (userVO == null) {
+            throw new CustomException(ResCodeEnum.INFO_0009);
+        }
+
+        ReqUpdatePWVO reqUpdatePWVO = new ReqUpdatePWVO();
+        reqUpdatePWVO.setUserManageId(userVO.getUserManageId());
+
+        String passwordRaw = reqVo.getPassword();
+        reqUpdatePWVO.setPasswordMask(cryptoService.encrypt(StringUtil.maskPW(passwordRaw))); // 패스워드 마스킹
+        reqUpdatePWVO.setPassword(passwordEncoder.encode(passwordRaw)); // 패스워드 해싱
+
+        int updated = mypageDAO.updateUserPassword(reqUpdatePWVO);
+        SystemUtil.checkUpdatedCount(updated, 1);
 
         return resVo;
     }

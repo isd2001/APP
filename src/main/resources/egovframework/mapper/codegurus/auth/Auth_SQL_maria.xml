@@ -228,13 +228,15 @@
     </select>
 
     <!-- 패스워드 찾기 -->
-    <select id="selectUserPassword" resultType="String">
+    <select id="selectUserPassword" resultType="UserVO">
         SELECT /* selectUserPassword */
+            user_manage_id,
             password_mask
         FROM user_manage
         WHERE user_id = #{username}
         AND name = #{name}
         AND birth = #{birth}
+        AND delete_ornot = 'N'
     </select>
 
     <!-- 가족관계가 매핑이 되어 있는 상태이면 Y, 관계가 없으면 N 리턴 -->

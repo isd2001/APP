@@ -20,7 +20,10 @@ public class UserVO extends BaseVO {
     private String username; // 사용자명이 아니라 userId 와 같은 값임.
 
 	@JsonIgnore
-    private String password;
+	private String password;
+
+	@JsonIgnore
+	private String passwordMask;
 
     @ApiModelProperty(notes = "사용자관리ID", example = "1")
 	private String userManageId;
