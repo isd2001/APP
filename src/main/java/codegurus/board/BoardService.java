@@ -64,7 +64,7 @@ public class BoardService {
      * @param reqVo
      * @return
      */
-    public ResBoardDetailVO selectBoardOne(ReqBoardDetailVO reqVo) {
+    public ResBoardDetailVO selectBoardOne(ReqBoardOneVO reqVo) {
 
         ResBoardDetailVO resVo = boardDAO.selectBoardOne(reqVo); // 이용약관, 개인정보, 마케팅활용 동의 조회
 

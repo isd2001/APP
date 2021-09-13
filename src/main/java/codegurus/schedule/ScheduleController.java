@@ -74,6 +74,8 @@ public class ScheduleController extends BaseController {
     @ApiOperation(value = "이달의 도서 조회")
     public Res<ResScheduleListVO> selectThisMonthBookList(@RequestBody @Valid ReqThisMonthBookVO reqVo) {
         reqVo.setUserManageId(cacheService.getUserManageId());
+        reqVo.setMonth("08");
+        reqVo.setOnlineSubjectId(1);
         ResScheduleListVO resVo = scheduleService.selectThisMonthBookList(reqVo);
         return new Res<ResScheduleListVO>(resVo);
     }

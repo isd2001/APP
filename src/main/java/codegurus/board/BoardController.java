@@ -1,9 +1,6 @@
 package codegurus.board;
 
-import codegurus.board.vo.ReqBoardDetailVO;
-import codegurus.board.vo.ReqBoardListVO;
-import codegurus.board.vo.ResBoardDetailVO;
-import codegurus.board.vo.ResBoardListVO;
+import codegurus.board.vo.*;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.res.Res;
 import io.swagger.annotations.Api;
@@ -39,9 +36,8 @@ public class BoardController extends BaseController {
      */
     @PostMapping("/noticeList")
     @ApiOperation(value = "공지사항 목록 조회")
-    public Res<ResBoardListVO> noticeList () {
+    public Res<ResBoardListVO> noticeList (@RequestBody @Valid ReqBoardListVO reqVo) {
 
-        ReqBoardListVO reqVo = new ReqBoardListVO();
         reqVo.setType("공지사항");
         ResBoardListVO resVo = boardService.selectBoardList(reqVo);
         return new Res<ResBoardListVO>(resVo);
@@ -69,8 +65,7 @@ public class BoardController extends BaseController {
      */
     @PostMapping("/faqList")
     @ApiOperation(value = "FAQ 목록 조회")
-    public Res<ResBoardListVO> qnaList () {
-        ReqBoardListVO reqVo = new ReqBoardListVO();
+    public Res<ResBoardListVO> qnaList (@RequestBody @Valid ReqBoardListVO reqVo) {
         reqVo.setType("FAQ");
         ResBoardListVO resVo = boardService.selectBoardList(reqVo);
         return new Res<ResBoardListVO>(resVo);
@@ -99,7 +94,7 @@ public class BoardController extends BaseController {
      */
     @PostMapping("/termOfUse")
     @ApiOperation(value = "이용약관 조회")
-    public Res<ResBoardDetailVO> termOfUse (@RequestBody @Valid ReqBoardDetailVO reqVo) {
+    public Res<ResBoardDetailVO> termOfUse (@RequestBody @Valid ReqBoardOneVO reqVo) {
 
         reqVo.setType("이용약관");
         ResBoardDetailVO resVo = boardService.selectBoardOne(reqVo);
@@ -114,7 +109,7 @@ public class BoardController extends BaseController {
      */
     @PostMapping("/personalInfo")
     @ApiOperation(value = "개인정보 수집 및 이용동의")
-    public Res<ResBoardDetailVO> personalInfo (@RequestBody @Valid ReqBoardDetailVO reqVo) {
+    public Res<ResBoardDetailVO> personalInfo (@RequestBody @Valid ReqBoardOneVO reqVo) {
 
         reqVo.setType("개인정보");
         ResBoardDetailVO resVo = boardService.selectBoardOne(reqVo);
@@ -129,7 +124,7 @@ public class BoardController extends BaseController {
      */
     @PostMapping("/promotion")
     @ApiOperation(value = "마케팅 활용 동의 조회")
-    public Res<ResBoardDetailVO> promotion (@RequestBody @Valid ReqBoardDetailVO reqVo) {
+    public Res<ResBoardDetailVO> promotion (@RequestBody @Valid ReqBoardOneVO reqVo) {
 
         reqVo.setType("마케팅");
         ResBoardDetailVO resVo = boardService.selectBoardOne(reqVo);

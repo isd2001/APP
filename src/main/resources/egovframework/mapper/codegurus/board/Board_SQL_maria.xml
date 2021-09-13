@@ -15,6 +15,7 @@
             DF14(reg_date) as reg_date
         FROM board
         WHERE 1=1
+        and product_id = #{productId}
         and `type` = #{type}
 		and delete_ornot = 'N'
 		ORDER BY fix_ornot DESC, reg_date DESC
@@ -32,6 +33,7 @@
 			DF14(reg_date) as reg_date
 		FROM board
 		WHERE 1=1
+		  and product_id = #{productId}
 		  and `type` = #{type}
 		  and board_id = #{boardId}
 		  and delete_ornot = 'N'
@@ -49,6 +51,7 @@
 			DF14(reg_date) as reg_date
 		FROM board
 		WHERE 1=1
+		  and product_id = #{productId}
 		  and `type` = #{type}
 		  and delete_ornot = 'N'
 		order by board_id desc limit 1
@@ -60,7 +63,6 @@
 		UPDATE board
 		SET lookup_count = lookup_count + 1
 		WHERE 1=1
-		  and `type` = #{type}
 		  and board_id = #{boardId}
 	</update>
 </mapper>

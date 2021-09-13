@@ -1,9 +1,6 @@
 package codegurus.board;
 
-import codegurus.board.vo.ReqBoardDetailVO;
-import codegurus.board.vo.ReqBoardListVO;
-import codegurus.board.vo.ResBoardDetailVO;
-import codegurus.board.vo.ResBoardListElemVO;
+import codegurus.board.vo.*;
 
 import java.util.List;
 
@@ -18,7 +15,7 @@ public interface BoardDAO {
     List<ResBoardListElemVO> selectBoardList(ReqBoardListVO reqVo);
     ResBoardDetailVO selectBoardDetail(ReqBoardDetailVO reqVo);
 
-    ResBoardDetailVO selectBoardOne(ReqBoardDetailVO reqVo);
+    ResBoardDetailVO selectBoardOne(ReqBoardOneVO reqVo);
 
     int updateLookupCount(ReqBoardDetailVO reqVo);
 }
