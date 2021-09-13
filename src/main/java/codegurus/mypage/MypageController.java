@@ -7,6 +7,9 @@ import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.Res;
 import codegurus.cmm.vo.res.ResBaseVO;
+import codegurus.learning.LearningService;
+import codegurus.learning.vo.ReqLearningResultVO;
+import codegurus.learning.vo.ResLearningResultVO;
 import codegurus.mypage.vo.*;
 import codegurus.oneline.OnelineService;
 import codegurus.oneline.vo.ReqOnelineContentSaveVO;
@@ -45,6 +48,9 @@ public class MypageController extends BaseController {
     @Autowired
     private CacheService cacheService;
 
+    @Autowired
+    private LearningService learningService;
+
     /**
      * 나의 진도
      *
@@ -58,6 +64,25 @@ public class MypageController extends BaseController {
         ResMagnitudeListVO resVo = mypageService.selectmagnitudeList(reqVo);
 
         return new Res<ResMagnitudeListVO>(resVo);
+    }
+
+    /**
+     * 나의 진도 > 학습 결과
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/learningResult")
+    @ApiOperation(value = "나의 진도 > 학습 결과 조회")
+    public Res<ResLearningResultVO> learningResult(@RequestBody @Valid ReqLearningResultVO reqVo) {
+
+        ResLearningResultVO resVo = new ResLearningResultVO();
+
+        reqVo.setUserManageId(cacheService.getUserManageId());  // 학습 결과 조회 대상 회원 관리ID
+        reqVo.setOnlineSubjectScheduleId(reqVo.getOnlineSubjectScheduleId());
+
+        learningService.selectLearningResult(reqVo, resVo);
+        return new Res<ResLearningResultVO>(resVo);
     }
 
     /**
