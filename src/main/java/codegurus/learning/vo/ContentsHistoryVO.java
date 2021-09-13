@@ -42,7 +42,7 @@ public class ContentsHistoryVO {
     private List<TemplateInstHistoryVO> templateInstHistoryList;
 
     @ApiModelProperty(notes = "사전 목록")
-    private List<TemplateInstVO> templateInstList;
+    private List<TemplateInstVO> learningVocaList;
 
     @ApiModelProperty(notes = "책 정보")
     private BookVO book;

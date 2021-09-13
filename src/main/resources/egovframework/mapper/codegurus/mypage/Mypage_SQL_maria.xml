@@ -118,7 +118,7 @@
             <id property="bookId" column="book_id" />
             <result property="bookTitle" column="book_title"/>
         </association>
-        <collection property="templateInstList" ofType="TemplateInstVO" autoMapping="true">
+        <collection property="learningVocaList" ofType="TemplateInstVO" autoMapping="true">
             <id property="templateInstId" column="template_inst_id" />
             <result property="templateTitle" column="tempate_title"/>
             <result property="json" column="json"/>
@@ -183,7 +183,7 @@
             contents_history.contents_history_id,
             contents_history.summary_doing_drawing_file_id ,
             contents_history.summary_doing_voice_file_id,
-            contents_history.end_date,
+            DF14(contents_history.end_date) as end_date,
 
             DRAWING_COMTNFILE.ATCH_FILE_ID as DRAWING_ATCH_FILE_ID,
             DRAWING_COMTNFILEDETAIL.FILE_CN as DRAWING_FILE_CN,

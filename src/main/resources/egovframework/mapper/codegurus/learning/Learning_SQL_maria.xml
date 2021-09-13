@@ -10,6 +10,18 @@
 		<association property="bookThumbnail" javaType="FileVO" autoMapping="true">
 			<id property="atchFileId" column="book_thumbnail_file_id"/>
 		</association>
+		<association property="outlineVoice" javaType="FileVO" autoMapping="true">
+			<id property="atchFileId" column="outline_voice_file_id"/>
+			<result property="fileCn" column="VOICE_FILE_CN" />
+			<result property="fileSn" column="VOICE_FILE_SN" />
+			<result property="fileStreCours" column="VOICE_FILE_STRE_COURS" />
+			<result property="streFileNm" column="VOICE_STRE_FILE_NM" />
+			<result property="fileExtsn" column="VOICE_FILE_EXTSN" />
+			<result property="orignlFileNm" column="VOICE_ORIGNL_FILE_NM" />
+			<result property="fileMg" column="VOICE_FILE_SIZE" />
+			<result property="creatDt" column="VOICE_CREAT_DT" />
+			<result property="downloadCnt" column="VOICE_DOWNLOAD_CNT" />
+		</association>
 		<collection property="labelList" ofType="LabelVO" autoMapping="true" />
 	</resultMap>
 	<select id="selectBookDetail" resultMap="BookDetailMap">
@@ -18,6 +30,7 @@
 		    contents.contents_id,
 		    contents.book_id,
 
+			book.book_introduction,
 		    book.book_thumbnail_file_id,
 
 			labelManage.label_manage_id,
@@ -32,7 +45,25 @@
 			COMTNFILEDETAIL.ORIGNL_FILE_NM,
 			COMTNFILEDETAIL.FILE_SIZE,
 			COMTNFILE.CREAT_DT,
-			COMTNFILEDETAIL.DOWNLOAD_CNT
+			COMTNFILEDETAIL.DOWNLOAD_CNT,
+
+		    book.outline,
+		    book.outline_voice_file_id,
+
+			VOICE_COMTNFILE.ATCH_FILE_ID as VOICE_ATCH_FILE_ID,
+			VOICE_COMTNFILEDETAIL.FILE_CN as VOICE_FILE_CN,
+			VOICE_COMTNFILEDETAIL.FILE_SN as VOICE_FINE_SN,
+			VOICE_COMTNFILEDETAIL.FILE_STRE_COURS as VOICE_FILE_STRE_COURS,
+			VOICE_COMTNFILEDETAIL.STRE_FILE_NM as VOICE_STRE_FILE_NM,
+			VOICE_COMTNFILEDETAIL.FILE_EXTSN as VOICE_FILE_EXTSN,
+			VOICE_COMTNFILEDETAIL.ORIGNL_FILE_NM as VOICE_ORIGNL_FILE_NM,
+			VOICE_COMTNFILEDETAIL.FILE_SIZE as VOICE_FILE_SIZE,
+			VOICE_COMTNFILE.CREAT_DT as VOICE_CREAT_DT,
+			VOICE_COMTNFILEDETAIL.DOWNLOAD_CNT as VOICE_DOWNLOAD_CNT,
+
+
+		    book.trailer,
+		    book.trailer_active_ornot
 		FROM online_subject_schedule schedule
 		LEFT JOIN contents contents
 			on schedule.contents_id = contents.contents_id
@@ -50,6 +81,10 @@
 			on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
 		LEFT JOIN COMTNFILEDETAIL
 			on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+		LEFT JOIN COMTNFILE VOICE_COMTNFILE
+				  on book.outline_voice_file_id = COMTNFILE.ATCH_FILE_ID
+		LEFT JOIN COMTNFILEDETAIL VOICE_COMTNFILEDETAIL
+				  on book.outline_voice_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
 		WHERE 1=1
 		  AND schedule.online_subject_schedule_id = #{onlineSubjectScheduleId}
 	</select>
@@ -326,7 +361,7 @@
 		</association>
 		<association property="book" column="online_subject_schedule_id" javaType="BookVO" select="selectBook"/>
 		<collection property="questionScoreList" column="contents_history_id" ofType="QuestionScoreVO" select="selectScoreList"/>
-		<collection property="templateInstList" column="contents_history_id" ofType="TemplateInstVO" select="selectDicList">
+		<collection property="learningVocaList" column="contents_history_id" ofType="TemplateInstVO" select="selectDicList">
 			<id property="templateInstId" column="template_inst_id" />
 			<result property="templateTitle" column="tempate_title"/>
 			<result property="json" column="json"/>
@@ -386,6 +421,33 @@
 		<association property="bookThumbnail" javaType="FileVO" autoMapping="true">
 			<id property="atchFileId" column="book_thumbnail_file_id"/>
 		</association>
+		<association property="cate" javaType="CateVO" autoMapping="true">
+			<id property="cateId" column="cate_id"/>
+			<result property="parentsId" column="book_cate_parents_id"/>
+			<result property="depth" column="book_cate_depth"/>
+			<result property="order" column="book_cate_order"/>
+			<result property="cateTitle" column="book_cate_cate_title"/>
+			<result property="firstCateTitle" column="book_cate_first_cate_title"/>
+			<result property="secondCateTitle" column="book_cate_second_cate_title"/>
+			<result property="thirdCateTitle" column="book_cate_third_cate_title"/>
+			<result property="fourthCateTitle" column="book_cate_fourth_cate_title"/>
+			<result property="fifthCateTitle" column="book_cate_fifth_cate_title"/>
+			<result property="sixthCateTitle" column="book_cate_sixth_cate_title"/>
+			<result property="seventhCateTitle" column="book_cate_seventh_cate_title"/>
+			<result property="eightCateTitle" column="book_cate_eight_cate_title"/>
+			<result property="ninthCateTitle" column="book_cate_ninth_cate_title"/>
+			<result property="tenthCateTitle" column="book_cate_tenth_cate_title"/>
+			<result property="firstCateId" column="book_cate_first_cate_id"/>
+			<result property="secondCateId" column="book_cate_second_cate_id"/>
+			<result property="thirdCateId" column="book_cate_third_cate_id"/>
+			<result property="fourthCateId" column="book_cate_fourth_cate_id"/>
+			<result property="fifthCateId" column="book_cate_fifth_cate_id"/>
+			<result property="sixthCateId" column="book_cate_sixth_cate_id"/>
+			<result property="seventhCateId" column="book_cate_seventh_cate_id"/>
+			<result property="eightCateId" column="book_cate_eight_cate_id"/>
+			<result property="ninthCateId" column="book_cate_ninth_cate_id"/>
+			<result property="tenthCateId" column="book_cate_tenth_cate_id"/>
+		</association>
 		<collection property="labelList" ofType="LabelVO" autoMapping="true" />
 	</resultMap>
 	<select id="selectBook" resultMap="BookcaseMap">
@@ -393,6 +455,37 @@
 			book.book_id,
 		    book.book_title,
 			book.book_thumbnail_file_id,
+		    book.book_introduction,
+
+		    book.author,
+		    book.illustrator,
+
+		    book.cate_id,
+
+			book_cate.parents_id as book_cate_parents_id,
+			book_cate.depth as book_cate_depth,
+			book_cate.`order` as book_cate_order,
+			book_cate.cate_title as book_cate_cate_title,
+			book_cate.first_cate_title as book_cate_first_cate_title,
+			book_cate.second_cate_title as book_cate_second_cate_title,
+			book_cate.third_cate_title as book_cate_third_cate_title,
+			book_cate.fourth_cate_title as book_cate_fourth_cate_title,
+			book_cate.fifth_cate_title as book_cate_fifth_cate_title,
+			book_cate.sixth_cate_title as book_cate_sixth_cate_title,
+			book_cate.seventh_cate_title as book_cate_seventh_cate_title,
+			book_cate.eight_cate_title as book_cate_eight_cate_title,
+			book_cate.ninth_cate_title as book_cate_ninth_cate_title,
+			book_cate.tenth_cate_title as book_cate_tenth_cate_title,
+			book_cate.first_cate_id as book_cate_first_cate_id,
+			book_cate.second_cate_id as book_cate_second_cate_id,
+			book_cate.third_cate_id as book_cate_third_cate_id,
+			book_cate.fourth_cate_id as book_cate_fourth_cate_id,
+			book_cate.fifth_cate_id as book_cate_fifth_cate_id,
+			book_cate.sixth_cate_id as book_cate_sixth_cate_id,
+			book_cate.seventh_cate_id as book_cate_seventh_cate_id,
+			book_cate.eight_cate_id as book_cate_eight_cate_id,
+			book_cate.ninth_cate_id as book_cate_ninth_cate_id,
+			book_cate.tenth_cate_id as book_cate_tenth_cate_id,
 
 			labelManage.label_manage_id,
 			labelManage.label_title,
@@ -407,6 +500,8 @@
 			COMTNFILEDETAIL.FILE_SIZE,
 			COMTNFILE.CREAT_DT,
 			COMTNFILEDETAIL.DOWNLOAD_CNT
+
+
 		FROM online_subject_schedule as schedule
         INNER JOIN contents as contents
 			on schedule.contents_id = contents.contents_id
@@ -416,6 +511,8 @@
 			on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
 		LEFT JOIN COMTNFILEDETAIL
 			on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+		LEFT JOIN cate book_cate
+			on book.cate_id = book_cate.cate_id
 		LEFT JOIN label_mapping labelMapping
 			on  labelMapping.label_domain_manage_id = 1 /* 1:책 */
 			and labelMapping.object_manage_id = book.book_id
@@ -483,7 +580,7 @@
 	<!-- 어휘 조회 -->
 	<resultMap id="MyDicMap" type="ContentsHistoryVO" autoMapping="true">
 		<id property="contentsHistoryId" column="contents_history_id"/>
-		<collection property="templateInstList" ofType="TemplateInstVO" autoMapping="true">
+		<collection property="learningVocaList" ofType="TemplateInstVO" autoMapping="true">
 			<id property="templateInstId" column="template_inst_id" />
 			<result property="templateTitle" column="tempate_title"/>
 			<result property="json" column="json"/>
@@ -492,31 +589,21 @@
 	<select id="selectDicList" resultMap="MyDicMap">
 		SELECT /* selectDicList */
 			history.contents_history_id,
-			book.book_id,
-			book.book_title,
-
+			template_inst_history.template_inst_id ,
 			template_inst.template_inst_id,
 			template_inst.json,
 			template_inst.template_id,
 			template.template_title
 
 		FROM contents_history as history
-				 left join template_inst_history as tempate_inst_history
-						   on history.contents_history_id = tempate_inst_history.contents_history_id
-				 LEFT JOIN online_subject_schedule as schedule
-						   on history.online_subject_schedule_id = schedule.online_subject_schedule_id
-				 left JOIN contents as contents
-						   on schedule.contents_id = contents.contents_id
-				 LEFT JOIN template_inst as template_inst
-						   on contents.contents_id = template_inst.contents_id
-							   and tempate_inst_history.template_inst_id = template_inst.template_inst_id
-							   and template_inst.delete_ornot='N'
-				 LEFT JOIN template as template
-						   on template_inst.template_id = template.template_id
-							   and template.delete_ornot = 'N'
-				 INNER JOIN book as book
-							on contents.book_id = book.book_id
+		left join template_inst_history as template_inst_history
+			on history.contents_history_id = template_inst_history.contents_history_id
+		LEFT JOIN template_inst as template_inst
+			on  template_inst_history.template_inst_id = template_inst.template_inst_id
+		LEFT JOIN template as template
+			on template_inst.template_id = template.template_id
 		where history.delete_ornot = 'N'
-		  and history.contents_history_id =#{contentsHistoryId}
+		and template.template_id=14
+		and history.contents_history_id =#{contentsHistoryId}
 	</select>
 </mapper>
