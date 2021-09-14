@@ -38,7 +38,7 @@
 			<if test = 'regId != null'>
 				and onelinereview.reg_id = #{regId}
 			</if>
-		order by reg_date desc
+		order by onelinereview.reg_date desc
 	</select>
 
 	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 별점 조회 -->
