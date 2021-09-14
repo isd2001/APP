@@ -11,6 +11,7 @@
 		    content,
 			`type`,
             lookup_count,
+			fix_ornot,
             reg_id,
             DF14(reg_date) as reg_date
         FROM board
