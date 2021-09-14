@@ -27,10 +27,13 @@ public class ResBoardListElemVO extends ResBaseVO {
     @ApiModelProperty(notes = "조회 수", position = 5)
     private String lookupCount = "";
 
-    @ApiModelProperty(notes = "등록 id", position = 6)
+    @ApiModelProperty(notes = "고정 여부, 고정됨:Y", position = 6)
+    private String fixOrnot;
+
+    @ApiModelProperty(notes = "등록 id", position = 7)
     private String regId = "";
 
-    @ApiModelProperty(notes = "등록 날짜", position = 7)
+    @ApiModelProperty(notes = "등록 날짜", position = 8)
     private String regDate = "";
 }
 
