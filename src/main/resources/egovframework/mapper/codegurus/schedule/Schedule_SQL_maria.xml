@@ -77,16 +77,22 @@
 	<!-- 이달의 도서 목록 조회 -->
 	<select id="selectThisMonthBookList" resultType="ResScheduleVO">
 		SELECT /* selectThisMonthBookList */
-			online_subject_schedule_id,
-			online_subject_id,
-			`position`
+			online_subject_schedule.online_subject_schedule_id,
+			online_subject_schedule.online_subject_id,
+			online_subject_schedule.`position`,
+			case when contents_history.end_date is not null then 'Y' else 'N' end as resultYn -- 조회된 도서 목록 중 완료된 학습 여부
         FROM online_subject_schedule
+		LEFT JOIN contents_history
+			on online_subject_schedule.online_subject_schedule_id = contents_history.online_subject_schedule_id
+			-- and DATE_FORMAT(end_date,'%m')
+			and DATE_FORMAT(contents_history.end_date, '%m') = #{month}
         WHERE 1=1
-          AND online_subject_id = #{onlineSubjectId} <!-- 원래는 사용자 정보에서 불러와야하는데 테스트용으로 넣어둠 -->
-          AND `month` = #{month} <!-- DATE_FORMAT(CURRENT_DATE , '%m') 테스트용으로 원하는 월을 불러오게 하기 위해 임시로 주석처리 -->
-		  AND active_ornot = 'Y'
-		  AND delete_ornot = 'N'
-		ORDER BY seq asc
+          AND online_subject_schedule.online_subject_id = #{onlineSubjectId} <!-- 원래는 사용자 정보에서 불러와야하는데 테스트용으로 넣어둠 -->
+          AND online_subject_schedule.`month` = #{month} <!-- DATE_FORMAT(CURRENT_DATE , '%m') 테스트용으로 원하는 월을 불러오게 하기 위해 임시로 주석처리 -->
+		  AND online_subject_schedule.active_ornot = 'Y'
+		  AND online_subject_schedule.delete_ornot = 'N'
+		GROUP BY online_subject_schedule.online_subject_schedule_id
+		ORDER BY online_subject_schedule.seq asc
 	</select>
 
 	<!-- 이달의 도서 팝업 조회 -->
