@@ -117,8 +117,8 @@ public class OnelineController extends BaseController {
     @ApiOperation(value = "내가 쓴 한줄평")
     public Res<ResOnelineListVO> myList(@RequestBody @Valid ReqOnelineListVO reqVo) {
 
-        reqVo.setRegId(cacheService.getUserManageId());
-        ResOnelineListVO resVo = onelineService.selectOnelineList(reqVo);
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        ResOnelineListVO resVo = onelineService.selectMyOnelineList(reqVo);
 
         return new Res<ResOnelineListVO>(resVo);
     }

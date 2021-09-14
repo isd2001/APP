@@ -17,9 +17,6 @@ public class ResOnelineMarkGoodVO extends ResBaseVO  {
     @ApiModelProperty(notes = "한줄평 ID", example = "29", position = 2)
     private String onelinereviewId;
 
-    @ApiModelProperty(notes = "한줄평 좋아요 ID", example = "2", position = 3)
-    private String onelinereviewLikeId;
-
     @ApiModelProperty(hidden = true)
     private String regId;
 }

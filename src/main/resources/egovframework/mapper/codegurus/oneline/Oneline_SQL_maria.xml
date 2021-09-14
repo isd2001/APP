@@ -3,12 +3,8 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="codegurus.oneline.OnelineDAO">
 
-	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 한줄평 조회 -->
-	<resultMap id="onlinereviewMap" type="OnelineVO" autoMapping="true">
-		<id property="onelinereviewId" column="onelinereview_id" />
-		<association property="book" javaType="BookVO" autoMapping="true" />
-	</resultMap>
-	<select id="selectOnelineList" resultMap="onlinereviewMap">
+	<!-- 오늘의 학습 책 책 ID로 등록되어 있는 한줄평 조회 -->
+	<select id="selectOnelineList" resultType="OnelineVO">
 		SELECT
 			onelinereview.onelinereview_id,
 			onelinereview.book_id,
@@ -19,27 +15,38 @@
 			when `like`.reg_id=#{userManageId} then 'Y' else 'N'
 			end as like_yn,
 			regUser.name as reg_user_name,
-			regUser.user_manage_id as reg_user_id,
-			book.book_id,
-			book.book_title
+			regUser.user_manage_id as reg_user_id
 		FROM
 			onelinereview onelinereview
 		LEFT JOIN onelinereview_like `like`
 			on onelinereview.onelinereview_id = `like`.onelinereview_id
 			and `like`.reg_id=#{userManageId}
 			and `like`.delete_ornot='N'
+			and `like`.ONELINEREVIEW_LIKE_ID=(select MAX(ONELINEREVIEW_LIKE_ID) as onelinereview_like_id from onelinereview_like where reg_id=#{userManageId} and delete_ornot='N' and onelinereview_id=onelinereview.onelinereview_id)
 		LEFT JOIN user_manage regUser
 			on onelinereview.reg_id = regUser.user_manage_id
-		LEFT JOIN book
-			on onelinereview.book_id = book.book_id
 		WHERE 1=1
 		  	and onelinereview.delete_ornot = 'N'
 			and onelinereview.book_id = #{bookId}
-			<if test = 'regId != null'>
-				and onelinereview.reg_id = #{regId}
-			</if>
-		order by onelinereview.reg_date desc
+		order by onelinereview.onelinereview_id desc
 	</select>
+
+	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 한줄평 조회 -->
+	<select id="selectOneline" resultType="ResOnelineVO">
+		SELECT
+			onelinereview_id,
+			book_id,
+			score,
+			reg_id
+		FROM
+			onelinereview
+		WHERE
+			1=1
+		  AND reg_id=#{regId}
+		  AND book_id=#{bookId}
+		  AND delete_ornot='N'
+	</select>
+
 
 	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 별점 조회 -->
 	<select id="selectMyStarScore" resultType="OnelineVO">
@@ -57,21 +64,40 @@
 		  AND delete_ornot='N'
 	</select>
 
-	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 한줄평 조회 -->
-	<select id="selectOneline" resultType="ResOnelineVO">
+	<!-- 마이페이지 내가 쓴 한줄평 조회 -->
+	<resultMap id="onlinereviewMap" type="OnelineVO" autoMapping="true">
+		<association property="book" javaType="BookVO" autoMapping="true" />
+	</resultMap>
+	<select id="selectMyOnelineList" resultMap="onlinereviewMap">
 		SELECT
-			onelinereview_id,
-			book_id,
-			onelinereview_content,
-			score,
-			reg_id
+			onelinereview.onelinereview_id,
+			onelinereview.book_id,
+			onelinereview.onelinereview_content,
+			onelinereview.score,
+			`like`.ONELINEREVIEW_LIKE_ID,
+			case
+				when `like`.reg_id=#{userManageId} then 'Y' else 'N'
+			end as like_yn,
+			regUser.name as reg_user_name,
+			regUser.user_manage_id as reg_user_id,
+			book.book_id,
+			book.book_title
 		FROM
-			onelinereview
-		WHERE
-			1=1
-		  	AND reg_id=#{regId}
-		  	AND book_id=#{bookId}
-			AND delete_ornot='N'
+			onelinereview onelinereview
+		LEFT JOIN onelinereview_like `like`
+			on onelinereview.onelinereview_id = `like`.onelinereview_id
+			and `like`.reg_id=#{userManageId}
+			and `like`.delete_ornot='N'
+			and `like`.ONELINEREVIEW_LIKE_ID=(select MAX(ONELINEREVIEW_LIKE_ID) as onelinereview_like_id from onelinereview_like where reg_id=#{userManageId} and delete_ornot='N' and onelinereview_id=onelinereview.onelinereview_id)
+		LEFT JOIN user_manage regUser
+			on onelinereview.reg_id = regUser.user_manage_id
+		LEFT JOIN book
+			on onelinereview.book_id = book.book_id
+		WHERE 1=1
+			and onelinereview.delete_ornot = 'N'
+			and onelinereview.book_id = #{bookId}
+			and onelinereview.reg_id = #{userManageId}
+		order by onelinereview.reg_date desc
 	</select>
 
 	<!-- 오늘의 학습 책 한줄평 등록 -->
@@ -193,6 +219,7 @@
 		SET delete_ornot  = 'Y',
 			modify_id 	  = #{regId},
 			modify_date   = CURRENT_TIMESTAMP
-		WHERE onelinereview_like_id = #{onelinereviewLikeId}
+		WHERE onelinereview_id = #{onelinereviewId}
+		AND reg_id = #{regId}
 	</update>
 </mapper>

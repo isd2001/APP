@@ -38,6 +38,21 @@ public class OnelineService {
     }
 
     /**
+     * 마이페이지 내가 쓴 한줄평 목록 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResOnelineListVO selectMyOnelineList(ReqOnelineListVO reqVo) {
+
+        ResOnelineListVO resVo = new ResOnelineListVO();
+        resVo.setList(onelineDAO.selectMyOnelineList(reqVo));
+
+        return resVo;
+
+    }
+
+    /**
      * 오늘의 학습 책 나의 별점 조회
      *
      * @param reqVo
@@ -151,7 +166,7 @@ public class OnelineService {
             }
 
             int updated = onelineDAO.deleteMarkGood(reqVo);
-            SystemUtil.checkUpdatedCount(updated, 1);
+            //SystemUtil.checkUpdatedCount(updated, 1);
             resVo.setResMsg("한줄평 좋아요 제거 완료");
         }
 
@@ -159,7 +174,6 @@ public class OnelineService {
         resVo.setRegId(reqVo.getRegId());
         resVo.setCmd(reqVo.getCmd());
         resVo.setOnelinereviewId(reqVo.getOnelinereviewId());
-        resVo.setOnelinereviewLikeId(reqVo.getOnelinereviewId());
 
         return resVo;
     }
