@@ -31,6 +31,9 @@ public class OnelineVO {
     @Max(5)
     private String score;
 
+    @ApiModelProperty(notes="한줄평 좋아요 ID", example="35")
+    private String onelinereviewLikeId;
+
     @ApiModelProperty(notes = "좋아요 클릭 YN (내가 좋아요를 누른 한줄평일 경우 'Y', 좋아요 누르지 않은 한줄평일 경우 'N')", example = "Y", position = 5)
     private String likeYn;
 

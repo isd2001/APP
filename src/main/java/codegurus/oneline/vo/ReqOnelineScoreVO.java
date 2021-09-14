@@ -24,5 +24,5 @@ public class ReqOnelineScoreVO extends ReqBaseVO {
     @ApiModelProperty(notes = "별점", example = "4")
     @Min(1)
     @Max(5)
-    String score = "";
+    String score;
 }

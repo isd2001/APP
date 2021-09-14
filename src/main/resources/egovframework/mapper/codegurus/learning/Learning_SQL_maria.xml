@@ -396,7 +396,9 @@
 			VOICE_COMTNFILEDETAIL.ORIGNL_FILE_NM as VOICE_ORIGNL_FILE_NM,
 			VOICE_COMTNFILEDETAIL.FILE_SIZE as VOICE_FILE_SIZE,
 			VOICE_COMTNFILE.CREAT_DT as VOICE_CREAT_DT,
-			VOICE_COMTNFILEDETAIL.DOWNLOAD_CNT as VOICE_DOWNLOAD_CNT
+			VOICE_COMTNFILEDETAIL.DOWNLOAD_CNT as VOICE_DOWNLOAD_CNT,
+
+		    '1' as learning_rate
 		from contents_history as contents_history
 		LEFT join COMTNFILE as DRAWING_COMTNFILE
 			on contents_history.summary_doing_drawing_file_id = DRAWING_COMTNFILE.ATCH_FILE_ID
@@ -532,7 +534,7 @@
 		select /* selectScore */
 			sum(score.assignment_score) as assignment_score,
 			sum(score.calculation_score) as calculation_score,
-			(sum(score.calculation_score) / sum(score.assignment_score))*100 as score_percent,
+			round((sum(score.calculation_score) / sum(score.assignment_score))*100,0) as score_percent,
 			score_cate.cate_id,
 			score_cate.parents_id,
 			score_cate.depth,
@@ -574,19 +576,11 @@
 			on score.cate_id = score_cate.cate_id
 		where contents_history.delete_ornot = 'N'
 			and contents_history.contents_history_id =#{contentsHistoryId}
-		group by score.cate_id;
+		group by score_cate.parents_id;
 	</select>
 
 	<!-- 어휘 조회 -->
-	<resultMap id="MyDicMap" type="ContentsHistoryVO" autoMapping="true">
-		<id property="contentsHistoryId" column="contents_history_id"/>
-		<collection property="learningVocaList" ofType="TemplateInstVO" autoMapping="true">
-			<id property="templateInstId" column="template_inst_id" />
-			<result property="templateTitle" column="tempate_title"/>
-			<result property="json" column="json"/>
-		</collection>
-	</resultMap>
-	<select id="selectDicList" resultMap="MyDicMap">
+	<select id="selectDicList" resultType="TemplateInstVO">
 		SELECT /* selectDicList */
 			history.contents_history_id,
 			template_inst_history.template_inst_id ,

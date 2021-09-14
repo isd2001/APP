@@ -4,6 +4,8 @@ import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.res.Res;
 import codegurus.learning.vo.*;
+import codegurus.oneline.OnelineService;
+import codegurus.oneline.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,9 @@ public class LearningController extends BaseController {
     @Autowired
     private CacheService cacheService;
 
+    @Autowired
+    private OnelineService onelineService;
+
     /**
      * 오늘의 학습 책 조회
      *
@@ -47,6 +52,21 @@ public class LearningController extends BaseController {
         ResLearningBookVO resVo = new ResLearningBookVO();
         learningService.selectBookDetail(reqVo, resVo);
         return new Res<ResLearningBookVO>(resVo);
+    }
+
+    /**
+     * 오늘의 학습 책 조회 (나의 별점 조회)
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/myStarScore")
+    @ApiOperation(value="나의 별점 조회")
+    public Res<ResStarScoreVO> myStarScore(@RequestBody @Valid ReqStarScoreVO reqVo) {
+
+        reqVo.setRegId(cacheService.getUserManageId());
+        ResStarScoreVO resVo = onelineService.selectMyStarScore(reqVo);
+        return new Res<ResStarScoreVO>(resVo);
     }
 
     /**

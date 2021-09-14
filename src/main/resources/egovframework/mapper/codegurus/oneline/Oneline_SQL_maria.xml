@@ -14,12 +14,20 @@
 			onelinereview.book_id,
 			onelinereview.onelinereview_content,
 		    onelinereview.score,
+			`like`.ONELINEREVIEW_LIKE_ID,
+			case
+			when `like`.reg_id=#{userManageId} then 'Y' else 'N'
+			end as like_yn,
 			regUser.name as reg_user_name,
 			regUser.user_manage_id as reg_user_id,
 			book.book_id,
 			book.book_title
 		FROM
 			onelinereview onelinereview
+		LEFT JOIN onelinereview_like `like`
+			on onelinereview.onelinereview_id = `like`.onelinereview_id
+			and `like`.reg_id=#{userManageId}
+			and `like`.delete_ornot='N'
 		LEFT JOIN user_manage regUser
 			on onelinereview.reg_id = regUser.user_manage_id
 		LEFT JOIN book
@@ -30,7 +38,23 @@
 			<if test = 'regId != null'>
 				and onelinereview.reg_id = #{regId}
 			</if>
+		order by reg_date desc
+	</select>
 
+	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 별점 조회 -->
+	<select id="selectMyStarScore" resultType="OnelineVO">
+		SELECT
+			onelinereview_id,
+			book_id,
+			score,
+			reg_id
+		FROM
+			onelinereview
+		WHERE
+			1=1
+		  AND reg_id=#{regId}
+		  AND book_id=#{bookId}
+		  AND delete_ornot='N'
 	</select>
 
 	<!-- 오늘의 학습 책 책 ID, 등록자 ID로 등록되어 있는 한줄평 조회 -->

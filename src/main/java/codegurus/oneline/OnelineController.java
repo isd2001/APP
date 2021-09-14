@@ -42,6 +42,8 @@ public class OnelineController extends BaseController {
     @PostMapping("/list")
     @ApiOperation(value = "오늘의 학습 책 한줄평 목록 조회")
     public Res<ResOnelineListVO> list(@RequestBody @Valid ReqOnelineListVO reqVo) {
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
         ResOnelineListVO resVo = onelineService.selectOnelineList(reqVo);
         return new Res<ResOnelineListVO>(resVo);
     }
@@ -114,6 +116,7 @@ public class OnelineController extends BaseController {
     @PostMapping("/myList")
     @ApiOperation(value = "내가 쓴 한줄평")
     public Res<ResOnelineListVO> myList(@RequestBody @Valid ReqOnelineListVO reqVo) {
+
         reqVo.setRegId(cacheService.getUserManageId());
         ResOnelineListVO resVo = onelineService.selectOnelineList(reqVo);
 

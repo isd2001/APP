@@ -38,6 +38,25 @@ public class OnelineService {
     }
 
     /**
+     * 오늘의 학습 책 나의 별점 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResStarScoreVO selectMyStarScore(ReqStarScoreVO reqVo) {
+
+        ResStarScoreVO resVo = new ResStarScoreVO();
+
+        OnelineVO item = onelineDAO.selectMyStarScore(reqVo);
+        if(item == null){ SystemUtil.returnNoSearchResult(); }  // 조회 결과 없음 리턴
+
+        resVo.setItem(item);
+        return resVo;
+
+
+    }
+
+    /**
      * 오늘의 학습 책 한줄평/별점 등록
      *
      * @param reqVo

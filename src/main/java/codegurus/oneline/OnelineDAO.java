@@ -13,6 +13,7 @@ import java.util.List;
 public interface OnelineDAO {
 
     List<OnelineVO> selectOnelineList(ReqOnelineListVO reqVo);
+    OnelineVO selectMyStarScore(ReqStarScoreVO reqVo);
 
     ResOnelineVO selectOneline(ReqOnelineSaveVO reqVo);
     void insertOnelineContent(ReqOnelineSaveVO reqVo);

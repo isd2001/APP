@@ -49,4 +49,7 @@ public class ContentsHistoryVO {
 
     @ApiModelProperty(notes = "문항 점수")
     private List<QuestionScoreVO> questionScoreList;
+
+    @ApiModelProperty(notes = "학습률")
+    private String learningRate;
 }

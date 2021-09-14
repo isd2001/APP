@@ -19,10 +19,10 @@ public class ReqOnelineMarkGoodVO extends ReqBaseVO {
     @Pattern(regexp="^[AD]$")
     private String cmd;
 
-    @ApiModelProperty(notes = "한줄평 ID", example = "29", position = 2)
+    @ApiModelProperty(notes = "한줄평 ID", example = "38", position = 2)
     private String onelinereviewId;
 
-    @ApiModelProperty(notes = "한줄평 좋아요 ID (좋아요 제거시에만 요청값 존재)", example = "2", position = 3)
+    @ApiModelProperty(notes = "한줄평 좋아요 ID (좋아요 제거시에만 요청값 존재)", example = "35", position = 3)
     private String onelinereviewLikeId;
 
     @ApiModelProperty(hidden = true)
