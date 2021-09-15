@@ -22,18 +22,14 @@
 		zipcode,
 		address,
 		address_detail,
-		<!-- rcms 에서는 필요 없지 싶다 -->
-		<!--
-		termofuse_agree,
-		personalinfo_agree,
-		promotion_agree,
-		locationinfo_agree,
+		termofuse_agree_ornot,
+		personalinfo_agree_ornot,
+		promotion_agree_ornot,
+		locationinfo_agree_ornot,
 		termofuse_agree_date,
 		personalinfo_agree_date,
 		promotion_agree_date,
 		locationinfo_agree_date,
-		-->
-		<!--// rcms 에서는 필요 없지 싶다 -->
 		last_password,
 		last_login_date,
 		login_fail_count,

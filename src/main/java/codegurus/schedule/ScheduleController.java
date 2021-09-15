@@ -1,9 +1,14 @@
 package codegurus.schedule;
 
 import codegurus.cmm.cache.CacheService;
+import codegurus.cmm.jwt.JwtFilter;
+import codegurus.cmm.jwt.TokenProvider;
+import codegurus.cmm.util.ContextUtil;
+import codegurus.cmm.util.StringUtil;
 import codegurus.schedule.vo.*;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.res.Res;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -32,6 +38,9 @@ public class ScheduleController extends BaseController {
 
     @Autowired
     private CacheService cacheService;
+
+    @Autowired
+    private TokenProvider tokenProvider;
 
     /**
      * 온라인 과목 목록 조회
@@ -72,10 +81,20 @@ public class ScheduleController extends BaseController {
      */
     @PostMapping("/thisMonthBookList")
     @ApiOperation(value = "이달의 도서 조회")
-    public Res<ResScheduleListVO> selectThisMonthBookList(@RequestBody @Valid ReqThisMonthBookVO reqVo) {
+    public Res<ResScheduleListVO> selectThisMonthBookList(HttpServletRequest request, @RequestBody @Valid ReqThisMonthBookVO reqVo) {
+        String jwt = StringUtil.trim(JwtFilter.resolveToken(request));
+        Claims claims = tokenProvider.parseClaims(jwt);
+        // 체험회원일 경우
+        if (TokenProvider.TRIAL_USER.equals(claims.get(TokenProvider.SUBJECT_KEY))) {
+            log.debug("## 체험회원일 경우");
+            reqVo.setMonth("01");
+            reqVo.setOnlineSubjectId(1);
+        } else {
+            reqVo.setMonth("08");
+            reqVo.setOnlineSubjectId(1);
+        }
+
         reqVo.setUserManageId(cacheService.getUserManageId());
-        reqVo.setMonth("08");
-        reqVo.setOnlineSubjectId(1);
         ResScheduleListVO resVo = scheduleService.selectThisMonthBookList(reqVo);
         return new Res<ResScheduleListVO>(resVo);
     }
