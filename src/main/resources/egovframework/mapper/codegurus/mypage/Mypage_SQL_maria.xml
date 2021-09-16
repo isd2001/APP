@@ -19,17 +19,14 @@
     </resultMap>
     <select id="selectmagnitudeList" resultMap="MagnitudeMap">
         SELECT /* selectmagnitudeList */
-            schedule.online_subject_schedule_id,
-
-            contents_history.contents_history_id,
-            contents_history.end_date,
-
+            online_subject_schedule.online_subject_schedule_id,
+            online_subject_schedule.`POSITION`,
+            contents_history.contents_history_id ,
+            date_format(contents_history.end_date,'%Y%m') end_date,
             contents.contents_id,
-
             book.book_id,
             book.book_title,
             book.book_thumbnail_file_id,
-
             COMTNFILE.ATCH_FILE_ID,
             COMTNFILEDETAIL.FILE_CN,
             COMTNFILEDETAIL.FILE_SN,
@@ -40,23 +37,21 @@
             COMTNFILEDETAIL.FILE_SIZE,
             COMTNFILE.CREAT_DT,
             COMTNFILEDETAIL.DOWNLOAD_CNT
-        FROM
-            online_subject_schedule as schedule
-        LEFT JOIN contents_history contents_history
-            on schedule.ONLINE_SUBJECT_SCHEDULE_ID = contents_history.online_subject_schedule_id
-            and contents_history.delete_ornot ='N'
-        LEFT JOIN contents as contents
-            on schedule.CONTENTS_ID = contents.contents_id
-        LEFT JOIN book as book
-            on contents.book_id = book.book_id
-        LEFT JOIN COMTNFILE
-            on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
-        LEFT JOIN COMTNFILEDETAIL
-            on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
-        where schedule.`month`=#{month}
-            and schedule.active_ornot = 'Y'
-            and contents_history.user_manage_id = #{userManageId}
-        order by schedule.online_subject_schedule_id asc
+        from contents_history
+            left join online_subject_schedule
+                on contents_history.online_subject_schedule_id=online_subject_schedule.online_subject_schedule_id
+            left join contents
+                on online_subject_schedule.contents_id=contents.contents_id
+            left join book
+                on contents.book_id=book.book_id
+            LEFT JOIN COMTNFILE
+                on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
+            LEFT JOIN COMTNFILEDETAIL
+                on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+        where contents_history.user_manage_id = #{userManageId}
+        and date_format(contents_history.end_date,'%Y%m')=concat(#{year},#{month})
+        and contents_history.delete_ornot='N'
+        order by contents_history.end_date
     </select>
 
     <!-- 나의 책장 조회 -->
@@ -108,7 +103,8 @@
             and labelManage.label_domain_manage_id = labelMapping.label_domain_manage_id
             and labelManage.delete_ornot = 'N'
         where history.delete_ornot = 'N'
-        and   history.user_manage_id = #{userManageId}
+        and history.user_manage_id = #{userManageId}
+        and date_format(history.end_date,'%Y%m')=concat(#{year},#{month})
     </select>
 
     <!-- 나의사전 목록 조회 -->
@@ -136,23 +132,25 @@
             template.template_title
 
         FROM contents_history as history
-                 left join template_inst_history as tempate_inst_history
-                           on history.contents_history_id = tempate_inst_history.contents_history_id
-                 LEFT JOIN online_subject_schedule as schedule
-                           on history.online_subject_schedule_id = schedule.online_subject_schedule_id
-                 left JOIN contents as contents
-                           on schedule.contents_id = contents.contents_id
-                 LEFT JOIN template_inst as template_inst
-                           on contents.contents_id = template_inst.contents_id
-                    and tempate_inst_history.template_inst_id = template_inst.template_inst_id
-                               and template_inst.delete_ornot='N'
-                 LEFT JOIN template as template
-                           on template_inst.template_id = template.template_id
-                               and template.delete_ornot = 'N'
-                 INNER JOIN book as book
-                            on contents.book_id = book.book_id
+        left join template_inst_history as tempate_inst_history
+            on history.contents_history_id = tempate_inst_history.contents_history_id
+        LEFT JOIN online_subject_schedule as schedule
+            on history.online_subject_schedule_id = schedule.online_subject_schedule_id
+        left JOIN contents as contents
+            on schedule.contents_id = contents.contents_id
+        LEFT JOIN template_inst as template_inst
+            on contents.contents_id = template_inst.contents_id
+            and tempate_inst_history.template_inst_id = template_inst.template_inst_id
+            and template_inst.delete_ornot='N'
+            and template_inst.template_id='14'
+        LEFT JOIN template as template
+            on template_inst.template_id = template.template_id
+            and template.delete_ornot = 'N'
+        INNER JOIN book as book
+            on contents.book_id = book.book_id
         where history.delete_ornot = 'N'
-          and   history.user_manage_id = #{userManageId}
+        and history.user_manage_id = #{userManageId}
+        and date_format(history.end_date,'%Y%m')=concat(#{year},#{month})
     </select>
 
     <!-- 나의 포트폴리오 목록 조회 -->
@@ -223,10 +221,9 @@
             COMTNFILEDETAIL.FILE_SIZE,
             COMTNFILE.CREAT_DT,
             COMTNFILEDETAIL.DOWNLOAD_CNT
-        FROM
-            online_subject_schedule as schedule
-        LEFT JOIN contents_history contents_history
-            on schedule.ONLINE_SUBJECT_SCHEDULE_ID = contents_history.online_subject_schedule_id
+        FROM contents_history contents_history
+        LEFT JOIN online_subject_schedule as schedule
+            on contents_history.online_subject_schedule_id = schedule.ONLINE_SUBJECT_SCHEDULE_ID
             and contents_history.delete_ornot ='N'
         LEFT join COMTNFILE as DRAWING_COMTNFILE
             on contents_history.summary_doing_drawing_file_id = DRAWING_COMTNFILE.ATCH_FILE_ID
@@ -244,10 +241,10 @@
             on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
         LEFT JOIN COMTNFILEDETAIL
             on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
-        where schedule.`month`=#{month}
+        where date_format(contents_history.end_date,'%Y%m')=concat(#{year},#{month})
             and schedule.active_ornot = 'Y'
             and   contents_history.user_manage_id = #{userManageId}
-        order by schedule.online_subject_schedule_id asc
+        order by contents_history.end_date desc
     </select>
 
     <!-- 회원정보 조회 > 부모정보 조회 -->

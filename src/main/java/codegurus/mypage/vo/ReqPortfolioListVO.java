@@ -12,7 +12,10 @@ import lombok.Setter;
 @Setter
 public class ReqPortfolioListVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "month", example="07")
+    @ApiModelProperty(notes="year", example="2021")
+    private String year;
+
+    @ApiModelProperty(notes = "month", example="09")
     private String month;
 
     @ApiModelProperty(hidden = true)
