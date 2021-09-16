@@ -14,6 +14,12 @@ import java.util.List;
 @Setter
 public class ContentsHistoryVO {
 
+    @ApiModelProperty(notes = "온라인 과목 ID")
+    private String onlineSubjectId;
+
+    @ApiModelProperty(notes = "과목명")
+    private String subjectTitle;
+
     @ApiModelProperty(notes = "콘텐츠 이력")
     private String contentsHistoryId;
 

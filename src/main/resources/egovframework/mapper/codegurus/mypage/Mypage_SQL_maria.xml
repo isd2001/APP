@@ -122,6 +122,8 @@
     </resultMap>
     <select id="selectDicList" resultMap="MyDicMap">
         SELECT /* selectDicList */
+            subject.online_subject_id,
+            subject.subject_title,
             history.contents_history_id,
             book.book_id,
             book.book_title,
@@ -136,6 +138,8 @@
             on history.contents_history_id = tempate_inst_history.contents_history_id
         LEFT JOIN online_subject_schedule as schedule
             on history.online_subject_schedule_id = schedule.online_subject_schedule_id
+        LEFT JOIN online_subject as subject
+            on schedule.online_subject_id = subject.online_subject_id
         left JOIN contents as contents
             on schedule.contents_id = contents.contents_id
         LEFT JOIN template_inst as template_inst
