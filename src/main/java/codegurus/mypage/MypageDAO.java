@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public interface MypageDAO {
 
-    List<ResScheduleVO> selectmagnitudeList(ReqMagnitudeListVO reqVo);
+    List<ContentsHistoryVO> selectmagnitudeList(ReqMagnitudeListVO reqVo);
     List<BookVO> selectBookcaseList(ReqBookcaseListVO reqVo);
     List<BookVO> selectportfolioList(ReqPortfolioListVO reqVo);
     List<ContentsHistoryVO> selectDicList(ReqDicListVO reqVo);

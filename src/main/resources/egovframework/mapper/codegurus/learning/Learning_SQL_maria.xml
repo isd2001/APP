@@ -371,7 +371,7 @@
 		SELECT /* selectContentsHistory */
 			contents_history.contents_history_id ,
 			contents_history.online_subject_schedule_id,
-			contents_history.end_date,
+			DF14(contents_history.end_date) as end_date,
 			contents_history.summary_doing_drawing_file_id ,
 			contents_history.summary_doing_voice_file_id,
 		    contents_history.user_manage_id,

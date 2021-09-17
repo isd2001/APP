@@ -56,7 +56,7 @@ public class MypageService {
     public ResMagnitudeListVO selectmagnitudeList(ReqMagnitudeListVO reqVo) {
         ResMagnitudeListVO resVo = new ResMagnitudeListVO();
 
-        List<ResScheduleVO> list = mypageDAO.selectmagnitudeList(reqVo);
+        List<ContentsHistoryVO> list = mypageDAO.selectmagnitudeList(reqVo);
 
         if (list.size() == 0) {
             SystemUtil.returnNoSearchResult();
