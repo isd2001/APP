@@ -140,8 +140,8 @@
             #{zipcode},
             #{address},
             #{addressDetail},
-            CURRENT_TIMESTAMP,
-            DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL #{trialPeriod} DAY)
+            #{trialStartDate},
+            #{trialEndDate}
         )
     </insert>
 

@@ -6,10 +6,7 @@ import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.constants.*;
 import codegurus.cmm.exception.CustomException;
 import codegurus.cmm.jwt.TokenProvider;
-import codegurus.cmm.util.JsonUtil;
-import codegurus.cmm.util.StringUtil;
-import codegurus.cmm.util.SystemUtil;
-import codegurus.cmm.util.WebUtil;
+import codegurus.cmm.util.*;
 import codegurus.cmm.vo.req.ReqAuthVO;
 import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.ResAuthVO;
@@ -32,6 +29,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalField;
 import java.util.*;
 
 
@@ -217,7 +217,13 @@ public class AuthService implements UserDetailsService {
     public ResTrialRegisterVO trialRegister(ReqTrialRegisterVO reqVo) {
 
         ResTrialRegisterVO resVo = new ResTrialRegisterVO();
-        reqVo.setTrialPeriod(Constants.TRIAL_PERIOD);
+        LocalDateTime now = LocalDateTime.now();
+
+        long timemills = Timestamp.valueOf(now).getTime();
+        String startDate = DateUtil.getLocalDateTimeToString(now, Constants.DF14);
+        String endDate = DateUtil.addDays(startDate, Constants.DF14, Constants.TRIAL_PERIOD);
+        reqVo.setTrialStartDate(startDate);
+        reqVo.setTrialEndDate(endDate);
 
         log.debug("## reqVo:[{}]", JsonUtil.toJson(reqVo));
 
@@ -232,7 +238,7 @@ public class AuthService implements UserDetailsService {
         // 체험회원 전용 토큰 생성
         Map<String, Object> params = new HashMap<>();
         params.put("trialManageId", reqVo.getTrialManageId());
-        String accessToken = tokenProvider.generateTokenTrialUser(params);
+        String accessToken = tokenProvider.generateTokenTrialUser(params, timemills);
         resVo.setTrialManageId(reqVo.getTrialManageId());
         resVo.setGrantType(TokenProvider.BEARER_TYPE);
         resVo.setAccessToken(accessToken);

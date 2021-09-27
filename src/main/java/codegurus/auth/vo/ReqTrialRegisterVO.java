@@ -26,7 +26,9 @@ public class ReqTrialRegisterVO extends ReqVocBaseVO {
     private String trialManageId;
 
     @JsonIgnore
-    private int trialPeriod;
+    private String trialStartDate;
+    @JsonIgnore
+    private String trialEndDate;
 
     @JsonIgnore
     private String productId = ProductEnum.상품_스마트독서.getProductId();
