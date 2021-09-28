@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalField;
 import java.util.*;
 
 
@@ -221,7 +220,7 @@ public class AuthService implements UserDetailsService {
 
         long timemills = Timestamp.valueOf(now).getTime();
         String startDate = DateUtil.getLocalDateTimeToString(now, Constants.DF14);
-        String endDate = DateUtil.addDays(startDate, Constants.DF14, Constants.TRIAL_PERIOD);
+        String endDate = DateUtil.addMinutes(startDate, Constants.DF14, Constants.TRIAL_PERIOD);
         reqVo.setTrialStartDate(startDate);
         reqVo.setTrialEndDate(endDate);
 

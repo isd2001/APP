@@ -4,18 +4,16 @@ import codegurus.auth.vo.ReqDeleteUserVO;
 import codegurus.auth.vo.ReqUpdatePWVO;
 import codegurus.auth.vo.UserVO;
 import codegurus.cmm.CommonDAO;
-import codegurus.cmm.constants.Constants;
+import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.exception.CustomException;
-import codegurus.cmm.util.DateUtil;
+import codegurus.cmm.jwt.TokenProvider;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.SystemUtil;
-import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.learning.vo.BookVO;
 import codegurus.learning.vo.ContentsHistoryVO;
 import codegurus.mypage.vo.*;
-import codegurus.schedule.vo.ResScheduleVO;
 import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +44,9 @@ public class MypageService {
 
     @Autowired
 	private EgovEnvCryptoService cryptoService;
+
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * 나의 진도 목록 조회
@@ -138,21 +139,29 @@ public class MypageService {
 
         ResUserInfoVO resVo = new ResUserInfoVO();
 
-        // 회원정보(학생) 조회
-        UserVO vo = commonDAO.selectUserByUserManageId(reqVo.getUserManageId());
-        if(vo == null){ SystemUtil.returnNoSearchResult(); }
-        resVo.setUsername(vo.getUsername());
-        resVo.setName(vo.getName());
-        // resVo.setBirth(DateUtil.convertDateFormat(vo.getBirth(), Constants.DF8, Constants.DF8_HAN_NO_ZEROS)); // 화면에 출력하는 건 한글이 좋은데, 수정UI에서 datepicker가 없는 이상 혼선이 예상되므로 DF8을 사용함.
-        resVo.setBirth(vo.getBirth());
+        UserVO userVO = cacheService.getTokenUser();
+        if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)) {
+            // 체험회원 정보 조회
+            resVo.setUsername(userVO.getUsername());
+            resVo.setName(userVO.getName());
+            resVo.setBirth(userVO.getBirth());
+        } else {
+            // 회원정보(학생) 조회
+            UserVO vo = commonDAO.selectUserByUserId(userVO.getUsername());
+            if(vo == null){ SystemUtil.returnNoSearchResult(); }
+            resVo.setUsername(vo.getUsername());
+            resVo.setName(vo.getName());
+            // resVo.setBirth(DateUtil.convertDateFormat(vo.getBirth(), Constants.DF8, Constants.DF8_HAN_NO_ZEROS)); // 화면에 출력하는 건 한글이 좋은데, 수정UI에서 datepicker가 없는 이상 혼선이 예상되므로 DF8을 사용함.
+            resVo.setBirth(vo.getBirth());
 
-        // 부모 회원정보 조회
-        Map<String, String> parentInfo = mypageDAO.selectParentInfo(reqVo);
-        if(parentInfo != null){
-            resVo.setParentName(parentInfo.get("parent_cust_nm"));
-            String parentBirth = parentInfo.get("parent_birthdt");
-            if(StringUtil.isNotBlank(parentBirth)){
-                resVo.setParentBirth(parentBirth);
+            // 부모 회원정보 조회
+            Map<String, String> parentInfo = mypageDAO.selectParentInfo(reqVo);
+            if(parentInfo != null){
+                resVo.setParentName(parentInfo.get("parent_cust_nm"));
+                String parentBirth = parentInfo.get("parent_birthdt");
+                if(StringUtil.isNotBlank(parentBirth)){
+                    resVo.setParentBirth(parentBirth);
+                }
             }
         }
 

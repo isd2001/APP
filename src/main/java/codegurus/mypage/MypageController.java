@@ -4,7 +4,6 @@ import codegurus.auth.vo.ReqDeleteUserVO;
 import codegurus.auth.vo.ReqUpdatePWVO;
 import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.controller.BaseController;
-import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.Res;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.learning.LearningService;
@@ -12,7 +11,6 @@ import codegurus.learning.vo.ReqLearningResultVO;
 import codegurus.learning.vo.ResLearningResultVO;
 import codegurus.mypage.vo.*;
 import codegurus.oneline.OnelineService;
-import codegurus.oneline.vo.ReqOnelineContentSaveVO;
 import codegurus.oneline.vo.ReqOnelineSaveVO;
 import codegurus.oneline.vo.ReqOnelineUpdateVO;
 import codegurus.oneline.vo.ResOnelineSaveVO;
@@ -165,7 +163,6 @@ public class MypageController extends BaseController {
     @ApiOperation(value = "회원정보 > 회원정보 조회")
     public Res<ResUserInfoVO> userInfo(@RequestBody @Valid ReqUserInfoVO reqVo) {
 
-        reqVo.setUserManageId(cacheService.getUserManageId());
         ResUserInfoVO resVo = mypageService.selectUserInfo(reqVo);
 
         return new Res<ResUserInfoVO>(resVo);

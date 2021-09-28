@@ -1,13 +1,19 @@
 package codegurus.cmm.cache;
 
+import codegurus.auth.AuthDAO;
+import codegurus.auth.vo.ResTrialUserVO;
 import codegurus.auth.vo.UserVO;
 import codegurus.cmm.CommonDAO;
+import codegurus.cmm.jwt.JwtFilter;
+import codegurus.cmm.jwt.TokenProvider;
+import codegurus.cmm.util.StringUtil;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 /**
@@ -23,7 +29,16 @@ import java.util.Optional;
 public class CacheService {
 
 	@Autowired
+	private HttpServletRequest httpRequest;
+
+	@Autowired
 	private CommonDAO commonDAO;
+
+	@Autowired
+	private TokenProvider tokenProvider;
+
+	@Autowired
+	private AuthDAO authDAO;
 
 	// TODO: redis autowiring
 
@@ -43,13 +58,35 @@ public class CacheService {
 	 * @return
 	 */
 	public UserVO getTokenUser(){
+		String jwt = StringUtil.trim(JwtFilter.resolveToken(httpRequest));
 
-		Object principal = getPrincipal();
+		Claims claims = tokenProvider.parseClaims(jwt);
+
+		String username = StringUtil.trim(claims.get(TokenProvider.SUBJECT_KEY));
+
+		if (TokenProvider.TRIAL_USER.equals(username)) {
+			log.debug("## 체험회원일 경우");
+			String trialManageId = StringUtil.trim(claims.get("trialManageId"));
+
+			UserVO userVo = new UserVO();
+			userVo.setUserManageId("-1");
+			ResTrialUserVO trialUser = authDAO.selectTrialUser(trialManageId);
+			userVo.setUsername(username);
+			userVo.setName(trialUser.getName());
+			userVo.setBirth(trialUser.getBirth());
+			return userVo;
+		} else {
+			log.debug("## 회원일 경우");
+
+			return commonDAO.selectUserByUserId(username);
+		}
+
+//		Object principal = getPrincipal();
 //		log.debug("## principal:[{}]", principal);
-		String username = (principal instanceof UserDetails) ? ((UserDetails) principal).getUsername() : principal.toString();
-		log.debug("## JWT username:[{}]", username);
+//		String username = (principal instanceof UserDetails) ? ((UserDetails) principal).getUsername() : principal.toString();
+//		log.debug("## JWT username:[{}]", username);
 
-		return commonDAO.selectUserByUserId(username);
+//		return commonDAO.selectUserByUserId(username);
 	}
 
 	/**

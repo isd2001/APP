@@ -1,18 +1,20 @@
 package codegurus.schedule;
 
 import codegurus.auth.AuthDAO;
-import codegurus.cmm.constants.EduStatCdEnum;
+import codegurus.auth.vo.UserVO;
+import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.constants.ProductEnum;
+import codegurus.cmm.jwt.TokenProvider;
+import codegurus.cmm.service.FileService;
 import codegurus.cmm.util.JsonUtil;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.SystemUtil;
-import codegurus.cmm.vo.res.Res;
 import codegurus.schedule.vo.*;
-import codegurus.cmm.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,9 @@ public class ScheduleService {
 
     @Autowired
     private AuthDAO authDAO;
+
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * 온라인 과목 목록 조회
@@ -92,9 +97,33 @@ public class ScheduleService {
             }
         }
         log.debug("## onlineSubjectId:[{}], month:[{}]", onlineSubjectId, month);
+
         // TODO: 아래의 코드를 주석해제하면 오프라인 진도가 적용됨
-//        reqVo.setOnlineSubjectId(onlineSubjectId);
-//        reqVo.setMonth(month);
+        LocalDate localDate = LocalDate.now();
+        int monthValue = localDate.getMonthValue();
+        if(10 > monthValue) {
+            month = "0" + monthValue;
+        } else {
+            month = "" + monthValue;
+        }
+
+        UserVO userVO = cacheService.getTokenUser();
+        if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)) {
+            // 체험회원 룰 적용
+            onlineSubjectId = 9;
+            month = "01";
+        }
+        else if(userVO.getUsername().startsWith("test01")) {
+            onlineSubjectId = 2;
+        } else if(userVO.getUsername().startsWith("test02")) {
+            onlineSubjectId = 3;
+        } else if(userVO.getUsername().startsWith("test03")) {
+            onlineSubjectId = 4;
+        } else {
+            onlineSubjectId = 1;
+        }
+        reqVo.setOnlineSubjectId(onlineSubjectId);
+        reqVo.setMonth(month);
         //------------------- 오프라인 진도를 반영한 온라인과목/월 조회 - end ---------------------
 
         resVo.setList(scheduleDAO.selectThisMonthBookList(reqVo));

@@ -11,7 +11,6 @@ import codegurus.cmm.util.JsonUtil;
 import codegurus.cmm.util.StringUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,7 +70,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         // 체험회원이 아닐 경우
         }else{
             log.debug("## 체험회원이 아닐 경우");
-            String username = StringUtil.trim(claims.get("sub"));
+            String username = StringUtil.trim(claims.get(TokenProvider.SUBJECT_KEY));
             log.debug("## username:[{}]", username);
         }
 
