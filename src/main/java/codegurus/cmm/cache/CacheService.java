@@ -4,6 +4,7 @@ import codegurus.auth.AuthDAO;
 import codegurus.auth.vo.ResTrialUserVO;
 import codegurus.auth.vo.UserVO;
 import codegurus.cmm.CommonDAO;
+import codegurus.cmm.constants.AuthEnum;
 import codegurus.cmm.jwt.JwtFilter;
 import codegurus.cmm.jwt.TokenProvider;
 import codegurus.cmm.util.StringUtil;
@@ -74,6 +75,10 @@ public class CacheService {
 			userVo.setUsername(username);
 			userVo.setName(trialUser.getName());
 			userVo.setBirth(trialUser.getBirth());
+			userVo.setParentName(trialUser.getParentName());
+			userVo.setParentBirth(trialUser.getParentBirth());
+			userVo.setAuthCode(AuthEnum.스마트독서_학생체험회원.getAuthCode());
+			userVo.setTrialEndDate(trialUser.getTrialEndDate());
 			return userVo;
 		} else {
 			log.debug("## 회원일 경우");

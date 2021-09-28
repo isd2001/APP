@@ -159,12 +159,12 @@
             zipcode,
             address,
             address_detail as addressDetail,
-            DF8(trial_start_date) as trial_start_date,
-            DF8(trial_end_date) as trial_end_date,
+            DF14(trial_start_date) as trial_start_date,
+            DF14(trial_end_date) as trial_end_date,
             trial_status_code,
             reg_date,
             delete_ornot,
-            if(DF8(NOW()) <![CDATA[ <= ]]> DF8(trial_end_date), 'Y', 'N') as validPeriod
+            if(DF14(NOW()) <![CDATA[ <= ]]> DF14(trial_end_date), 'Y', 'N') as validPeriod
         FROM
             trial_manage tm
         WHERE trial_manage_id = #{value}
@@ -403,4 +403,12 @@
         where user_manage_id = #{userManageId}
     </update>
 
+    <update id="updateTrialManageId">
+        UPDATE /* updateTrialManageId */
+            user_manage
+        SET
+            trial_manage_id = #{trialManageId}
+        WHERE user_id = #{username}
+          and delete_ornot = 'N'
+    </update>
 </mapper>

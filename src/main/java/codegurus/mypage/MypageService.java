@@ -140,20 +140,21 @@ public class MypageService {
         ResUserInfoVO resVo = new ResUserInfoVO();
 
         UserVO userVO = cacheService.getTokenUser();
+        if(userVO == null){ SystemUtil.returnNoSearchResult(); }
+
+        resVo.setUsername(userVO.getUsername());
+        resVo.setName(userVO.getName());
+        // resVo.setBirth(DateUtil.convertDateFormat(vo.getBirth(), Constants.DF8, Constants.DF8_HAN_NO_ZEROS)); // 화면에 출력하는 건 한글이 좋은데, 수정UI에서 datepicker가 없는 이상 혼선이 예상되므로 DF8을 사용함.
+        resVo.setBirth(userVO.getBirth());
+        resVo.setAuthCode(userVO.getAuthCode());
+        resVo.setTrialEndDate(userVO.getTrialEndDate());
+        resVo.setPromotionAgreeOrnot(userVO.getPromotionAgreeOrnot());
+
         if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)) {
             // 체험회원 정보 조회
-            resVo.setUsername(userVO.getUsername());
-            resVo.setName(userVO.getName());
-            resVo.setBirth(userVO.getBirth());
+            resVo.setParentName(userVO.getParentName());
+            resVo.setParentBirth(userVO.getParentBirth());
         } else {
-            // 회원정보(학생) 조회
-            UserVO vo = commonDAO.selectUserByUserId(userVO.getUsername());
-            if(vo == null){ SystemUtil.returnNoSearchResult(); }
-            resVo.setUsername(vo.getUsername());
-            resVo.setName(vo.getName());
-            // resVo.setBirth(DateUtil.convertDateFormat(vo.getBirth(), Constants.DF8, Constants.DF8_HAN_NO_ZEROS)); // 화면에 출력하는 건 한글이 좋은데, 수정UI에서 datepicker가 없는 이상 혼선이 예상되므로 DF8을 사용함.
-            resVo.setBirth(vo.getBirth());
-
             // 부모 회원정보 조회
             Map<String, String> parentInfo = mypageDAO.selectParentInfo(reqVo);
             if(parentInfo != null){

@@ -62,7 +62,20 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * spring security를 아예 타지 않는 것은 아니고, 모든 사용자에 대해 권한 허용 예외처리 (http permit all)
      */
-    public static final String[] ANT_MATCHERS_HTTP_PERMIT_ALL = { "/auth/login", "/auth/checkUserDup", "/auth/register*", "/auth/trialRegister", "/auth/sms*", "/auth/counselReq", "/auth/find*", "/auth/fullmemberAuth", "/auth/contractInfo" };
+    public static final String[] ANT_MATCHERS_HTTP_PERMIT_ALL = {
+            "/auth/login"
+            , "/auth/checkUserDup"
+            , "/auth/register*"
+            , "/auth/trialRegister"
+            , "/auth/sms*"
+            , "/auth/counselReq"
+            , "/auth/find*"
+            , "/auth/fullmemberAuth"
+            , "/auth/contractInfo"
+            , "/board/*" // 전부 로그인 없이 조회되어야함
+            , "/schedule/subjectList" // 전부 로그인 없이 조회되어야함
+            , "/schedule/bookScheduleList" // 전부 로그인 없이 조회되어야함
+    };
 
     /**
      * WebSecurity configure

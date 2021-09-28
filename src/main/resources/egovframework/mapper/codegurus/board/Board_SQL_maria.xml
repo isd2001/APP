@@ -34,7 +34,6 @@
 			DF14(reg_date) as reg_date
 		FROM board
 		WHERE 1=1
-		  and product_id = #{productId}
 		  and `type` = #{type}
 		  and board_id = #{boardId}
 		  and delete_ornot = 'N'

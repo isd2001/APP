@@ -8,54 +8,64 @@
 
 	<!-- 사용자정보 select 대상 칼럼 -->
 	<sql id="userSelectCols">
-		user_manage_id,
-		user_id,
-		user_id as username,
-		password,
-		user_photo,
-		name,
-		name_past,
-		birth,
-		gender,
-		cellphone,
-		email,
-		zipcode,
-		address,
-		address_detail,
-		termofuse_agree_ornot,
-		personalinfo_agree_ornot,
-		promotion_agree_ornot,
-		locationinfo_agree_ornot,
-		termofuse_agree_date,
-		personalinfo_agree_date,
-		promotion_agree_date,
-		locationinfo_agree_date,
-		last_password,
-		last_login_date,
-		login_fail_count,
-		login_fail_date,
-		lock_ornot,
-		modify_date,
-		reg_date,
-		delete_ornot
+		a.user_manage_id,
+		a.user_id,
+		a.user_id as username,
+		a.password,
+		a.password_mask,
+		a.user_photo,
+		a.name,
+		a.name_past,
+		a.birth,
+		a.birth_year,
+		a.gender,
+		a.cellphone,
+		a.email,
+		a.zipcode,
+		a.address,
+		a.address_detail,
+		a.termofuse_agree_ornot,
+		a.personalinfo_agree_ornot,
+		a.promotion_agree_ornot,
+		a.locationinfo_agree_ornot,
+		DF14(a.termofuse_agree_date) as termofuse_agree_date,
+		DF14(a.personalinfo_agree_date) as personalinfo_agree_date,
+		DF14(a.promotion_agree_date) as promotion_agree_date,
+		DF14(a.locationinfo_agree_date) as locationinfo_agree_date,
+		a.last_password,
+		DF14(a.last_login_date) as last_login_date,
+		a.login_fail_count,
+		DF14(a.login_fail_date) as login_fail_date,
+		a.lock_ornot,
+		a.trial_manage_id,
+		DF14(a.reg_date) as reg_date,
+		DF14(a.modify_date) as modify_date,
+		a.delete_ornot,
+		c.auth_code,
+		DF14(d.trial_end_date) as trial_end_date
 	</sql>
 
 	<!-- 사용자관리ID로 사용자정보 획득 -->
 	<select id="selectUserByUserManageId" resultType="UserVO">
 		select /* selectUserByUserManageId */
 		<include refid="userSelectCols" />
-		from user_manage
- 		where user_manage_id = #{value}
-		and delete_ornot <![CDATA[ <> ]]> 'Y'
+		from user_manage a
+ 		where a.user_manage_id = #{value}
+		and a.delete_ornot <![CDATA[ <> ]]> 'Y'
 	</select>
 
 	<!-- 사용자ID로 사용자정보 획득 -->
 	<select id="selectUserByUserId" resultType="UserVO">
 		select /* selectUserByUserId */
 		<include refid="userSelectCols" />
-		from user_manage
- 		where user_id = #{value}
-		and delete_ornot <![CDATA[ <> ]]> 'Y'
+		from user_manage a
+		left join user_auth b ON a.user_manage_id = b.user_manage_id and b.delete_ornot = 'N'
+		left join auth c ON b.auth_id = c.auth_id and c.delete_ornot = 'N'
+		left join trial_manage d ON a.trial_manage_id = d.trial_manage_id and d.delete_ornot = 'N'
+		and d.trial_status_code = '00'
+		and DF14(d.trial_end_date) > DF14(NOW())
+ 		where a.user_id = #{value}
+		and a.delete_ornot <![CDATA[ <> ]]> 'Y'
 	</select>
 
 	<!-- atchFileId의 목록을 받아서 FileVO list를 리턴한다. -->

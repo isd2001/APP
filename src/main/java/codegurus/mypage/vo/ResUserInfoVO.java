@@ -2,6 +2,7 @@ package codegurus.mypage.vo;
 
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.learning.vo.ContentsHistoryVO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,4 +30,13 @@ public class ResUserInfoVO extends ResBaseVO {
 
     @ApiModelProperty(example = "19840222", notes = "부모 생년월일", position = 5)
     private String parentBirth;
+
+    @ApiModelProperty(example = "01", notes = "권한 코드(01:정회원, 02:일반회원, 03:체험회원)", position = 6)
+    private String authCode;
+
+    @ApiModelProperty(example = "20210929101010", notes = "체험회원 만료일, 체험회원 혹은 일반회원이 체험회원토큰을 받은 경우 이 값이 날라감 만료후에는 null", position = 7)
+    private String trialEndDate;
+
+    @ApiModelProperty(example = "Y", notes = "마케팅 정보 동의 여부(Y, N)", position = 8)
+    private String promotionAgreeOrnot;
 }

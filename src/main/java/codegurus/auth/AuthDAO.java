@@ -1,6 +1,7 @@
 package codegurus.auth;
 
 import codegurus.auth.vo.*;
+import codegurus.cmm.vo.req.ReqAuthVO;
 
 import java.util.List;
 import java.util.Map;
@@ -26,4 +27,5 @@ public interface AuthDAO {
     int updateUserAuth(Map<String, Object> map);
     List<String> selectUserSubjectList(String userManageId);
     int updateUserInfoByFullmemberAuth(ReqContractInfoVO reqVo);
+    int updateTrialManageId(ReqAuthVO reqVo);
 }

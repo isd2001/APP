@@ -16,6 +16,7 @@ import codegurus_ext.voc.VocDAO;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -115,6 +116,22 @@ public class AuthService implements UserDetailsService {
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         ResAuthVO resVo = tokenProvider.generateTokenDto(authentication);
+
+        // 체험회원 토큰이 넘어왔다면 업데이트 쳐준다.
+        if(StringUtil.isNotBlank(reqVo.getTrialToken())) {
+            try {
+                Claims claims = tokenProvider.parseClaims(reqVo.getTrialToken());
+
+                String trialManageId = StringUtil.trim(claims.get("trialManageId"));
+                if(StringUtil.isNotBlank(trialManageId) && Integer.parseInt(trialManageId) > 0) {
+                    reqVo.setTrialManageId(trialManageId);
+                    authDAO.updateTrialManageId(reqVo);
+                }
+            } catch (Exception e) {
+                // 오류가 나더라도 여기는 무시, 제대로된 토큰을 안보냈을꺼기때문에
+            }
+        }
+
 
 //         4. RefreshToken 저장 (현재(2021.06) 정책상 사용하지 않음)
 //        RefreshToken refreshToken = RefreshToken.builder()
