@@ -140,14 +140,12 @@
         LEFT JOIN template_inst as template_inst
             on contents.contents_id = template_inst.contents_id
             and tempate_inst_history.template_inst_id = template_inst.template_inst_id
-            and template_inst.delete_ornot='N'
             and template_inst.template_id='14'
         LEFT JOIN template as template
             on template_inst.template_id = template.template_id
             and template.delete_ornot = 'N'
         INNER JOIN book as book
             on contents.book_id = book.book_id
-        where history.delete_ornot = 'N'
         and history.user_manage_id = #{userManageId}
         and date_format(history.end_date,'%Y%m')=concat(#{year},#{month})
     </select>
