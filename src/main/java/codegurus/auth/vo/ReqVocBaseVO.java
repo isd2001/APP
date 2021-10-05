@@ -70,7 +70,7 @@ public class ReqVocBaseVO extends ReqBaseVO {
 
     // 제품번호
     @JsonIgnore
-    protected String prodId1 = "Z001"; // 답변 대기중
+    protected String prodId1 = "D010";
 
     // 우편번호시퀀스
     @JsonIgnore
