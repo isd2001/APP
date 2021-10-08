@@ -146,10 +146,10 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("*");
-//        configuration.addAllowedOrigin("http://localhost:3000");
-//        configuration.addAllowedOrigin("http://codegurus.iptime.org:3002");
-//        configuration.addAllowedOrigin("http://codegurus.iptime.org:3000");
+//        configuration.addAllowedOrigin("*");
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://codegurus.iptime.org:3002");
+        configuration.addAllowedOrigin("http://codegurus.iptime.org:3000");
 
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
