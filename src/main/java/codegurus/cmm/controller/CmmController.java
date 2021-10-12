@@ -137,6 +137,7 @@ public class CmmController extends BaseController {
 			//response.setHeader("Content-Disposition", "attachment; filename=\"" + contentDisposition + "\"");
 			
 			response.setHeader("Accept-Ranges", "bytes");
+			response.setHeader("access-control-allow-origin", "*");
 			
 			response.setContentLengthLong(fSize);
 
