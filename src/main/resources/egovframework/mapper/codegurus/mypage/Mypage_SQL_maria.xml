@@ -148,6 +148,8 @@
             on contents.book_id = book.book_id
         and history.user_manage_id = #{userManageId}
         and date_format(history.end_date,'%Y%m')=concat(#{year},#{month})
+        and history.delete_ornot = 'N'
+        and template_inst.template_inst_id IS NOT NULL
     </select>
 
     <!-- 나의 포트폴리오 목록 조회 -->
