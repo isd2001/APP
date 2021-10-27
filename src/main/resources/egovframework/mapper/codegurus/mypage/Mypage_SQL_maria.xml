@@ -10,6 +10,20 @@
             <association property="bookThumbnail" javaType="FileVO" autoMapping="true">
                 <id property="atchFileId" column="book_thumbnail_file_id"/>
             </association>
+            <association property="voiceFile" javaType="FileVO" autoMapping="true">
+                <id property="atchFileId" column="OUTLINEVOICE_ATCH_FILE_ID"/>
+                <result property="fileCn" column="OUTLINEVOICE_FILE_CN" />
+                <result property="fileSn" column="OUTLINEVOICE_FILE_SN" />
+                <result property="fileStreCours" column="OUTLINEVOICE_FILE_STRE_COURS" />
+                <result property="streFileNm" column="OUTLINEVOICE_STRE_FILE_NM" />
+                <result property="fileExtsn" column="OUTLINEVOICE_FILE_EXTSN" />
+                <result property="orignlFileNm" column="OUTLINEVOICE_ORIGNL_FILE_NM" />
+                <result property="fileMg" column="OUTLINEVOICE_FILE_SIZE" />
+                <result property="creatDt" column="OUTLINEVOICE_CREAT_DT" />
+                <result property="downloadCnt" column="OUTLINEVOICE_DOWNLOAD_CNT" />
+            </association>
+            <association property="cate" javaType="CateVO" autoMapping="true" />
+            <collection property="labelList" ofType="LabelVO" autoMapping="true" />
         </association>
     </resultMap>
     <select id="selectmagnitudeList" resultMap="MagnitudeMap">
@@ -19,9 +33,22 @@
             contents_history.contents_history_id ,
             DF8(contents_history.end_date) end_date,
             contents.contents_id,
+
             book.book_id,
             book.book_title,
+
+            book.author,
+            book.book_introduction,
+            book.illustrator,
+            book.translator,
+            book.publisher,
+            DF14(book.publicationdate) publicationdate,
+            book.isbn,
+            book.outline,
+            book.trailer,
+            book.trailer_active_ornot,
             book.book_thumbnail_file_id,
+
             COMTNFILE.ATCH_FILE_ID,
             COMTNFILEDETAIL.FILE_CN,
             COMTNFILEDETAIL.FILE_SN,
@@ -31,7 +58,50 @@
             COMTNFILEDETAIL.ORIGNL_FILE_NM,
             COMTNFILEDETAIL.FILE_SIZE,
             COMTNFILE.CREAT_DT,
-            COMTNFILEDETAIL.DOWNLOAD_CNT
+            COMTNFILEDETAIL.DOWNLOAD_CNT,
+
+            book.outline_voice_file_id,
+
+            VOICECOMTNFILE.ATCH_FILE_ID as OUTLINEVOICE_ATCH_FILE_ID,
+            VOICECOMTNFILEDETAIL.FILE_CN as OUTLINEVOICE_FILE_CN,
+            VOICECOMTNFILEDETAIL.FILE_SN as OUTLINEVOICE_FILE_SN,
+            VOICECOMTNFILEDETAIL.FILE_STRE_COURS as OUTLINEVOICE_FILE_STRE_COURS,
+            VOICECOMTNFILEDETAIL.STRE_FILE_NM as OUTLINEVOICE_STRE_FILE_NM,
+            VOICECOMTNFILEDETAIL.FILE_EXTSN as OUTLINEVOICE_FILE_EXTSN,
+            VOICECOMTNFILEDETAIL.ORIGNL_FILE_NM as OUTLINEVOICE_ORIGNL_FILE_NM,
+            VOICECOMTNFILEDETAIL.FILE_SIZE as OUTLINEVOICE_FILE_SIZE,
+            VOICECOMTNFILE.CREAT_DT as OUTLINEVOICE_CREAT_DT,
+            VOICECOMTNFILEDETAIL.DOWNLOAD_CNT as OUTLINEVOICE_DOWNLOAD_CNT,
+
+            book.cate_id,
+
+            book_cate.parents_id,
+            book_cate.depth,
+            book_cate.`order`,
+            book_cate.cate_title,
+            book_cate.first_cate_title,
+            book_cate.second_cate_title,
+            book_cate.third_cate_title,
+            book_cate.fourth_cate_title,
+            book_cate.fifth_cate_title,
+            book_cate.sixth_cate_title,
+            book_cate.seventh_cate_title,
+            book_cate.eight_cate_title,
+            book_cate.ninth_cate_title,
+            book_cate.tenth_cate_title,
+            book_cate.first_cate_id,
+            book_cate.second_cate_id,
+            book_cate.third_cate_id,
+            book_cate.fourth_cate_id,
+            book_cate.fifth_cate_id,
+            book_cate.sixth_cate_id,
+            book_cate.seventh_cate_id,
+            book_cate.eight_cate_id,
+            book_cate.ninth_cate_id,
+            book_cate.tenth_cate_id,
+
+            labelManage.label_manage_id,
+            labelManage.label_title
         from contents_history
             left join online_subject_schedule
                 on contents_history.online_subject_schedule_id=online_subject_schedule.online_subject_schedule_id
@@ -42,7 +112,21 @@
             LEFT JOIN COMTNFILE
                 on book.book_thumbnail_file_id = COMTNFILE.ATCH_FILE_ID
             LEFT JOIN COMTNFILEDETAIL
-                on book.book_thumbnail_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+                on book.outline_voice_file_id = COMTNFILEDETAIL.ATCH_FILE_ID
+            LEFT JOIN COMTNFILE as VOICECOMTNFILE
+                on book.outline_voice_file_id = VOICECOMTNFILE.ATCH_FILE_ID
+            LEFT JOIN COMTNFILEDETAIL as VOICECOMTNFILEDETAIL
+                on book.outline_voice_file_id = VOICECOMTNFILEDETAIL.ATCH_FILE_ID
+            LEFT JOIN label_mapping labelMapping
+                on  labelMapping.label_domain_manage_id = 1 /* 1:책 */
+                and labelMapping.object_manage_id = book.book_id
+                and labelMapping.delete_ornot = 'N'
+            LEFT JOIN label_manage labelManage
+                on 	labelManage.label_manage_id = labelMapping.label_manage_id
+                and labelManage.label_domain_manage_id = labelMapping.label_domain_manage_id
+                and labelManage.delete_ornot = 'N'
+            LEFT JOIN cate book_cate
+                on book.cate_id = book_cate.cate_id
         where contents_history.user_manage_id = #{userManageId}
         and date_format(contents_history.end_date,'%Y%m')=concat(#{year},#{month})
         and contents_history.delete_ornot='N'
