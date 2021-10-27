@@ -2,10 +2,15 @@ package codegurus.board;
 
 import codegurus.board.vo.*;
 import codegurus.cmm.util.SystemUtil;
+import codegurus.cmm.vo.res.Res;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -72,6 +77,39 @@ public class BoardService {
             SystemUtil.returnNoSearchResult();
         } // 조회결과 없음 리턴
 
+        return resVo;
+    }
+
+    /**
+     * 마케팅활용 동의
+     *
+     * @param reqVo
+     * @param resVo
+     * @return
+     */
+    public void promotionAgree(ReqPromotionAgreeVO reqVo, ResPromotionAgreeVO resVo) {
+
+        int updated =boardDAO.updatePromotionAgree(reqVo);
+
+        SystemUtil.checkUpdatedCount(updated, 1);
+        resVo.setResMsg("마케팅활용 동의 성공");
+    }
+
+    /**
+     * 클라이언트 버전 체크
+     *
+     * @param reqVo
+     * @pamam resVo
+     * @return
+     */
+    public ResClientVersionCheckVO clientVersionChcek(ReqClientVersionCheckVO reqVo, ResClientVersionCheckVO resVo) {
+
+        ClientVersionVO item = boardDAO.SelectClientVersionCheck(reqVo); // 이용약관, 개인정보, 마케팅활용 동의 조회
+
+        if(item == null) {
+            SystemUtil.returnNoSearchResult();
+        } // 조회결과 없음 리턴
+        resVo.setItem(item);
         return resVo;
     }
 }

@@ -65,4 +65,37 @@
 		WHERE 1=1
 		  and board_id = #{boardId}
 	</update>
+
+
+	<!-- 마케팅 활용 동의 업데이트 -->
+	<update id="updatePromotionAgree">
+		/* updatePromotionAgree */
+		UPDATE user_manage
+		SET promotion_agree_ornot = #{promotionAgreeOrnot}
+		WHERE 1=1
+		  and user_manage_id = #{userManageId}
+	</update>
+
+	<!-- 마케팅 활용 동의 업데이트 -->
+	<select id="SelectClientVersionCheck" resultType="ClientVersionVO">
+		/* SelectClientVersionCheck */
+		SELECT /* selectClientVersion */
+			client_version_id,
+			client_name,
+			client_division,
+			client_type,
+			version_name,
+			version_code,
+			forcing_update_ornot,
+			update_division,
+			download_url,
+			content,
+			activate_ornot,
+			DF14(reg_date) reg_date
+		FROM client_version
+		WHERE 1=1
+		  AND client_type=#{clientType}
+		ORDER BY reg_date desc
+		limit 1
+	</select>
 </mapper>

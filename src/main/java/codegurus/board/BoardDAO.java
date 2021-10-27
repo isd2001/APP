@@ -18,4 +18,8 @@ public interface BoardDAO {
     ResBoardDetailVO selectBoardOne(ReqBoardOneVO reqVo);
 
     int updateLookupCount(ReqBoardDetailVO reqVo);
+
+    int updatePromotionAgree(ReqPromotionAgreeVO reqVo);
+
+    ClientVersionVO SelectClientVersionCheck(ReqClientVersionCheckVO reqVo);
 }
