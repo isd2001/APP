@@ -2,6 +2,9 @@ package codegurus.mypage;
 
 import codegurus.auth.vo.ReqDeleteUserVO;
 import codegurus.auth.vo.ReqUpdatePWVO;
+import codegurus.board.BoardService;
+import codegurus.board.vo.ReqPromotionAgreeVO;
+import codegurus.board.vo.ResPromotionAgreeVO;
 import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.res.Res;
@@ -48,6 +51,10 @@ public class MypageController extends BaseController {
 
     @Autowired
     private LearningService learningService;
+
+    @Autowired
+    private BoardService boardService;
+
 
     /**
      * 나의 진도
@@ -229,4 +236,21 @@ public class MypageController extends BaseController {
 		return new Res<ResBaseVO>(resVo);
 	}
 
+    /**
+     * 마케팅 활용 동의
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/promotionAgree")
+    @ApiOperation(value = "마케팅 활용 동의")
+    public Res<ResPromotionAgreeVO> promotionAgree (@RequestBody @Valid ReqPromotionAgreeVO reqVo) {
+
+        ResPromotionAgreeVO resVo = new ResPromotionAgreeVO();
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        boardService.promotionAgree(reqVo, resVo);
+
+        return new Res<ResPromotionAgreeVO>(resVo);
+    }
 }

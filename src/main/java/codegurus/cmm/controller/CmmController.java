@@ -1,5 +1,8 @@
 package codegurus.cmm.controller;
 
+import codegurus.board.BoardService;
+import codegurus.board.vo.ReqClientVersionCheckVO;
+import codegurus.board.vo.ResClientVersionCheckVO;
 import codegurus.cmm.service.FileService;
 import codegurus.cmm.vo.res.Res;
 import codegurus.cmm.vo.res.ResFileVO;
@@ -9,6 +12,7 @@ import egovframework.com.cmm.service.EgovCmmUseService;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovBasicLogger;
 import egovframework.com.cmm.util.EgovResourceCloseHelper;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +27,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +46,9 @@ public class CmmController extends BaseController {
 	/** EgovCmmUseService */
 	@Resource(name = "EgovCmmUseService")
 	private EgovCmmUseService cmmUseService;
+
+	@Autowired
+	private BoardService boardService;
 
 	/**
 	 * 전자정부 파일 업로드 모듈
@@ -200,5 +208,22 @@ public class CmmController extends BaseController {
 			e.printStackTrace();
 			return new ResponseEntity<Map<String,Object>>(result, HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	/**
+	 * 클라이언트 버전 체크
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@PostMapping("/clientVersionCheck")
+	@ApiOperation(value = "클라이언트 버전 체크")
+	public Res<ResClientVersionCheckVO> clientVersionCheck (@RequestBody @Valid ReqClientVersionCheckVO reqVo) {
+
+		ResClientVersionCheckVO resVo = new ResClientVersionCheckVO();
+
+		boardService.clientVersionChcek(reqVo, resVo);
+
+		return new Res<ResClientVersionCheckVO>(resVo);
 	}
 }

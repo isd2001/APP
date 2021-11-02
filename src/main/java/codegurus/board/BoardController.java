@@ -30,9 +30,6 @@ public class BoardController extends BaseController {
     @Autowired
     private BoardService boardService;
 
-    @Autowired
-    private CacheService cacheService;
-
     /**
      * 공지사항 목록 조회
      *
@@ -133,40 +130,5 @@ public class BoardController extends BaseController {
         reqVo.setType("마케팅");
         ResBoardDetailVO resVo = boardService.selectBoardOne(reqVo);
         return new Res<ResBoardDetailVO>(resVo);
-    }
-
-    /**
-     * 마케팅 활용 동의
-     *
-     * @param reqVo
-     * @return
-     */
-    @PostMapping("/promotionAgree")
-    @ApiOperation(value = "마케팅 활용 동의")
-    public Res<ResPromotionAgreeVO> promotionAgree (@RequestBody @Valid ReqPromotionAgreeVO reqVo) {
-
-        ResPromotionAgreeVO resVo = new ResPromotionAgreeVO();
-
-        reqVo.setUserManageId(cacheService.getUserManageId());
-        boardService.promotionAgree(reqVo, resVo);
-
-        return new Res<ResPromotionAgreeVO>(resVo);
-    }
-
-    /**
-     * 클라이언트 버전 체크
-     *
-     * @param reqVo
-     * @return
-     */
-    @PostMapping("/clientVersionCheck")
-    @ApiOperation(value = "클라이언트 버전 체크")
-    public Res<ResClientVersionCheckVO> clientVersionCheck (@RequestBody @Valid ReqClientVersionCheckVO reqVo) {
-
-        ResClientVersionCheckVO resVo = new ResClientVersionCheckVO();
-
-        boardService.clientVersionChcek(reqVo, resVo);
-
-        return new Res<ResClientVersionCheckVO>(resVo);
     }
 }
