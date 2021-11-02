@@ -12,6 +12,7 @@ import egovframework.com.cmm.service.EgovCmmUseService;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovBasicLogger;
 import egovframework.com.cmm.util.EgovResourceCloseHelper;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
+@Api( tags = "공통")
 @RestController
 public class CmmController extends BaseController {
 
