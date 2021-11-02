@@ -90,7 +90,7 @@
 			<property name="minEvictableIdleTimeMillis" value="-1"/>
 			<property name="validationQuery" value="select 1"/>
 
-			<property name="defaultAutoCommit" value="true"/>
+			<property name="defaultAutoCommit" value="false"/>
 			<property name="poolPreparedStatements" value="true"/>
 		</bean>
 	</beans>
