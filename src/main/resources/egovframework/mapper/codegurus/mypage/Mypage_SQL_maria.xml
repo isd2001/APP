@@ -10,7 +10,7 @@
             <association property="bookThumbnail" javaType="FileVO" autoMapping="true">
                 <id property="atchFileId" column="book_thumbnail_file_id"/>
             </association>
-            <association property="voiceFile" javaType="FileVO" autoMapping="true">
+            <association property="outlineVoice" javaType="FileVO" autoMapping="true">
                 <id property="atchFileId" column="OUTLINEVOICE_ATCH_FILE_ID"/>
                 <result property="fileCn" column="OUTLINEVOICE_FILE_CN" />
                 <result property="fileSn" column="OUTLINEVOICE_FILE_SN" />
@@ -258,7 +258,7 @@
         </association>
     </resultMap>
     <select id="selectportfolioList" resultMap="PortfilioMap">
-        SELECT /* selectmagnitudeList */
+        SELECT /* selectportfolioList */
             schedule.online_subject_schedule_id,
 
             contents_history.contents_history_id,

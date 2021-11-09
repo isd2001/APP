@@ -50,6 +50,11 @@
 		select /* selectUserByUserManageId */
 		<include refid="userSelectCols" />
 		from user_manage a
+		left join user_auth b ON a.user_manage_id = b.user_manage_id and b.delete_ornot = 'N'
+		left join auth c ON b.auth_id = c.auth_id and c.delete_ornot = 'N'
+		left join trial_manage d ON a.trial_manage_id = d.trial_manage_id and d.delete_ornot = 'N'
+		and d.trial_status_code = '00'
+		and DF14(d.trial_end_date) > DF14(NOW())
  		where a.user_manage_id = #{value}
 		and a.delete_ornot <![CDATA[ <> ]]> 'Y'
 	</select>
