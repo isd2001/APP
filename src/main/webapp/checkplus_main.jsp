@@ -14,7 +14,8 @@
    	String sAuthType = "";      	// 없으면 기본 선택화면, M(휴대폰), X(인증서공통), U(공동인증서), F(금융인증서), S(PASS인증서), C(신용카드)
 	String customize 	= "";		//없으면 기본 웹페이지 / Mobile : 모바일페이지
 
-    String url = request.getRequestURL().toString().replace(request.getRequestURI(),"");
+//    String url = request.getRequestURL().toString().replace(request.getRequestURI(),"");
+    String url = "https://devsmart.jrplaton.com/app_api";
 
     // CheckPlus(본인인증) 처리 후, 결과 데이타를 리턴 받기위해 다음예제와 같이 http부터 입력합니다.
 	//리턴url은 인증 전 인증페이지를 호출하기 전 url과 동일해야 합니다. ex) 인증 전 url : http://www.~ 리턴 url : http://www.~
@@ -69,7 +70,7 @@
 	function fnPopup(){
 		//window.open('', 'popupChk', 'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
 		document.form_chk.action = "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
-		document.form_chk.target = "popupChk";
+		//document.form_chk.target = "popupChk";
 		document.form_chk.submit();
 	}
 	</script>
