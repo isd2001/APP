@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html;charset=utf-8" %>
 
 <%
+    System.out.println("test1");
     NiceID.Check.CPClient niceCheck = new  NiceID.Check.CPClient();
-    
+
+    System.out.println("test2");
     String sSiteCode = "BV963";			// NICE로부터 부여받은 사이트 코드
     String sSitePassword = "4RZcqRBKR0dP";		// NICE로부터 부여받은 사이트 패스워드
     
