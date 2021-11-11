@@ -1,10 +1,8 @@
 <%@ page language="java" contentType="text/html;charset=utf-8" %>
 
 <%
-    System.out.println("test1");
-    NiceID.Check.CPClient niceCheck = new  NiceID.Check.CPClient();
+    NiceID.Check.CPClient niceCheck = new NiceID.Check.CPClient();
 
-    System.out.println("test2");
     String sSiteCode = "BV963";			// NICE로부터 부여받은 사이트 코드
     String sSitePassword = "4RZcqRBKR0dP";		// NICE로부터 부여받은 사이트 패스워드
     
@@ -16,8 +14,8 @@
    	String sAuthType = "";      	// 없으면 기본 선택화면, M(휴대폰), X(인증서공통), U(공동인증서), F(금융인증서), S(PASS인증서), C(신용카드)
 	String customize 	= "";		//없으면 기본 웹페이지 / Mobile : 모바일페이지
 
-//    String url = request.getRequestURL().toString().replace(request.getRequestURI(),"");
-    String url = "https://devsmart.jrplaton.com/app_api";
+    String url = request.getRequestURL().toString().replace(request.getRequestURI(),"");
+//    String url = "https://devsmart.jrplaton.com/app_api";
 
     // CheckPlus(본인인증) 처리 후, 결과 데이타를 리턴 받기위해 다음예제와 같이 http부터 입력합니다.
 	//리턴url은 인증 전 인증페이지를 호출하기 전 url과 동일해야 합니다. ex) 인증 전 url : http://www.~ 리턴 url : http://www.~

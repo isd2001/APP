@@ -677,13 +677,6 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/NiceID.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>NiceID.Check</groupId>
-            <artifactId>NiceID_ibm</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/NiceID_ibm.jar</systemPath>
-        </dependency>
     </dependencies>
 
 
