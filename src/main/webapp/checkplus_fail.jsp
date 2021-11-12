@@ -5,8 +5,8 @@
 
     String sEncodeData = requestReplace(request.getParameter("EncodeData"), "encodeData");
 
-    String sSiteCode = "";				// NICE로부터 부여받은 사이트 코드
-    String sSitePassword = "";			// NICE로부터 부여받은 사이트 패스워드
+    String sSiteCode = "BV963";				// NICE로부터 부여받은 사이트 코드
+    String sSitePassword = "4RZcqRBKR0dP";			// NICE로부터 부여받은 사이트 패스워드
 
     String sCipherTime = "";			// 복호화한 시간
     String sRequestNumber = "";			// 요청 번호
@@ -103,8 +103,28 @@ public String requestReplace (String paramValue, String gubun) {
 <html>
 <head>
     <title>NICE평가정보 - CheckPlus 안심본인인증 테스트</title>
+
+    <script language='javascript'>
+        function fnPopup(){
+            var data = '{'
+                + '"iReturn":1'
+                + ', "sCipherTime":"<%= sCipherTime %>"'
+                + ', "sRequestNumber":"<%= sRequestNumber %>"'
+                + ', "sAuthType":"<%= sAuthType %>"'
+                + ', "sErrorCode":"<%= sErrorCode %>"'
+                + ', "sMessage":"<%= sMessage %>"'
+                + '}';
+            // alert(data);
+
+            window.opener.postMessage({
+                message : data
+            } , '*');
+
+            window.close();
+        }
+    </script>
 </head>
-<body>
+<body onload="fnPopup()">
     <center>
     <p><p><p><p>
     본인인증이 실패하였습니다.<br>

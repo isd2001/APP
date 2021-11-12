@@ -1,12 +1,21 @@
+<%@ page import="java.util.Enumeration" %>
 <%@ page language="java" contentType="text/html;charset=utf-8" %>
 
 <%	//인증 후 결과값이 null로 나오는 부분은 관리담당자에게 문의 바랍니다.
     NiceID.Check.CPClient niceCheck = new  NiceID.Check.CPClient();
+//    request.setCharacterEncoding("UTF-8");
+
+//    System.out.println("EncodeData : " + request.getParameter("EncodeData"));
+//    Enumeration<String> names = request.getParameterNames();
+//    while (names.hasMoreElements()) {
+//        String name = (String) names.nextElement();
+//        System.out.println("name : " + name);
+//    }
 
     String sEncodeData = requestReplace(request.getParameter("EncodeData"), "encodeData");
 
-    String sSiteCode = "";				// NICE로부터 부여받은 사이트 코드
-    String sSitePassword = "";			// NICE로부터 부여받은 사이트 패스워드
+    String sSiteCode = "BV963";				// NICE로부터 부여받은 사이트 코드
+    String sSitePassword = "4RZcqRBKR0dP";			// NICE로부터 부여받은 사이트 패스워드
 
     String sCipherTime = "";			// 복호화한 시간
     String sRequestNumber = "";			// 요청 번호
@@ -22,8 +31,12 @@
 	String sMobileCo = "";				// 통신사
     String sMessage = "";
     String sPlainData = "";
+
     
     int iReturn = niceCheck.fnDecode(sSiteCode, sSitePassword, sEncodeData);
+//    System.out.println("sSiteCode : " + sSiteCode);
+//    System.out.println("sSitePassword : " + sSitePassword);
+//    System.out.println("sEncodeData : " + sEncodeData);
 
     if( iReturn == 0 )
     {
@@ -36,8 +49,8 @@
         sRequestNumber  = (String)mapresult.get("REQ_SEQ");
         sResponseNumber = (String)mapresult.get("RES_SEQ");
         sAuthType		= (String)mapresult.get("AUTH_TYPE");
-//        sName			= (String)mapresult.get("NAME");
-		sName			= (String)mapresult.get("UTF8_NAME"); //charset utf8 사용시 주석 해제 후 사용
+        sName			= (String)mapresult.get("NAME");
+//		sName			= (String)mapresult.get("UTF8_NAME"); //charset utf8 사용시 주석 해제 후 사용
         sBirthDate		= (String)mapresult.get("BIRTHDATE");
         sGender			= (String)mapresult.get("GENDER");
         sNationalInfo  	= (String)mapresult.get("NATIONALINFO");
@@ -47,6 +60,7 @@
         sMobileCo		= (String)mapresult.get("MOBILE_CO");
         
         String session_sRequestNumber = (String)session.getAttribute("REQ_SEQ");
+//        System.out.println("session_sRequestNumber : " + session_sRequestNumber);
         if(!sRequestNumber.equals(session_sRequestNumber))
         {
             sMessage = "세션값 불일치 오류입니다.";
@@ -129,8 +143,36 @@
 <html>
 <head>
     <title>NICE평가정보 - CheckPlus 안심본인인증 테스트</title>
+
+    <script language='javascript'>
+        function fnPopup(){
+            var data = '{'
+                + '"iReturn":<%= iReturn %>'
+                + ', "sCipherTime":"<%= sCipherTime %>"'
+                + ', "sRequestNumber":"<%= sRequestNumber %>"'
+                + ', "sResponseNumber":"<%= sResponseNumber %>"'
+                + ', "sAuthType":"<%= sAuthType %>"'
+                + ', "sName":"<%= sName %>"'
+                + ', "sDupInfo":"<%= sDupInfo %>"'
+                + ', "sConnInfo":"<%= sConnInfo %>"'
+                + ', "sBirthDate":"<%= sBirthDate %>"'
+                + ', "sGender":<%= sGender %>'
+                + ', "sNationalInfo":<%= sNationalInfo %>'
+                + ', "sMobileNo":"<%= sMobileNo %>"'
+                + ', "sMobileCo":"<%= sMobileCo %>"'
+                + ', "sMessage":"<%= sMessage %>"'
+                + '}';
+            // alert(data);
+
+            window.opener.postMessage({
+                message : data
+            } , '*');
+
+            window.close();
+        }
+    </script>
 </head>
-<body>
+<body onload="fnPopup()">
     <center>
     <p><p><p><p>
     본인인증이 완료 되었습니다.<br>

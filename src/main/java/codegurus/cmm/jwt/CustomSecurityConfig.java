@@ -56,7 +56,12 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
      *  - AuthInterceptor 를 구축하게 됨에 따라 CustomWebMvcConfig와 url 패턴을 공유할 필요가 있어서 상수로 정의함.
      */
     public static final String[] ANT_MATCHERS_WEB_IGNORE = { "/css/**", "/html/**", "/images/**", "/js/**", "/resource/**", "/resources/**", "" +
-            "/v2/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/download/**", "/index.jsp" }; // TODO: 파일 다운로드(/download)에 대한 권한제어 필요 여부 검토
+            "/v2/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/download/**"
+            , "/index.jsp"
+            , "/checkplus_main.jsp"
+            , "/checkplus_fail.jsp"
+            , "/checkplus_success.jsp"
+    }; // TODO: 파일 다운로드(/download)에 대한 권한제어 필요 여부 검토
     public static final String[] REGEX_MATCHERS_WEB_IGNORE = { "\\A/WEB-INF/jsp/.*\\Z" };
 
     /**
@@ -75,9 +80,6 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
             , "/board/*" // 전부 로그인 없이 조회되어야함
             , "/schedule/subjectList" // 전부 로그인 없이 조회되어야함
             , "/schedule/bookScheduleList" // 전부 로그인 없이 조회되어야함
-            , "/checkplus_main.jsp" // 전부 로그인 없이 조회되어야함
-            , "/checkplus_fail.jsp" // 전부 로그인 없이 조회되어야함
-            , "/checkplus_success.jsp" // 전부 로그인 없이 조회되어야함
     };
 
     /**
