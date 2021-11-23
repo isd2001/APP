@@ -75,6 +75,7 @@ public class CacheService {
 			userVo.setUsername(username);
 			userVo.setName(trialUser.getName());
 			userVo.setBirth(trialUser.getBirth());
+			userVo.setBirthYear(trialUser.getBirthYear());
 			userVo.setParentName(trialUser.getParentName());
 			userVo.setParentBirth(trialUser.getParentBirth());
 			userVo.setAuthCode(AuthEnum.스마트독서_학생체험회원.getAuthCode());

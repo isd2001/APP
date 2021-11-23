@@ -152,6 +152,7 @@
             product_id,
             name,
             birth,
+            birth_year,
             gender,
             parents_name as parentName,
             parents_birth as parentBirth,

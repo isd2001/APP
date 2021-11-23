@@ -83,7 +83,7 @@ public class ScheduleService {
         int onlineSubjectId = 0;
         String month = "";
         List<String> eduCntrIdList = authDAO.selectUserSubjectList(reqVo.getUserManageId());
-//        log.debug("## eduCntrIdList:{}", JsonUtil.toJson(eduCntrIdList));
+        log.debug("## eduCntrIdList:{}", JsonUtil.toJson(eduCntrIdList));
         for(String eduCntrId : eduCntrIdList){
             Map<String, Object> qp = new HashMap<>();
             qp.put("intgEduCntrId", eduCntrId);
@@ -108,10 +108,26 @@ public class ScheduleService {
         }
 
         UserVO userVO = cacheService.getTokenUser();
+        log.debug("## getUsername:", userVO.getUsername());
         if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)) {
             // 체험회원 룰 적용
+            int yearValue = localDate.getYear(); // 현재 년도
+            int birthYear = Integer.parseInt(userVO.getBirthYear());
+
+            int trialUserAge = (yearValue-birthYear) + 1;
+
+            if(trialUserAge == 7) {
+                onlineSubjectId = 9;
+            } else if(trialUserAge == 8) {
+                onlineSubjectId = 10;
+            } else if(trialUserAge == 9) {
+                onlineSubjectId = 11;
+            } else if(trialUserAge == 10) {
+                onlineSubjectId = 12;
+            }
+
             onlineSubjectId = 9;
-            month = "01";
+            //month = "01";
         }
         else if(userVO.getUsername().startsWith("test01")) {
             onlineSubjectId = 2;
@@ -122,6 +138,7 @@ public class ScheduleService {
         } else {
             onlineSubjectId = 1;
         }
+        log.debug("##1234 onlineSubjectId:[{}], month:[{}]", onlineSubjectId, month);
         reqVo.setOnlineSubjectId(onlineSubjectId);
         reqVo.setMonth(month);
         //------------------- 오프라인 진도를 반영한 온라인과목/월 조회 - end ---------------------

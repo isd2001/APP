@@ -26,6 +26,9 @@ public class ResTrialUserVO extends ResBaseVO {
     @ApiModelProperty(notes = "생년월일", example = "20141111", position = 3)
 	private String birth;
 
+    @ApiModelProperty(notes = "생년", example = "2014", position = 3)
+    private String birthYear;
+
     @ApiModelProperty(notes = "성별", example = "M", position = 4)
 	private String gender;
 
