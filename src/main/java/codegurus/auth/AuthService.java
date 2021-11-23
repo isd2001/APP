@@ -260,6 +260,22 @@ public class AuthService implements UserDetailsService {
         resVo.setAccessToken(accessToken);
         resVo.setExpireDate(((Date)params.get("accessTokenExpiresIn")).getTime());
 
+        // 회원 토큰이 넘어왔다면 업데이트 쳐준다.
+        if(StringUtil.isNotBlank(reqVo.getUserToken())) {
+            try {
+                Claims claims = tokenProvider.parseClaims(reqVo.getUserToken());
+
+                String username = StringUtil.trim(claims.get(TokenProvider.SUBJECT_KEY));
+                if(StringUtil.isNotBlank(username)) {
+                    ReqAuthVO reqAuthVO = new ReqAuthVO();
+                    reqAuthVO.setUsername(username);
+                    reqAuthVO.setTrialManageId(reqVo.getTrialManageId());
+                    authDAO.updateTrialManageId(reqAuthVO);
+                }
+            } catch (Exception e) {
+                // 오류가 나더라도 여기는 무시, 제대로된 토큰을 안보냈을꺼기때문에
+            }
+        }
         return resVo;
     }
 

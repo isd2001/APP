@@ -125,19 +125,16 @@ public class ScheduleService {
             } else if(trialUserAge == 10) {
                 onlineSubjectId = 12;
             }
-
-            onlineSubjectId = 9;
-            //month = "01";
         }
+        // TODO test 계정 하드코딩 추후 제거
         else if(userVO.getUsername().startsWith("test01")) {
             onlineSubjectId = 2;
         } else if(userVO.getUsername().startsWith("test02")) {
             onlineSubjectId = 3;
         } else if(userVO.getUsername().startsWith("test03")) {
             onlineSubjectId = 4;
-        } else {
-            onlineSubjectId = 1;
         }
+
         log.debug("##1234 onlineSubjectId:[{}], month:[{}]", onlineSubjectId, month);
         reqVo.setOnlineSubjectId(onlineSubjectId);
         reqVo.setMonth(month);
