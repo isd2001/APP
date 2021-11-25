@@ -240,6 +240,19 @@ public class MypageService {
 
         ResBaseVO resVo = new ResBaseVO();
 
+        // 사용자정보 조회
+        UserVO userVo = commonDAO.selectUserByUserManageId(reqVo.getUserManageId());
+        if (userVo == null) {
+            throw new CustomException(ResCodeEnum.INFO_0009);
+        }
+
+        // 패스워드 대조
+        boolean match = passwordEncoder.matches(StringUtil.trim(reqVo.getPassword()), userVo.getPassword());
+        log.debug("## 패스워드 대조 결과:[{}]", match);
+        if (! match) {
+            throw new CustomException(ResCodeEnum.INFO_0010);
+        }
+
         int updated = mypageDAO.deleteUser(reqVo.getUserManageId());
         SystemUtil.checkUpdatedCount(updated, 1);
 
