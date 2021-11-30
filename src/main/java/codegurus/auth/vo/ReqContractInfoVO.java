@@ -21,8 +21,7 @@ import javax.validation.constraints.Size;
 @Setter
 public class ReqContractInfoVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "암호화된 사용자번호 (회원가입API의 응답을 그대로 전송)", required = true, example = "Mr8zSeC5fJVfVoj6sbgxMQ%3D%3D", position = 1)
-    @NotBlank
+    @ApiModelProperty(notes = "암호화된 사용자번호 (회원가입API의 응답을 그대로 전송)", example = "Mr8zSeC5fJVfVoj6sbgxMQ%3D%3D", position = 1)
     protected String userManageIdEnc;
 
     @ApiModelProperty(notes = "이름", required = true, example = "최효린", position = 2)
