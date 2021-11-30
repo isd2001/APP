@@ -144,6 +144,7 @@ public class MypageService {
 
         resVo.setUsername(userVO.getUsername());
         resVo.setName(userVO.getName());
+        resVo.setGender(userVO.getGender());
         // resVo.setBirth(DateUtil.convertDateFormat(vo.getBirth(), Constants.DF8, Constants.DF8_HAN_NO_ZEROS)); // 화면에 출력하는 건 한글이 좋은데, 수정UI에서 datepicker가 없는 이상 혼선이 예상되므로 DF8을 사용함.
         resVo.setBirth(userVO.getBirth());
         resVo.setAuthCode(userVO.getAuthCode());
