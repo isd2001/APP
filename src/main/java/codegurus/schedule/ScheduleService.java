@@ -98,13 +98,13 @@ public class ScheduleService {
         }
         log.debug("## onlineSubjectId:[{}], month:[{}]", onlineSubjectId, month);
 
-        // TODO: 아래의 코드를 주석해제하면 오프라인 진도가 적용됨
         LocalDate localDate = LocalDate.now();
         int monthValue = localDate.getMonthValue();
+        String nowMonth = null;
         if(10 > monthValue) {
-            month = "0" + monthValue;
+            nowMonth = "0" + monthValue;
         } else {
-            month = "" + monthValue;
+            nowMonth = "" + monthValue;
         }
 
         UserVO userVO = cacheService.getTokenUser();
@@ -125,14 +125,21 @@ public class ScheduleService {
             } else if(trialUserAge == 10) {
                 onlineSubjectId = 12;
             }
+            month = nowMonth;
         }
         // TODO test 계정 하드코딩 추후 제거
-        else if(userVO.getUsername().startsWith("test01")) {
+        else if(userVO.getUsername().startsWith("test00")) {
+            onlineSubjectId = 1;
+            month = nowMonth;
+        } else if(userVO.getUsername().startsWith("test01")) {
             onlineSubjectId = 2;
+            month = nowMonth;
         } else if(userVO.getUsername().startsWith("test02")) {
             onlineSubjectId = 3;
+            month = nowMonth;
         } else if(userVO.getUsername().startsWith("test03")) {
             onlineSubjectId = 4;
+            month = nowMonth;
         }
 
         log.debug("##1234 onlineSubjectId:[{}], month:[{}]", onlineSubjectId, month);
