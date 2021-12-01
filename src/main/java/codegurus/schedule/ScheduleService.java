@@ -128,16 +128,17 @@ public class ScheduleService {
             month = nowMonth;
         }
         // TODO test 계정 하드코딩 추후 제거
-        else if(userVO.getUsername().startsWith("test00")) {
+        else if(userVO.getUsername().startsWith("test") && userVO.getName().startsWith("예비초등")) {
             onlineSubjectId = 1;
             month = nowMonth;
-        } else if(userVO.getUsername().startsWith("test01")) {
+        } else if(userVO.getUsername().startsWith("test") && userVO.getName().startsWith("1학년")) {
             onlineSubjectId = 2;
             month = nowMonth;
-        } else if(userVO.getUsername().startsWith("test02")) {
+        } else if(userVO.getUsername().startsWith("test") && userVO.getName().startsWith("2학년")) {
             onlineSubjectId = 3;
             month = nowMonth;
-        } else if(userVO.getUsername().startsWith("test03")) {
+        } else if((userVO.getUsername().startsWith("test") && userVO.getName().startsWith("3학년"))
+            || (userVO.getUsername().startsWith("sj") && userVO.getName().startsWith("성자초"))) {
             onlineSubjectId = 4;
             month = nowMonth;
         }
