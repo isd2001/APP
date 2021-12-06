@@ -86,16 +86,24 @@
 			client_type,
 			version_name,
 			version_code,
-			forcing_update_ornot,
+			IFNULL((
+				SELECT
+					SUM(forcing_update_ornot)
+				FROM client_version
+				WHERE client_type = #{clientType}
+				  AND version_code > #{versionCode}
+				GROUP BY client_type
+			), 0) AS forcing_update_ornot,
 			update_division,
 			download_url,
 			content,
 			activate_ornot,
 			DF14(reg_date) reg_date
 		FROM client_version
-		WHERE 1=1
-		  AND client_type=#{clientType}
-		ORDER BY reg_date desc
-		limit 1
+		WHERE client_type = #{clientType}
+		  AND activate_ornot = 'Y'
+		  AND delete_ornot = 'N'
+		ORDER BY client_Version_id DESC
+		LIMIT 1
 	</select>
 </mapper>

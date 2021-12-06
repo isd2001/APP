@@ -11,6 +11,9 @@ import lombok.Setter;
 @Setter
 public class ReqClientVersionCheckVO {
 
-    @ApiModelProperty(notes="클라이언트 유형(ex: aos,ios 등)", example = "ios", position = 1)
+    @ApiModelProperty(notes="클라이언트 유형(ex: aos, ios 등)", example = "aos")
     private String clientType;
+
+    @ApiModelProperty(notes="클라이언트 현재 버전코드, 자연수만 가능", example = "1")
+    private String versionCode;
 }

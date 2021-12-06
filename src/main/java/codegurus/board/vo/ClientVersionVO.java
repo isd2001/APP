@@ -29,7 +29,7 @@ public class ClientVersionVO {
     @ApiModelProperty(notes = "버전코드")
     private String versionCode;
 
-    @ApiModelProperty(notes = "강제 갱신")
+    @ApiModelProperty(notes = "강제 갱신, 자연수 이 값이 0보다 크면 강제 업데이트(업데이트를 안할 시 앱 이용 불가)")
     private String forcingUpdateOrnot;
 
     @ApiModelProperty(notes = "갱신 구분")

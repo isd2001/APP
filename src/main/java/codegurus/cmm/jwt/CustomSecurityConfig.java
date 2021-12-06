@@ -80,6 +80,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
             , "/board/*" // 전부 로그인 없이 조회되어야함
             , "/schedule/subjectList" // 전부 로그인 없이 조회되어야함
             , "/schedule/bookScheduleList" // 전부 로그인 없이 조회되어야함
+            , "/clientVersionCheck" // 전부 로그인 없이 조회되어야함
     };
 
     /**

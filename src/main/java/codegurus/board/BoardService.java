@@ -104,7 +104,7 @@ public class BoardService {
      */
     public ResClientVersionCheckVO clientVersionChcek(ReqClientVersionCheckVO reqVo, ResClientVersionCheckVO resVo) {
 
-        ClientVersionVO item = boardDAO.SelectClientVersionCheck(reqVo); // 이용약관, 개인정보, 마케팅활용 동의 조회
+        ClientVersionVO item = boardDAO.SelectClientVersionCheck(reqVo);
 
         if(item == null) {
             SystemUtil.returnNoSearchResult();
