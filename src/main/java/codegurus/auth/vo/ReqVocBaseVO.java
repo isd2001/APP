@@ -63,10 +63,10 @@ public class ReqVocBaseVO extends ReqBaseVO {
      * type
      *
      *  A: 자녀교육컨설팅인 경우
-     *  B: 모의수업 신청
+     *  C: 모의수업 신청
      */
     @JsonIgnore
-    protected String type = "A";
+    protected String type = "C";
 
     // 제품번호
     @JsonIgnore
