@@ -658,6 +658,7 @@ public class AuthService implements UserDetailsService {
         vp.put("child_sx1", reqVo.getGender());
         vp.put("prod_id1", reqVo.getProdId1());
         vp.put("acpt_dt", acptDt);
+        vp.put("vi_choice_item1", "APP");
         vocDAO.callSpSetAcpt(vp); // 호출
         reqVo.setVocRsltCode(StringUtil.trim(vp.get("rsltcode")));
         reqVo.setVocRsltMsg(StringUtil.trim(vp.get("rsltmsg")));
