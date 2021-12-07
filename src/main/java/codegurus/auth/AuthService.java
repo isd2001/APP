@@ -340,14 +340,14 @@ public class AuthService implements UserDetailsService {
         String userManageId = null;
 
         // 로그인 중에도 인증에 추가되서 수정함
-        UserVO check = cacheService.getTokenUser();
-
-        if(check != null) {
-            userManageId = check.getUserManageId();
-        }
-
-        if(userManageId == null) {
+        if(StringUtil.isNotBlank(reqVo.getUserManageIdEnc())) {
             userManageId = cryptoService.decrypt(reqVo.getUserManageIdEnc());
+        } else {
+            UserVO check = cacheService.getTokenUser();
+
+            if(check != null) {
+                userManageId = check.getUserManageId();
+            }
         }
 
         log.debug("## userManageId:[{}]", userManageId);
