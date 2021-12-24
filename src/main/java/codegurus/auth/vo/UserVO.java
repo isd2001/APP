@@ -72,6 +72,8 @@ public class UserVO extends BaseVO {
 	@JsonIgnore
 	private String promotionAgreeOrnot;
 	@JsonIgnore
+	private String appPushAgreeOrnot;
+	@JsonIgnore
 	private String locationinfoAgreeOrnot;
 	@JsonIgnore
 	private String termofuseAgreeDate;
@@ -79,6 +81,8 @@ public class UserVO extends BaseVO {
 	private String personalinfoAgreeDate;
 	@JsonIgnore
 	private String promotionAgreeDate;
+	@JsonIgnore
+	private String appPushAgreeDate;
 	@JsonIgnore
 	private String locationinfoAgreeDate;
 

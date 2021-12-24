@@ -28,4 +28,7 @@ public interface AuthDAO {
     List<String> selectUserSubjectList(String userManageId);
     int updateUserInfoByFullmemberAuth(ReqContractInfoVO reqVo);
     int updateTrialManageId(ReqAuthVO reqVo);
+
+    int deleteAppPushToken(ReqAuthVO reqVo);
+    int insertAppPushToken(ReqAuthVO reqVo);
 }

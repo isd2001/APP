@@ -35,12 +35,14 @@
                 termofuse_agree_ornot,
                 personalinfo_agree_ornot,
                 promotion_agree_ornot,
+                app_push_agree_ornot,
                 <!-- locationinfo_agree_ornot, --><!-- 필요하면 사용  -->
                 termofuse_agree_date,
                 personalinfo_agree_date,
                 promotion_agree_date,
+                app_push_agree_date,
+                <!-- locationinfo_agree_date, --><!-- 필요하면 사용  -->
             </if>
-            <!-- locationinfo_agree_date, -->
             reg_id,
             reg_date,
             modify_id,
@@ -66,6 +68,7 @@
                #{termofuseAgreeOrnot},
                #{personalinfoAgreeOrnot},
                #{promotionAgreeOrnot},
+               #{promotionAgreeOrnot},
                <!-- #{locationinfoAgreeOrnot}, -->
                <choose>
                    <when test='termofuseAgreeOrnot != null and termofuseAgreeOrnot != "" and termofuseAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
@@ -73,6 +76,10 @@
                </choose>
                <choose>
                    <when test='personalinfoAgreeOrnot != null and personalinfoAgreeOrnot != "" and personalinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+                   <otherwise>null,</otherwise>
+               </choose>
+               <choose>
+                   <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
                    <otherwise>null,</otherwise>
                </choose>
                <choose>
@@ -412,4 +419,35 @@
         WHERE user_id = #{username}
           and delete_ornot = 'N'
     </update>
+
+    <update id="deleteAppPushToken">
+        UPDATE /* deleteAppPushToken */
+            app_push_token
+        SET
+            delete_ornot = 'Y'
+            , modify_id = #{userManageId}
+        WHERE push_token = #{pushToken}
+          and client_type = #{clientType}
+          and delete_ornot = 'N'
+    </update>
+
+    <insert id="insertAppPushToken">
+        INSERT /* insertAppPushToken */
+        INTO app_push_token
+        (
+            user_manage_id,
+            push_token,
+            client_type,
+            reg_id,
+            modify_id
+        )
+        VALUES
+        (
+            #{userManageId},
+            #{pushToken},
+            #{clientType},
+            #{userManageId},
+            #{userManageId}
+        )
+    </insert>
 </mapper>

@@ -140,7 +140,14 @@ public class AuthService implements UserDetailsService {
 //                .build();
 //        refreshTokenRepository.save(refreshToken);
 
-        // TODO: 이 회원이 사용할 수 있는 온라인상품/과목/월 조회
+        // 앱 푸시 토큰 저장
+        if(reqVo.getPushToken() != null && reqVo.getClientType() != null) {
+            UserVO vo = commonDAO.selectUserByUserId(reqVo.getUsername());
+            reqVo.setUserManageId(vo.getUserManageId());
+
+            authDAO.deleteAppPushToken(reqVo);
+            authDAO.insertAppPushToken(reqVo);
+        }
 
         return resVo;
 

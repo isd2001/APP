@@ -72,14 +72,17 @@
 		/* updatePromotionAgree */
 		UPDATE user_manage
 		SET promotion_agree_ornot = #{promotionAgreeOrnot}
-		WHERE 1=1
-		  and user_manage_id = #{userManageId}
+		<choose>
+			<when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>, promotion_agree_date = CURRENT_TIMESTAMP</when>
+			<otherwise>, promotion_agree_date = null</otherwise>
+		</choose>
+		WHERE user_manage_id = #{userManageId}
 	</update>
 
-	<!-- 마케팅 활용 동의 업데이트 -->
+	<!-- 버전정보 확인 -->
 	<select id="SelectClientVersionCheck" resultType="ClientVersionVO">
 		/* SelectClientVersionCheck */
-		SELECT /* selectClientVersion */
+		SELECT
 			client_version_id,
 			client_name,
 			client_division,

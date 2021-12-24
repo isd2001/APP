@@ -351,7 +351,12 @@
         SET
             name = #{name},
             birth = #{birth},
-            birth_year = SUBSTR(#{birth}, 1, 4)
+            birth_year = SUBSTR(#{birth}, 1, 4),
+            app_push_agree_ornot = #{appPushAgreeOrnot},
+            <choose>
+                <when test='appPushAgreeOrnot != null and appPushAgreeOrnot != "" and appPushAgreeOrnot == "Y"'>app_push_agree_date = CURRENT_TIMESTAMP</when>
+                <otherwise>app_push_agree_date = null</otherwise>
+            </choose>
         WHERE USER_MANAGE_ID = #{userManageId}
     </update>
 
