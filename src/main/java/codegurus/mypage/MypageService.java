@@ -150,6 +150,7 @@ public class MypageService {
         resVo.setAuthCode(userVO.getAuthCode());
         resVo.setTrialEndDate(userVO.getTrialEndDate());
         resVo.setPromotionAgreeOrnot(userVO.getPromotionAgreeOrnot());
+        resVo.setAppPushAgreeOrnot(userVO.getAppPushAgreeOrnot());
 
         if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)) {
             // 체험회원 정보 조회

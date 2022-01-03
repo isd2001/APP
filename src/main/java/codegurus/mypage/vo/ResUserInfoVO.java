@@ -42,4 +42,7 @@ public class ResUserInfoVO extends ResBaseVO {
 
     @ApiModelProperty(example = "Y", notes = "마케팅 정보 동의 여부(Y, N)")
     private String promotionAgreeOrnot;
+
+    @ApiModelProperty(example = "Y", notes = "앱 푸시 동의 여부(Y, N)")
+    private String appPushAgreeOrnot;
 }
