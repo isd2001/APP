@@ -59,6 +59,10 @@ public class ReqVocBaseVO extends ReqBaseVO {
     @Size(min = 0, max = 200)
     protected String addressDetail;
 
+    @ApiModelProperty(notes = "시군구", required = true, example = "서울특별시 강동구", position = 10)
+    @NotBlank
+    protected String sigungu;
+
     /**
      * type
      *

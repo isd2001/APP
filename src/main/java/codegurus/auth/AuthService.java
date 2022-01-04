@@ -20,6 +20,7 @@ import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.method.P;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -657,8 +658,15 @@ public class AuthService implements UserDetailsService {
         vp.put("cust_nm", reqVo.getParentName());
         vp.put("zipcode", reqVo.getZipcode());
         vp.put("zipcode_sq", reqVo.getZipcodeSq());
-        vp.put("addr1", reqVo.getAddress());
-        vp.put("addr2", reqVo.getAddressDetail());
+        vp.put("addr1", reqVo.getSigungu());
+
+        String addr2 = "";
+        if(reqVo.getAddress() != null && reqVo.getSigungu() != null) {
+            addr2 = reqVo.getAddress().replace(reqVo.getSigungu(), "").trim();
+        }
+
+        vp.put("addr2", addr2);
+        vp.put("suppl_addr", reqVo.getAddressDetail());
         vp.put("hdph", reqVo.getParentCellphone());
         vp.put("child_nm1", reqVo.getName());
         vp.put("child_brt1", reqVo.getBirth());
