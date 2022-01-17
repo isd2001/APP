@@ -4,6 +4,7 @@
 <mapper namespace="codegurus.mypage.MypageDAO">
     <!-- 나의진도 목록 조회 -->
     <resultMap id="MagnitudeMap" type="ContentsHistoryVO" autoMapping="true">
+        <id property="contentsHistoryId" column="contents_history_id"/>
         <association property="book" javaType="BookVO" autoMapping="true">
             <id property="bookId" column="book_id"/>
             <result property="bookThumbnailFileId" column="book_thumbnail_file_id"/>
@@ -23,7 +24,11 @@
                 <result property="downloadCnt" column="OUTLINEVOICE_DOWNLOAD_CNT" />
             </association>
             <association property="cate" javaType="CateVO" autoMapping="true" />
-            <collection property="labelList" ofType="LabelVO" autoMapping="true" />
+
+            <collection property="labelList" ofType="LabelVO" autoMapping="true">
+                <id property="labelManageId" column="label_manage_id" />
+                <result property="labelTitle" column="label_title"/>
+            </collection>
         </association>
     </resultMap>
     <select id="selectmagnitudeList" resultMap="MagnitudeMap">
@@ -140,7 +145,10 @@
         <association property="bookThumbnail" javaType="FileVO" autoMapping="true">
             <id property="atchFileId" column="book_thumbnail_file_id"/>
         </association>
-        <collection property="labelList" ofType="LabelVO" autoMapping="true" />
+        <collection property="labelList" ofType="LabelVO" autoMapping="true">
+            <id property="labelManageId" column="label_manage_id" />
+            <result property="labelTitle" column="label_title"/>
+        </collection>
     </resultMap>
     <select id="selectBookcaseList" resultMap="BookcaseMap">
         SELECT /* selectBookcaseList */
@@ -332,7 +340,7 @@
 
     <!-- 회원정보 조회 > 부모정보 조회 -->
     <select id="selectParentInfo" resultType="LHMap">
-        SELECT /* electParentInfo */
+        SELECT /* selectParentInfo */
             c.intg_parent_cust_id,
             c.parent_sap_cust_id,
             c.parent_cust_nm ,
