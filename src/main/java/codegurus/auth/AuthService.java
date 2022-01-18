@@ -226,6 +226,45 @@ public class AuthService implements UserDetailsService {
         // INSERT (사용자 권한 매핑)
         authDAO.insertUserAuth(reqVo);
 
+        // 회원가입시 상품별 스케줄 간격 추가
+        if(reqVo instanceof ReqRegisterVO
+            && StringUtil.isNotBlank(((ReqRegisterVO) reqVo).getGrade())) {
+            // 간격값은 현재 나이와 선택한 나이의 차이 개월수를 계산하는것이다.
+            int selectGrade = 0;
+            int birthGrade = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(((ReqRegisterVO) reqVo).getBirth().substring(0, 4)) + 1;
+
+            switch (((ReqRegisterVO) reqVo).getGrade()) {
+                case "예비초등" :
+                    selectGrade = 7;
+                    break;
+                case "1학년" :
+                    selectGrade = 8;
+                    break;
+                case "2학년" :
+                    selectGrade = 9;
+                    break;
+                case "3학년" :
+                    selectGrade = 10;
+                    break;
+                case "4학년" :
+                    selectGrade = 11;
+                    break;
+            }
+
+            // 잘못된 요청
+            if(selectGrade != 0) {
+                ScheduleIntervalVO scheduleIntervalVO = new ScheduleIntervalVO();
+                scheduleIntervalVO.setValue((selectGrade - birthGrade) * 12);
+                scheduleIntervalVO.setUserManageId(reqVo.getUserManageId());
+
+                scheduleIntervalVO.setProductId(ProductEnum.상품_스마트독서.getProductId());
+                authDAO.insertScheduleInterval(scheduleIntervalVO);
+
+                scheduleIntervalVO.setProductId(ProductEnum.상품_플라톤.getProductId());
+                authDAO.insertScheduleInterval(scheduleIntervalVO);
+            }
+        }
+
         // 웅답에 암호화된 사용자관리ID 바인딩 (이후 정회원인증을 위해서)
         resVo.setUserManageIdEnc(cryptoService.encrypt(reqVo.getUserManageId()));
 

@@ -450,4 +450,24 @@
             #{userManageId}
         )
     </insert>
+
+    <insert id="insertScheduleInterval">
+        INSERT /* insertScheduleInterval */
+        INTO schedule_interval
+        (
+            user_manage_id,
+            product_id,
+            `value`,
+            reg_id,
+            modify_id
+        )
+        VALUES
+        (
+            #{userManageId},
+            #{productId},
+            #{value},
+            #{userManageId},
+            #{userManageId}
+        )
+    </insert>
 </mapper>

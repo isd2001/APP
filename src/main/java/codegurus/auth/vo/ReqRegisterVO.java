@@ -54,6 +54,9 @@ public class ReqRegisterVO extends ReqRegisterBaseVO {
     @Pattern(regexp = StringUtil.REGEX_YN)
     private String promotionAgreeOrnot;
 
+    @ApiModelProperty(notes = "학년 정보(예비초등, 1학년, 2학년, 3학년, 4학년)", example = "예비초등", position = 9)
+    private String grade;
+
     // 아직까지 요건이 없는 필드인 듯
 //    @ApiModelProperty(notes = "위치정보 동의 여부", required = false, example = "Y", position = 14, hidden = true)
 //    @Pattern(regexp=StringUtil.REGEX_YN)
