@@ -290,7 +290,7 @@
         AND a.relation_code = 'PARENT' -- 관계: 학부모
         AND a.user_manage_id = b.user_manage_id
         AND b.user_manage_id = c.user_manage_id
-        AND c.user_status_code = '00'
+        AND (c.user_status_code = '00' or c.user_status_code = '01')
         AND c.auth_id = d.auth_id
         AND a.delete_ornot = 'N'
         AND b.delete_ornot = 'N'
@@ -470,4 +470,39 @@
             #{userManageId}
         )
     </insert>
+
+    <!-- 스케줄 표시할때 필요한 계약정보 조회 -->
+    <select id="selectScheduleInfo" resultType="ScheduleInfoVO">
+        SELECT /* selectScheduleInfo */
+            user_manage.USER_ID
+             , user_manage.user_manage_id
+             , user_manage.BIRTH
+             , user_auth.USER_STATUS_CODE
+             , auth.PRODUCT_ID
+             , auth.AUTH_CODE
+             , svc_mh_edu_cntr_cp.EDU_STAT_CD
+             , svc_mh_edu_cntr_cp.EDU_STAT_CD_NM
+             , svc_mh_edu_cntr_cp.NO_CLASS_CHAG_DT
+             , IFNULL(schedule_interval.`value`, 0) AS `value`
+        FROM user_manage
+        INNER JOIN user_auth
+                ON user_manage.USER_MANAGE_ID = user_auth.USER_MANAGE_ID
+                    AND user_manage.DELETE_ORNOT = 'N'
+                    AND user_auth.DELETE_ORNOT = 'N'
+        LEFT JOIN auth
+               ON user_auth.AUTH_ID = auth.AUTH_ID
+        LEFT JOIN user_subject
+               ON user_manage.USER_MANAGE_ID = user_subject.USER_MANAGE_ID
+                   AND user_subject.DELETE_ORNOT = 'N'
+        LEFT JOIN svc_mh_edu_cntr_cp
+               ON svc_mh_edu_cntr_cp.intg_edu_cntr_id = user_subject.intg_edu_cntr_id
+                   AND svc_mh_edu_cntr_cp.DELETE_ORNOT = 'N'
+        LEFT JOIN schedule_interval
+               ON user_manage.USER_MANAGE_ID = schedule_interval.user_manage_id
+                   AND schedule_interval.delete_ornot = 'N'
+                   AND schedule_interval.product_id = #{productId}
+        WHERE auth.PRODUCT_ID = #{productId}
+          AND user_manage.user_manage_id = #{userManageId}
+          AND auth.AUTH_CODE = '01'
+    </select>
 </mapper>

@@ -12,14 +12,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReqThisMonthBookVO extends ReqBaseVO {
+    @ApiModelProperty(notes = "상품ID", example ="1")
+    private String productId = "1";
 
-    @ApiModelProperty(notes = "온라인 과목 ID, 현재 사용자 정보를 가져와서 세팅해야하는데 테스트용으로 넣어둠", example ="1")
+    @ApiModelProperty(notes = "온라인 과목 ID, 테스트때 썼던 컬럼 삭제 대상", example ="1")
     private int onlineSubjectId;
 
-    @ApiModelProperty(notes = "연도", example ="2021", hidden = true)
+    @ApiModelProperty(notes = "연도, 테스트때 썼던 컬럼 삭제 대상", example ="2021", hidden = true)
     private String year;
 
-    @ApiModelProperty(notes = "월 (01~12), 원래는 지금 해당하는 월을 조회해야하는데 테스트용으로 넣어둠", example ="01")
+    @ApiModelProperty(notes = "월 (01~12), 테스트때 썼던 컬럼 삭제 대상", example ="01")
     private String month;
 
     @JsonIgnore
