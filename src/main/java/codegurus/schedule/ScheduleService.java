@@ -178,7 +178,7 @@ public class ScheduleService {
                 }
 
                 // 하나라도 수업중이면 인증한것으로 인식
-                if(info.getEduStatCd().equals(EduStatCdEnum.수업중.getCode())) {
+                if(info.getEduStatCd() != null && info.getEduStatCd().equals(EduStatCdEnum.수업중.getCode())) {
                     isSet = true;
                     birth = info.getBirth();
                     scheduleIntervalValue = info.getValue();
