@@ -74,6 +74,9 @@ public class BookVO {
     @ApiModelProperty(notes = "트레일러 활성화 여부", example = "Y")
     private String trailerActiveOrnot;
 
+    @ApiModelProperty(notes = "책 Json", example = "{}")
+    private String bookJson;
+
     @ApiModelProperty(notes = "책 라벨 목록")
     private List<LabelVO> labelList;
 }

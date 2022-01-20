@@ -32,6 +32,7 @@
 
 			book.book_introduction,
 		    book.book_thumbnail_file_id,
+			book.book_json,
 
 			labelManage.label_manage_id,
 			labelManage.label_title,
@@ -173,6 +174,7 @@
 
 			book.book_title,
 			book.book_thumbnail_file_id,
+		    book.book_json,
 
 			COMTNFILE.ATCH_FILE_ID,
 			COMTNFILEDETAIL.FILE_CN,
