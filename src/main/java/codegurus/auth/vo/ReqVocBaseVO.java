@@ -44,24 +44,28 @@ public class ReqVocBaseVO extends ReqBaseVO {
     @Pattern(regexp= StringUtil.REGEX_CELLPHONE)
     protected String parentCellphone;
 
-    @ApiModelProperty(notes = "우편번호", required = true, example = "05869", position = 7)
+    @ApiModelProperty(notes = "우편번호", required = true, example = "03182", position = 7)
     @NotBlank
     @Pattern(regexp=StringUtil.REGEX_ZIPCODE)
     protected String zipcode;
 
-    @ApiModelProperty(notes = "주소", required = true, example = "서울특별시 강동구 진황도로 189(둔촌동)", position = 8)
+    @ApiModelProperty(notes = "주소", required = true, example = "서울특별시 종로구 새문안로 91", position = 8)
     @NotBlank
     @Size(min = 0, max = 200)
     protected String address;
 
-    @ApiModelProperty(notes = "상세주소", required = true, example = "101동 1405호", position = 9)
+    @ApiModelProperty(notes = "상세주소", required = true, example = "12층 1216호", position = 9)
     @NotBlank
     @Size(min = 0, max = 200)
     protected String addressDetail;
 
-    @ApiModelProperty(notes = "시군구", required = true, example = "서울특별시 강동구", position = 10)
+    @ApiModelProperty(notes = "시군구", required = true, example = "서울특별시 종로구", position = 11)
     @NotBlank
     protected String sigungu;
+
+    // 우편번호시퀀스
+    @ApiModelProperty(notes = "우편번호시퀀스", example = "00044", position = 12)
+    protected String zipcodeSq = Constants.우편번호시퀀스_기본값;
 
     /**
      * type
@@ -75,10 +79,6 @@ public class ReqVocBaseVO extends ReqBaseVO {
     // 제품번호
     @JsonIgnore
     protected String prodId1 = "D010";
-
-    // 우편번호시퀀스
-    @JsonIgnore
-    protected String zipcodeSq = Constants.우편번호시퀀스_기본값;
 
     // VOC 프로시저 호출결과
     @JsonIgnore
