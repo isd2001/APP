@@ -61,6 +61,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
             , "/checkplus_main.jsp"
             , "/checkplus_fail.jsp"
             , "/checkplus_success.jsp"
+            , "/juso.jsp"
     }; // TODO: 파일 다운로드(/download)에 대한 권한제어 필요 여부 검토
     public static final String[] REGEX_MATCHERS_WEB_IGNORE = { "\\A/WEB-INF/jsp/.*\\Z" };
 
