@@ -36,9 +36,6 @@
         <input type="hidden" id="address1" name="">
         <input type="hidden" id="address2" name="">
         <input type="hidden" id="userZipcodeSeq" name="">
-        <button type="button" >
-            주소검색
-        </button>
 
         <div id="addrPop">
         </div>
