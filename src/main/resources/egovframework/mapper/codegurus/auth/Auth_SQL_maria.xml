@@ -451,6 +451,29 @@
         )
     </insert>
 
+    <!-- 회원의 상품별 스케줄 간격을 가져온다 -->
+    <select id="selectScheduleInterval" resultType="int">
+        SELECT /* selectScheduleInterval */
+            IFNULL(MAX(`value`), 0) AS `value`
+        FROM schedule_interval
+        WHERE delete_ornot = 'N'
+          and user_manage_id = #{userManageId}
+          and product_id = #{productId}
+    </select>
+
+    <!-- 회원의 상품별 스케줄 간격을 삭제 -->
+    <update id="deleteScheduleInterval">
+        UPDATE /* deleteScheduleInterval */
+            schedule_interval
+        SET
+            delete_ornot = 'Y'
+          , modify_id = #{userManageId}
+          , modify_date = CURRENT_TIMESTAMP
+        WHERE user_manage_id = #{userManageId}
+          and product_id = #{productId}
+    </update>
+
+    <!-- 회원의 상품별 스케줄 간격을 입력 -->
     <insert id="insertScheduleInterval">
         INSERT /* insertScheduleInterval */
         INTO schedule_interval

@@ -1,10 +1,10 @@
 package codegurus.mypage;
 
-import codegurus.auth.vo.ReqDeleteUserVO;
-import codegurus.auth.vo.ReqUpdatePWVO;
-import codegurus.auth.vo.UserVO;
+import codegurus.auth.AuthDAO;
+import codegurus.auth.vo.*;
 import codegurus.cmm.CommonDAO;
 import codegurus.cmm.cache.CacheService;
+import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.exception.CustomException;
 import codegurus.cmm.jwt.TokenProvider;
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,9 @@ public class MypageService {
 
     @Autowired
     private CacheService cacheService;
+
+    @Autowired
+    private AuthDAO authDAO;
 
     /**
      * 나의 진도 목록 조회
@@ -180,8 +184,41 @@ public class MypageService {
     public ResBaseVO updateUserInfo(ReqUserUpdateVO reqVo) {
 
         ResBaseVO vo = new ResBaseVO();
+
+        // 생일을 바꾸면 스케줄 정보도 바꿔야할수있다..
+        UserVO userVO = cacheService.getTokenUser();
+
+        String currentBirthYear = userVO.getBirth();
+
+        if(currentBirthYear == null) currentBirthYear = "2022";
+        else currentBirthYear = currentBirthYear.substring(0, 4);
+
         int updated = mypageDAO.updateUserInfo(reqVo);
         SystemUtil.checkUpdatedCount(updated, 1);
+
+        String updateBirthYear = reqVo.getBirth();
+
+        if(updateBirthYear == null) updateBirthYear = "2022";
+        else updateBirthYear = updateBirthYear.substring(0, 4);
+
+        if(!currentBirthYear.equals(updateBirthYear)) {
+            // 스케줄을 수정할수없도록 보정해줘야함. 수정하는 연도가 높아진다는것은 나이가 어려지는것 + 반대는 -
+            int gap = (Integer.parseInt(updateBirthYear) - Integer.parseInt(currentBirthYear)) * 12;
+
+            ScheduleIntervalVO scheduleIntervalVO = new ScheduleIntervalVO();
+            scheduleIntervalVO.setUserManageId(reqVo.getUserManageId());
+            scheduleIntervalVO.setProductId(ProductEnum.상품_스마트독서.getProductId());
+            int currentScheduleIntervalValue = authDAO.selectScheduleInterval(scheduleIntervalVO);
+            authDAO.deleteScheduleInterval(scheduleIntervalVO);
+            scheduleIntervalVO.setValue(currentScheduleIntervalValue + gap);
+            authDAO.insertScheduleInterval(scheduleIntervalVO);
+
+            scheduleIntervalVO.setProductId(ProductEnum.상품_플라톤.getProductId());
+            currentScheduleIntervalValue = authDAO.selectScheduleInterval(scheduleIntervalVO);
+            authDAO.deleteScheduleInterval(scheduleIntervalVO);
+            scheduleIntervalVO.setValue(currentScheduleIntervalValue + gap);
+            authDAO.insertScheduleInterval(scheduleIntervalVO);
+        }
 
         return vo;
     }

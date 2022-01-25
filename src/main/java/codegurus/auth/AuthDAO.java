@@ -33,6 +33,8 @@ public interface AuthDAO {
     int insertAppPushToken(ReqAuthVO reqVo);
 
     int insertScheduleInterval(ScheduleIntervalVO reqVo);
+    int selectScheduleInterval(ScheduleIntervalVO reqVo);
+    int deleteScheduleInterval(ScheduleIntervalVO reqVo);
 
     List<ScheduleInfoVO> selectScheduleInfo(ScheduleInfoVO reqVo);
 }
