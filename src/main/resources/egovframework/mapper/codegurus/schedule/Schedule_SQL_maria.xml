@@ -33,6 +33,13 @@
 			<association property="bookThumbnail" javaType="FileVO" autoMapping="true" />
 		</association>
 	</resultMap>
+
+	<resultMap id="ThisMonthBookListMap" type="ResScheduleVO" autoMapping="true">
+		<association property="book" javaType = "BookVO" autoMapping="true">
+			<result property="bookId" column="book_id"/>
+		</association>
+	</resultMap>
+
 	<!-- 도서일정 목록 조회 -->
 	<select id="selectBookScheduleList" resultMap="ScheduleMap">
 		SELECT /* selectBookScheduleList */
@@ -75,13 +82,22 @@
 	</select>
 
 	<!-- 이달의 도서 목록 조회 -->
-	<select id="selectThisMonthBookList" resultType="ResScheduleVO">
+	<select id="selectThisMonthBookList" resultMap="ThisMonthBookListMap">
 		SELECT /* selectThisMonthBookList */
 			online_subject_schedule.online_subject_schedule_id,
 			online_subject_schedule.online_subject_id,
 			online_subject_schedule.`position`,
+
+			book.book_id,
+			book.book_title,
+			book.book_thumbnail_file_id,
+
 			case when contents_history.end_date is not null then 'Y' else 'N' end as resultYn -- 조회된 도서 목록 중 완료된 학습 여부
         FROM online_subject_schedule
+		LEFT JOIN contents
+		on online_subject_schedule.contents_id = contents.contents_id
+		LEFT JOIN book
+		on contents.book_id = book.book_id
 		LEFT JOIN contents_history
 			on online_subject_schedule.online_subject_schedule_id = contents_history.online_subject_schedule_id
 			and contents_history.user_manage_id = #{userManageId}
