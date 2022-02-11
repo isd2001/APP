@@ -87,6 +87,8 @@
 			online_subject_schedule.online_subject_schedule_id,
 			online_subject_schedule.online_subject_id,
 			online_subject_schedule.`position`,
+			online_subject_schedule.`month`,
+			online_subject_schedule.seq,
 
 			book.book_id,
 			book.book_title,
