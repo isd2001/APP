@@ -103,8 +103,6 @@
 		LEFT JOIN contents_history
 			on online_subject_schedule.online_subject_schedule_id = contents_history.online_subject_schedule_id
 			and contents_history.user_manage_id = #{userManageId}
-			-- and DATE_FORMAT(end_date,'%m')
-			and DATE_FORMAT(contents_history.end_date, '%m') = #{month}
         WHERE 1=1
           AND online_subject_schedule.online_subject_id = #{onlineSubjectId} <!-- 원래는 사용자 정보에서 불러와야하는데 테스트용으로 넣어둠 -->
           AND online_subject_schedule.`month` = #{month} <!-- DATE_FORMAT(CURRENT_DATE , '%m') 테스트용으로 원하는 월을 불러오게 하기 위해 임시로 주석처리 -->
