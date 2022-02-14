@@ -65,7 +65,7 @@ public class ReqVocBaseVO extends ReqBaseVO {
 
     // 우편번호시퀀스
     @ApiModelProperty(notes = "우편번호시퀀스", example = "00044", position = 12)
-    protected String zipcodeSq = Constants.우편번호시퀀스_기본값;
+    protected String zipcodeSq = "";
 
     /**
      * type

@@ -58,7 +58,7 @@ public class Test2ProJUnit {
         qp.put("type", "A");
         qp.put("cust_nm", "박주리");
         qp.put("zipcode", "05869");
-        qp.put("zipcode_sq", Constants.우편번호시퀀스_기본값);
+        qp.put("zipcode_sq", "00000");
         qp.put("addr1", "서울특별시 강동구 진황도로 189(둔촌동)");
         qp.put("addr2", "101동 1405호");
         qp.put("hdph", "01012345678");
