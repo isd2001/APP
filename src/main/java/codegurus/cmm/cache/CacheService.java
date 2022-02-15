@@ -5,6 +5,7 @@ import codegurus.auth.vo.ResTrialUserVO;
 import codegurus.auth.vo.UserVO;
 import codegurus.cmm.CommonDAO;
 import codegurus.cmm.constants.AuthEnum;
+import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.jwt.JwtFilter;
 import codegurus.cmm.jwt.TokenProvider;
 import codegurus.cmm.util.StringUtil;
@@ -15,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -58,7 +61,7 @@ public class CacheService {
 	 *
 	 * @return
 	 */
-	public UserVO getTokenUser(){
+	public UserVO getTokenUser(String productId){
 		String jwt = StringUtil.trim(JwtFilter.resolveToken(httpRequest));
 
 		Claims claims = tokenProvider.parseClaims(jwt);
@@ -84,7 +87,10 @@ public class CacheService {
 		} else {
 			log.debug("## 회원일 경우");
 
-			return commonDAO.selectUserByUserId(username);
+			Map<String, String> params = new HashMap<>();
+			params.put("userId", username);
+			params.put("productId", productId);
+			return commonDAO.selectUserByUserId(params);
 		}
 
 //		Object principal = getPrincipal();
@@ -102,7 +108,7 @@ public class CacheService {
 	 */
 	public String getUserManageId(){
 
-		return Optional.ofNullable(getTokenUser()).map(o -> o.getUserManageId()).orElse("");
+		return Optional.ofNullable(getTokenUser(ProductEnum.상품_스마트독서.getProductId())).map(o -> o.getUserManageId()).orElse("");
 	}
 
 }

@@ -17,18 +17,18 @@ public interface CommonDAO {
 	/**
 	 * 사용자ID로 사용자정보 획득
 	 *
-	 * @param userId 사용자ID(로그인ID)임
+	 * @param params
 	 * @return
 	 */
-	UserVO selectUserByUserId(String userId);
+	UserVO selectUserByUserId(Map<String, String> params);
 
 	/**
 	 * 사용자ID로 사용자정보 획득
 	 *
-	 * @param userManageId 사용자관리ID(숫자 PK)임
+	 * @param params
 	 * @return
 	 */
-	UserVO selectUserByUserManageId(String userManageId);
+	UserVO selectUserByUserManageId(Map<String, String> params);
 
 	/**
 	 *

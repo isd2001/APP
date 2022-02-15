@@ -18,6 +18,8 @@ import com.google.common.collect.ImmutableMap;
 import egovframework.rte.fdl.cryptography.EgovEnvCryptoService;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,10 +31,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.net.ssl.*;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.cert.X509Certificate;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -142,7 +152,11 @@ public class AuthService implements UserDetailsService {
 
         // 앱 푸시 토큰 저장
         if(reqVo.getPushToken() != null && reqVo.getClientType() != null) {
-            UserVO vo = commonDAO.selectUserByUserId(reqVo.getUsername());
+            Map<String, String> params = new HashMap<>();
+            params.put("userId", reqVo.getUsername());
+            params.put("productId", ProductEnum.상품_스마트독서.getProductId());
+
+            UserVO vo = commonDAO.selectUserByUserId(params);
             reqVo.setUserManageId(vo.getUserManageId());
 
             authDAO.deleteAppPushToken(reqVo);
@@ -165,7 +179,11 @@ public class AuthService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserVO vo = commonDAO.selectUserByUserId(username);
+        Map<String, String> params = new HashMap<>();
+        params.put("userId", username);
+        params.put("productId", ProductEnum.상품_스마트독서.getProductId());
+
+        UserVO vo = commonDAO.selectUserByUserId(params);
         if (vo == null) {
             WebUtil.setResCodeOverride(httpRequest, ResCodeEnum.INFO_0009); // 응답코드 재정의
             throw new UsernameNotFoundException(username);
@@ -259,6 +277,7 @@ public class AuthService implements UserDetailsService {
                 scheduleIntervalVO.setProductId(ProductEnum.상품_스마트독서.getProductId());
                 authDAO.insertScheduleInterval(scheduleIntervalVO);
 
+                // TODO 플라톤은 4개로 쪼개져있어서 조금 다르게 구현해야할듯하다..
                 scheduleIntervalVO.setProductId(ProductEnum.상품_플라톤.getProductId());
                 authDAO.insertScheduleInterval(scheduleIntervalVO);
             }
@@ -367,7 +386,7 @@ public class AuthService implements UserDetailsService {
 
         ResContractInfoVO resVo = new ResContractInfoVO();
 
-        List<ResContractInfoElemVO> list = authDAO.selectContractInfo(reqVo);
+        List<ResContractInfoElemVO> list = getContractInfoSapApi(reqVo);
         resVo.setList(list);
 
         return resVo;
@@ -389,7 +408,7 @@ public class AuthService implements UserDetailsService {
         if(StringUtil.isNotBlank(reqVo.getUserManageIdEnc())) {
             userManageId = cryptoService.decrypt(reqVo.getUserManageIdEnc());
         } else {
-            UserVO check = cacheService.getTokenUser();
+            UserVO check = cacheService.getTokenUser(ProductEnum.상품_스마트독서.getProductId());
 
             if(check != null) {
                 userManageId = check.getUserManageId();
@@ -399,7 +418,7 @@ public class AuthService implements UserDetailsService {
         log.debug("## userManageId:[{}]", userManageId);
 
         // 교육계약 사본 조회
-        List<ResContractInfoElemVO> list = authDAO.selectContractInfo(reqVo);
+        List<ResContractInfoElemVO> list = getContractInfoSapApi(reqVo);
         if (list.size() == 0) {
             throw new CustomException(ResCodeEnum.INFO_0016);
         }
@@ -413,7 +432,10 @@ public class AuthService implements UserDetailsService {
 //        }
 
         // 방급 가입한 회원정보와 대조 - TODO: 이 제약조건이 과하면 삭제하자.
-        UserVO userVo = commonDAO.selectUserByUserManageId(userManageId);
+        Map<String, String> params = new HashMap<>();
+        params.put("userManageId", userManageId);
+        params.put("productId", reqVo.getProductId());
+        UserVO userVo = commonDAO.selectUserByUserManageId(params);
         log.debug("## userVo:[{}]", JsonUtil.toJson(userVo));
         log.debug("## 정회원인증 > 개인정보 대조 - 회원정보 사용자명:[{}], 파라미터 사용자 명:[{}], 회원정보 생년월일:[{}], 파라미터 생년월일:[{}]", userVo.getName(), reqVo.getName(), userVo.getBirth(), reqVo.getBirth());
         if(! (userVo.getName().equals(reqVo.getName()) && userVo.getBirth().equals(reqVo.getBirth()))){
@@ -434,19 +456,62 @@ public class AuthService implements UserDetailsService {
             throw new CustomException(ResCodeEnum.INFO_1000.name(), ProjectConstants.PRODUCT_NAME+ " 관련 오프라인 상품중 수업중인 건이 존재하지 않으므로 정회원인증을 중단합니다.");
         }*/
 
+        // 상품코드 리스트를 저장한다
+        List<String> productIdList = new ArrayList<>();
+
         // 사용자과목 레코드 생성
         for(ResContractInfoElemVO vo : list){
-            authDAO.insertUserSubject(ImmutableMap.of(
-                    "userManageId", userManageId,
-                    "intgEduCntrId", vo.getIntgEduCntrId(),
-                    "intgCustId", vo.getIntgCustId(),
-                    "intgSubjId", vo.getIntgSubjId(),
-                    "regId", userManageId));
+            productIdList.add(vo.getProductId());
+
+//            authDAO.insertUserSubject(ImmutableMap.of(
+//                    "userManageId", userManageId,
+//                    "intgEduCntrId", vo.getIntgEduCntrId(),
+//                    "intgCustId", vo.getIntgCustId(),
+//                    "intgSubjId", vo.getIntgSubjId(),
+//                    "regId", userManageId));
+
+            Map<String, String> vp = new LinkedHashMap<>();
+            vp.put("userManageId", userManageId);
+            vp.put("intgEduCntrId", vo.getIntgEduCntrId());
+            vp.put("intgCustId", vo.getIntgCustId());
+            vp.put("intgSubjId", vo.getIntgSubjId());
+            vp.put("eduCntrOid", vo.getEduCntrOid());
+            vp.put("sapCustId", vo.getSapCustId());
+            vp.put("sapSubjId", vo.getSapSubjId());
+            vp.put("regId", userManageId);
+
+            // 이미 연결된 계약정보일 수 있어서 확인 필요, 있는 경우에는 스킵
+            int cnt = authDAO.selecttUserSubjectCount(vp);
+
+            if(cnt < 1) {
+                authDAO.insertUserSubject(vp);
+            }
         }
 
-        // 사용자권한 변경 (학생일반회원 -> 학생정회원)
-        int updated = authDAO.updateUserAuth(ImmutableMap.of("authId", AuthEnum.스마트독서_학생정회원.getAuthId(), "modifyId", userManageId, "userManageId", userManageId, "productId", ProjectConstants.PRODUCT_ID));
-        SystemUtil.checkUpdatedCount(updated, 1);
+        // 중복제거
+        productIdList = productIdList.stream().distinct().collect(Collectors.toList());
+
+        if(productIdList.size() > 0) {
+            for(String productId : productIdList) {
+                // 새로운 상품의 경우 권한이 없을 수 있어서 조회해서 있는지 확인이 필요, 없는 경우에는 insert
+                Map<String, String> vp = new LinkedHashMap<>();
+                vp.put("userManageId", userManageId);
+                vp.put("productId", productId);
+                int cnt = authDAO.selectUserAuthCount(vp);
+
+                if(cnt > 0) {
+                    // 사용자권한 변경 (학생일반회원 -> 학생정회원)
+                    int updated = authDAO.updateUserAuth(ImmutableMap.of("authId", AuthEnum.getAuthIdByAuthCode(productId, "01"), "modifyId", userManageId, "userManageId", userManageId, "productId", productId));
+                    SystemUtil.checkUpdatedCount(updated, 1);
+                } else {
+                    // 사용자권한 입력 (학생일반회원 -> 학생정회원)
+                    ReqRegisterVO vo = new ReqRegisterVO();
+                    vo.setUserManageId(userManageId);
+                    vo.setAuthId(AuthEnum.getAuthIdByAuthCode(productId, "01"));
+                    authDAO.insertUserAuth(vo);
+                }
+            }
+        }
 
         // 현재 정회원인증시 정회원 인증에 필요한 값들을 제외한 값 (이메일, 주소 관련 정보)등은 따로 어디에 저장할 것인지 정의된 것이 없다.
         // 그래서 해당 정보를 그냥 날려버리는 대신 학생회원 레코드에 저장하도록 하였다. (추후에 어떻게 할 것인지는 논의 필요)
@@ -454,6 +519,154 @@ public class AuthService implements UserDetailsService {
         authDAO.updateUserInfoByFullmemberAuth(reqVo);
 
         return resVo;
+    }
+
+    /**
+     * 계약정보 조회 sap api 추가
+     *
+     * @param reqVo
+     * @return
+     */
+    public List<ResContractInfoElemVO> getContractInfoSapApi(ReqContractInfoVO reqVo) {
+
+        List<ResContractInfoElemVO> list = authDAO.selectContractInfo(reqVo);
+
+        // 아직 DW에 적재가 안되었을 수 있기 때문에 sap api 추가 연동
+        if(list == null || list.size() <= 0) {
+
+            Base64.Encoder encoder = Base64.getEncoder();
+            Base64.Decoder decoder = Base64.getDecoder();
+
+            // 생년월일, 전화번호 -를 추가해야함
+            String birth = reqVo.getBirth().substring(0, 4) + "-" + reqVo.getBirth().substring(4, 6) + "-" + reqVo.getBirth().substring(6, 8);
+            String parentBirth = reqVo.getParentBirth().substring(0, 4) + "-" + reqVo.getParentBirth().substring(4, 6) + "-" + reqVo.getParentBirth().substring(6, 8);
+            String parentCellphone = reqVo.getParentCellphone().substring(0, 3) + "-" + reqVo.getParentCellphone().substring(3, 7) + "-" + reqVo.getParentCellphone().substring(7, 11);
+            String matnr = "";
+
+            Map<String, String> param = new HashMap<>();
+            param.put("productId", reqVo.getProductId());
+
+            List<String> sapSubjIdList = authDAO.selectOnlineSubjectSapMappingList(param).stream().map(el -> String.valueOf(el.get("sap_subject_id"))).distinct().collect(Collectors.toList());;
+
+            for(String sap_subject_id : sapSubjIdList) {
+                if(!matnr.equals("")) {
+                    matnr += "|" + sap_subject_id;
+                } else {
+                    matnr += sap_subject_id;
+                }
+            }
+            // TODO test
+//            matnr += "|800863|800829|801293";
+
+            String url = "https://hsapi.eduhansol.co.kr/smart/smartPlatonCust"
+                    + "?childName=" + new String(encoder.encode(reqVo.getName().getBytes()))
+                    + "&childBirth=" + new String(encoder.encode(birth.getBytes()))
+                    + "&parentName=" + new String(encoder.encode(reqVo.getParentName().getBytes()))
+                    + "&parentBirth=" + new String(encoder.encode(parentBirth.getBytes()))
+                    + "&parentTel=" + new String(encoder.encode(parentCellphone.getBytes()))
+                    + "&matnr=" + new String(encoder.encode(matnr.getBytes()));
+
+            String responseMessage = "";
+            InputStream is = null;
+            InputStreamReader isr =  null;
+            BufferedReader br = null;
+            StringBuffer sb = new StringBuffer();
+
+            try {
+                URL httpsUrl = new URL(url);
+                HttpsURLConnection conn = (HttpsURLConnection) httpsUrl.openConnection();
+                conn.setUseCaches(false);
+                conn.setConnectTimeout(40000);
+                conn.setDoOutput(true); //post 방식 설정
+
+                conn.setHostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+
+                TrustManager[] trustAllCerts = new TrustManager[] {
+                    new X509TrustManager() {
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return null;
+                        }
+                        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+
+                        }
+                        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+
+                        }
+                    }
+                };
+                SSLContext sc = SSLContext.getInstance("SSL");
+                sc.init(null, trustAllCerts, new java.security.SecureRandom());
+                HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+                conn.connect();
+                responseMessage = conn.getHeaderField(0);
+
+                System.out.println(responseMessage);
+                // HTTP/1.1 200 OK 형식의 http 헤더 결과 코드가 출력됩니다.
+                is = conn.getInputStream();
+                isr = new InputStreamReader(is);
+                br = new BufferedReader(isr);
+                String line = null;
+                while((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+                System.out.println(sb);
+                //html 부분 출력
+
+                JSONObject jsonObject = new JSONObject(sb.toString());
+                if(jsonObject.getJSONObject("result") != null && jsonObject.getJSONObject("result").getString("type").equals("Uw==")) {
+                    System.out.println("sap api 성공");
+
+                    JSONObject result = jsonObject.getJSONObject("result");
+                    JSONObject custInfo = result.getJSONArray("custInfo").getJSONObject(0);
+
+                    // base64 decode
+                    String parentSapCustId = new String(decoder.decode(custInfo.getString("KUNNR").getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+                    String sapCustId = new String(decoder.decode(custInfo.getString("KUNNR_C").getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+
+
+                    JSONArray subjectInfo = result.getJSONArray("subjectInfo");
+
+                    for(int i = 0; i < subjectInfo.length(); i++) {
+                        JSONObject subject = subjectInfo.getJSONObject(i);
+
+                        String eduCntrOid = new String(decoder.decode(subject.getString("VBELN").getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+                        String sapSubjId = new String(decoder.decode(subject.getString("MATNR").getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8).substring(12, 18);
+
+                        Map<String, String> map = new HashMap<>();
+                        map.put("CUST_NM", reqVo.getName());
+                        map.put("BIRTHDT", reqVo.getBirth());
+                        map.put("SAP_CUST_ID", sapCustId);
+                        map.put("EDU_STAT_CD", EduStatCdEnum.수업중.getCode());
+                        map.put("EDU_STAT_CD_NM", "수업중");
+                        map.put("EDU_CNTR_OID", eduCntrOid);
+                        map.put("PARENT_CUST_NM", reqVo.getParentName());
+                        map.put("PARENT_BIRTHDT", reqVo.getParentBirth());
+                        map.put("PARENT_HANDPHONE", reqVo.getParentCellphone());
+                        map.put("PARENT_SAP_CUST_ID", parentSapCustId);
+                        map.put("SAP_SUBJ_ID", sapSubjId);
+
+                        authDAO.insertEduCntrCp(map);
+                    }
+
+                    // 모두 처리후 다시 조회
+                    list = authDAO.selectContractInfo(reqVo);
+                } else {
+                    // 로그인 실패
+                    // result 안에 message 에러메시지가 있긴한데 생략
+                    throw new CustomException(ResCodeEnum.INFO_0009);
+                }
+            } catch(Exception e){
+                e.printStackTrace();
+                throw new CustomException(ResCodeEnum.INFO_0009);
+            }
+        }
+        return list;
     }
 
     /**
@@ -611,8 +824,12 @@ public class AuthService implements UserDetailsService {
 
         ResConnectChildVO resVo = new ResConnectChildVO();
 
+        Map<String, String> params = new HashMap<>();
+        params.put("userId", reqVo.getChildUsername());
+        params.put("productId", ProductEnum.상품_스마트독서.getProductId());
+
         // 자녀회원 select
-        UserVO userVo = commonDAO.selectUserByUserId(reqVo.getChildUsername());
+        UserVO userVo = commonDAO.selectUserByUserId(params);
         if (userVo == null) {
             throw new CustomException(ResCodeEnum.INFO_0009);
         }
@@ -709,7 +926,7 @@ public class AuthService implements UserDetailsService {
         vp.put("child_nm1", reqVo.getName());
         vp.put("child_brt1", reqVo.getBirth());
         vp.put("child_sx1", reqVo.getGender());
-        vp.put("prod_id1", reqVo.getProdId1());
+        vp.put("prod_id1", ProductEnum.getProductEnumByProductId(reqVo.getProductId()).getProdId1());
         vp.put("acpt_dt", acptDt);
         vp.put("choice_item1", "APP");
         vp.put("prod_gb", "platonsmartapp");

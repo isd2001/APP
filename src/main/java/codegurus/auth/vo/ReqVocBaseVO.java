@@ -1,6 +1,7 @@
 package codegurus.auth.vo;
 
 import codegurus.cmm.constants.Constants;
+import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.validation.DateCheck;
 import codegurus.cmm.vo.req.ReqBaseVO;
@@ -67,6 +68,9 @@ public class ReqVocBaseVO extends ReqBaseVO {
     @ApiModelProperty(notes = "우편번호시퀀스", example = "00044", position = 12)
     protected String zipcodeSq = "";
 
+    @ApiModelProperty(notes = "상품 ID (스마트독서 : 1, 플라톤 : 2, 공백은 전체)", example = "", position = 13)
+    private String productId = "";
+
     /**
      * type
      *
@@ -75,10 +79,6 @@ public class ReqVocBaseVO extends ReqBaseVO {
      */
     @JsonIgnore
     protected String type = "C";
-
-    // 제품번호
-    @JsonIgnore
-    protected String prodId1 = "D010";
 
     // VOC 프로시저 호출결과
     @JsonIgnore

@@ -12,6 +12,7 @@ public interface AuthDAO {
     void insertRegisterInfo(ReqRegisterBaseVO reqVo);
     void insertTrialRegister(ReqTrialRegisterVO reqVo);
     void insertUserAuth(ReqRegisterBaseVO params);
+    int selectUserAuthCount(Map<String, String> map);
     ResTrialUserVO selectTrialUser(String trialManageId);
     void insertSmsCert(ReqSmsCertVO reqVo);
     Map<String, String> selectSmsCert(ReqSmsCertCfmVO reqVo);
@@ -24,6 +25,7 @@ public interface AuthDAO {
     List<ResContractInfoElemVO> selectContractInfo(ReqContractInfoVO reqVo);
     Map<String, Object> callGetOnlineSubjInfo(Map<String, Object> map);
     void insertUserSubject(Map<String, String> map);
+    int selecttUserSubjectCount(Map<String, String> map);
     int updateUserAuth(Map<String, Object> map);
     List<String> selectUserSubjectList(String userManageId);
     int updateUserInfoByFullmemberAuth(ReqContractInfoVO reqVo);
@@ -37,4 +39,7 @@ public interface AuthDAO {
     int deleteScheduleInterval(ScheduleIntervalVO reqVo);
 
     List<ScheduleInfoVO> selectScheduleInfo(ScheduleInfoVO reqVo);
+
+    List<Map<String, Object>> selectOnlineSubjectSapMappingList(Map<String, String> map);
+    void insertEduCntrCp(Map<String, String> map);
 }

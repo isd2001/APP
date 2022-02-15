@@ -22,9 +22,9 @@ public class ReqRegisterVO extends ReqRegisterBaseVO {
 
     // 권한구분
     @JsonIgnore
-    private final String authId = AuthEnum.스마트독서_학생일반회원.getAuthId();   // user_auth insert용
+    private String authId = AuthEnum.스마트독서_학생일반회원.getAuthId();   // user_auth insert용
     @JsonIgnore
-    private final String authCode = AuthEnum.스마트독서_학생일반회원.getAuthCode(); // mybatis 분기 처리용
+    private String authCode = AuthEnum.스마트독서_학생일반회원.getAuthCode(); // mybatis 분기 처리용
 
     @ApiModelProperty(notes = "이름", required = true, example = "이지은", position = 3)
     @NotBlank

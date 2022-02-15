@@ -30,9 +30,6 @@ public class ReqTrialRegisterVO extends ReqVocBaseVO {
     @JsonIgnore
     private String trialEndDate;
 
-    @JsonIgnore
-    private String productId = ProductEnum.상품_스마트독서.getProductId();
-
     // 상담내용상세
     @JsonIgnore
     private String acptDt = "스마트독서 체험회원 등록";

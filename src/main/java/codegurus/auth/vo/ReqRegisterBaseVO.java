@@ -1,9 +1,6 @@
 package codegurus.auth.vo;
 
-import codegurus.cmm.constants.AuthEnum;
-import codegurus.cmm.constants.Constants;
 import codegurus.cmm.util.StringUtil;
-import codegurus.cmm.validation.DateCheck;
 import codegurus.cmm.vo.req.ReqBaseVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +9,6 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 /**
  * 회원가입 요청 Base VO

@@ -1,7 +1,6 @@
 package codegurus.auth.vo;
 
 import codegurus.cmm.constants.Constants;
-import codegurus.cmm.constants.ProjectConstants;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.validation.DateCheck;
 import codegurus.cmm.vo.req.ReqBaseVO;
@@ -10,7 +9,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -21,9 +19,6 @@ import javax.validation.constraints.Size;
 @Setter
 public class ReqContractInfoVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "암호화된 사용자번호 (회원가입API의 응답을 그대로 전송)", example = "Mr8zSeC5fJVfVoj6sbgxMQ%3D%3D", position = 1)
-    protected String userManageIdEnc;
-
     @ApiModelProperty(notes = "이름", required = true, example = "최효린", position = 2)
     @NotBlank
     @Size(min = 2, max = 20)
@@ -33,12 +28,6 @@ public class ReqContractInfoVO extends ReqBaseVO {
     @NotBlank
     @DateCheck(format = Constants.DF8)
     protected String birth;
-
-    // 현재로서는 사용되지 않는 필드
-    @ApiModelProperty(notes = "성별", required = true, example = "M", position = 5)
-    @NotBlank
-    @Pattern(regexp=StringUtil.REGEX_GENDER)
-    protected String gender;
 
     @ApiModelProperty(notes = "부모 이름", required = true, example = "방성안", position = 4)
     @NotBlank
@@ -54,24 +43,9 @@ public class ReqContractInfoVO extends ReqBaseVO {
     @Pattern(regexp= StringUtil.REGEX_CELLPHONE)
     protected String parentCellphone;
 
-    @ApiModelProperty(notes = "이메일주소", required = false, example = "abc@inter.net", position = 7)
-    @Email
-    protected String email;
-
-    @ApiModelProperty(notes = "우편번호", required = false, example = "05869", position = 8)
-    @Pattern(regexp=StringUtil.REGEX_ZIPCODE)
-    protected String zipcode;
-
-    @ApiModelProperty(notes = "주소", required = false, example = "서울특별시 강동구 진황도로 189(둔촌동)", position = 9)
-    @Size(min = 0, max = 200)
-    protected String address;
-
-    @ApiModelProperty(notes = "상세주소", required = false, example = "101동 1405호", position = 10)
-    @Size(min = 0, max = 200)
-    protected String addressDetail;
-
-    @JsonIgnore
-    protected String productId = ProjectConstants.PRODUCT_ID;
+    // 인증시 모든 상품 다 조회하는것으로
+    @ApiModelProperty(notes = "정회원인증 할 상품ID (1:스마트독서, 2:리터러시, 안보낼 경우 모두 확인)", required = false, example = "", position = 10)
+    protected String productId = "";
 
     @JsonIgnore
     protected String userManageId;
@@ -91,26 +65,6 @@ public class ReqContractInfoVO extends ReqBaseVO {
     }
     public String getParentCellphone() {
         return StringUtil.trim(parentCellphone);
-    }
-
-    // 기타 getter
-    public String getUserManageIdEnc() {
-        return userManageIdEnc;
-    }
-    public String getGender() {
-        return gender;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public String getZipcode() {
-        return zipcode;
-    }
-    public String getAddress() {
-        return address;
-    }
-    public String getAddressDetail() {
-        return addressDetail;
     }
     public String getProductId() {
         return productId;

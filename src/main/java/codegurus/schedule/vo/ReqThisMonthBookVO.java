@@ -1,5 +1,6 @@
 package codegurus.schedule.vo;
 
+import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.vo.req.ReqBaseVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @Setter
 public class ReqThisMonthBookVO extends ReqBaseVO {
     @ApiModelProperty(notes = "상품ID", example ="1")
-    private String productId = "1";
+    private String productId = ProductEnum.상품_스마트독서.getProductId();
 
     @ApiModelProperty(notes = "온라인 과목 ID, 테스트때 썼던 컬럼 삭제 대상", example ="1")
     private int onlineSubjectId;

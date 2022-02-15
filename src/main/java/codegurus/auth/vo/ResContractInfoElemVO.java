@@ -38,6 +38,12 @@ public class ResContractInfoElemVO extends ResBaseVO {
     private String intgSubjId;
 
     @JsonIgnore
+    private String eduCntrOid;
+
+    @JsonIgnore
+    private String sapCustId;
+
+    @JsonIgnore
     private String sapSubjId;
 
     @JsonIgnore
@@ -48,6 +54,9 @@ public class ResContractInfoElemVO extends ResBaseVO {
 
     @JsonIgnore
     private String prodtNm;
+
+    @JsonIgnore
+    private String productId;
 
     @JsonIgnore
     private String serviceTitle;

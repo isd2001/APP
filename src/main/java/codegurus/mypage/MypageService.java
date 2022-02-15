@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -143,7 +144,7 @@ public class MypageService {
 
         ResUserInfoVO resVo = new ResUserInfoVO();
 
-        UserVO userVO = cacheService.getTokenUser();
+        UserVO userVO = cacheService.getTokenUser(reqVo.getProductId());
         if(userVO == null){ SystemUtil.returnNoSearchResult(); }
 
         resVo.setUsername(userVO.getUsername());
@@ -186,7 +187,7 @@ public class MypageService {
         ResBaseVO vo = new ResBaseVO();
 
         // 생일을 바꾸면 스케줄 정보도 바꿔야할수있다..
-        UserVO userVO = cacheService.getTokenUser();
+        UserVO userVO = cacheService.getTokenUser(ProductEnum.상품_스마트독서.getProductId());
 
         String currentBirthYear = userVO.getBirth();
 
@@ -254,7 +255,10 @@ public class MypageService {
         ResBaseVO resVo = new ResBaseVO();
 
         // 사용자정보 조회
-        UserVO userVo = commonDAO.selectUserByUserManageId(reqVo.getUserManageId());
+        Map<String, String> params = new HashMap<>();
+        params.put("userManageId", reqVo.getUserManageId());
+        params.put("productId", ProductEnum.상품_스마트독서.getProductId());
+        UserVO userVo = commonDAO.selectUserByUserManageId(params);
         if (userVo == null) {
             throw new CustomException(ResCodeEnum.INFO_0009);
         }
@@ -280,7 +284,10 @@ public class MypageService {
         ResBaseVO resVo = new ResBaseVO();
 
         // 사용자정보 조회
-        UserVO userVo = commonDAO.selectUserByUserManageId(reqVo.getUserManageId());
+        Map<String, String> params = new HashMap<>();
+        params.put("userManageId", reqVo.getUserManageId());
+        params.put("productId", ProductEnum.상품_스마트독서.getProductId());
+        UserVO userVo = commonDAO.selectUserByUserManageId(params);
         if (userVo == null) {
             throw new CustomException(ResCodeEnum.INFO_0009);
         }

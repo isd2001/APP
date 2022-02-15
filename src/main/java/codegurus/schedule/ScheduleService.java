@@ -104,7 +104,7 @@ public class ScheduleService {
             nowMonth = "" + monthValue;
         }
 
-        UserVO userVO = cacheService.getTokenUser();
+        UserVO userVO = cacheService.getTokenUser(reqVo.getProductId());
         log.debug("## getUsername:", userVO.getUsername());
         if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)) {
             // 체험회원 룰 적용
@@ -157,6 +157,7 @@ public class ScheduleService {
         }*/
         // 여기까지 하드코딩
         // 실제 정회원, 수업중이 하나라도 있으면 해당
+        // TODO 리터러시 스케줄 관련해서 수정해야함
         else {
             ScheduleInfoVO scheduleInfoVO = new ScheduleInfoVO();
             scheduleInfoVO.setProductId(reqVo.getProductId());

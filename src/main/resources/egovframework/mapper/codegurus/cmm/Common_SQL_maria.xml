@@ -57,8 +57,9 @@
 		left join trial_manage d ON a.trial_manage_id = d.trial_manage_id and d.delete_ornot = 'N'
 		and d.trial_status_code = '00'
 		and DF14(d.trial_end_date) > DF14(NOW())
- 		where a.user_manage_id = #{value}
+ 		where a.user_manage_id = #{userManageId}
 		and a.delete_ornot <![CDATA[ <> ]]> 'Y'
+		and c.product_id = #{productId}
 	</select>
 
 	<!-- 사용자ID로 사용자정보 획득 -->
@@ -71,8 +72,9 @@
 		left join trial_manage d ON a.trial_manage_id = d.trial_manage_id and d.delete_ornot = 'N'
 		and d.trial_status_code = '00'
 		and DF14(d.trial_end_date) > DF14(NOW())
- 		where a.user_id = #{value}
+ 		where a.user_id = #{userId}
 		and a.delete_ornot <![CDATA[ <> ]]> 'Y'
+		and c.product_id = #{productId}
 	</select>
 
 	<!-- atchFileId의 목록을 받아서 FileVO list를 리턴한다. -->

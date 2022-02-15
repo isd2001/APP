@@ -115,6 +115,18 @@
         )
     </insert>
 
+    <!-- 사용자 권한 갯수 조회 -->
+    <select id="selectUserAuthCount" resultType="int">
+        SELECT /* selectUserAuthCount */
+               COUNT(*)
+        FROM user_auth
+        INNER JOIN auth
+        ON user_auth.AUTH_ID = auth.AUTH_ID
+            AND user_auth.USER_MANAGE_ID = #{userManageId}
+            AND user_auth.DELETE_ORNOT = 'N'
+            AND auth.PRODUCT_ID = #{productId}
+    </select>
+
     <!-- 체험회원 등록 -->
     <insert id="insertTrialRegister" useGeneratedKeys="true" keyProperty="trialManageId">
         INSERT /* insertTrialRegister */
@@ -305,13 +317,16 @@
             ,intg_cust_id
             ,intg_parent_cust_id
             ,a.intg_subj_id
-            ,sap_subj_id
+            ,a.edu_cntr_oid
+            ,a.sap_cust_id
+            ,a.sap_subj_id
             ,edu_stat_cd
             ,edu_stat_cd_nm
             ,cust_nm as name
             ,parent_cust_nm as parentName
             ,intg_prodt_id /* SAP 데이터가 거의 없음 */
             ,prodt_nm
+            ,d.product_id
             ,b.sap_subject_title
             ,d.product_name as service_title
             ,c.subject_title
@@ -322,14 +337,91 @@
         AND parent_cust_nm = #{parentName}
         AND parent_birthdt = #{parentBirth}
         AND parent_handphone = #{parentCellphone}
-        -- AND a.sap_subj_id = b.sap_subject_id -- 구버전
-        AND a.intg_subj_id = b.intg_subj_id
+        AND a.sap_subj_id = b.sap_subject_id
+        -- AND a.intg_subj_id = b.intg_subj_id -- 구버전
         AND b.online_subject_id = c.online_subject_id
-        AND c.product_id = #{productId}
+        <if test='productId != null and productId != ""'>
+            AND c.product_id = #{productId}
+        </if>
         AND c.product_id = d.product_id
         AND a.delete_ornot = 'N'
-        GROUP BY intg_edu_cntr_id
+        AND a.edu_stat_cd = 'DA21010'
+        GROUP BY edu_cntr_oid
     </select>
+
+    <!-- 정회원 인증 정보 조회 -->
+    <select id="selecttUserSubjectCount" resultType="int">
+        SELECT /* selecttUserSubjectCount */
+            COUNT(*)
+        FROM user_subject
+        WHERE edu_cntr_oid = #{eduCntrOid}
+            AND user_manage_id = #{userManageId}
+            AND delete_ornot = 'N'
+    </select>
+
+    <!-- 온라인과목SAP매핑 조회 (오프라인과목 전체목록 조회) -->
+    <select id="selectOnlineSubjectSapMappingList" resultType="LHMap">
+        select /* selectOnlineSubjectSapMappingList */
+            online_subject_sap_mapping.online_subject_sap_mapping_id,
+            online_subject_sap_mapping.online_subject_id,
+            online_subject_sap_mapping.intg_subj_id,
+            online_subject_sap_mapping.sap_subject_id,
+            online_subject_sap_mapping.sap_subject_code,
+            online_subject_sap_mapping.sap_subject_title,
+            online_subject_sap_mapping.use_ornot,
+            online_subject_sap_mapping.reg_id,
+            online_subject_sap_mapping.reg_date,
+            online_subject_sap_mapping.modify_id,
+            online_subject_sap_mapping.modify_date,
+            online_subject_sap_mapping.delete_ornot
+        from online_subject_sap_mapping
+        inner join online_subject
+        ON online_subject_sap_mapping.ONLINE_SUBJECT_ID = online_subject.ONLINE_SUBJECT_ID
+           and online_subject_sap_mapping.use_ornot = 'Y'
+           and online_subject_sap_mapping.delete_ornot = 'N'
+            <if test='productId != null and productId != ""'>
+                AND online_subject.PRODUCT_ID = #{productId}
+            </if>
+    </select>
+
+    <!-- 교육계약 테이블 사본 insert -->
+    <insert id="insertEduCntrCp">
+        INSERT /* insertEduCntrCp */
+        INTO svc_mh_edu_cntr_cp
+        (
+        cust_nm,
+        birthdt,
+        sap_cust_id,
+        edu_stat_cd,
+        edu_stat_cd_nm,
+        edu_cntr_oid,
+        parent_cust_nm,
+        parent_birthdt,
+        parent_handphone,
+        parent_sap_cust_id,
+        sap_subj_id,
+        reg_date,
+        batch_exec_date,
+        delete_ornot
+        )
+        VALUES
+        (
+        #{CUST_NM},
+        #{BIRTHDT},
+        #{SAP_CUST_ID},
+        #{EDU_STAT_CD},
+        #{EDU_STAT_CD_NM},
+        #{EDU_CNTR_OID},
+        #{PARENT_CUST_NM},
+        #{PARENT_BIRTHDT},
+        #{PARENT_HANDPHONE},
+        #{PARENT_SAP_CUST_ID},
+        #{SAP_SUBJ_ID},
+        CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP,
+        'N'
+        )
+    </insert>
 
     <!-- 정회원 인증 (사용자과목 insert) -->
     <insert id="insertUserSubject">
@@ -340,6 +432,9 @@
             intg_edu_cntr_id,
             intg_cust_id,
             intg_subj_id,
+            edu_cntr_oid,
+            sap_cust_id,
+            sap_subj_id,
             reg_id,
             modify_id
         )
@@ -349,6 +444,9 @@
             #{intgEduCntrId},
             #{intgCustId},
             #{intgSubjId},
+            #{eduCntrOid},
+            #{sapCustId},
+            #{sapSubjId},
             #{regId},
             #{regId}
         )
@@ -518,7 +616,7 @@
                ON user_manage.USER_MANAGE_ID = user_subject.USER_MANAGE_ID
                    AND user_subject.DELETE_ORNOT = 'N'
         LEFT JOIN svc_mh_edu_cntr_cp
-               ON svc_mh_edu_cntr_cp.intg_edu_cntr_id = user_subject.intg_edu_cntr_id
+               ON svc_mh_edu_cntr_cp.edu_cntr_oid = user_subject.edu_cntr_oid
                    AND svc_mh_edu_cntr_cp.DELETE_ORNOT = 'N'
         LEFT JOIN schedule_interval
                ON user_manage.USER_MANAGE_ID = schedule_interval.user_manage_id
