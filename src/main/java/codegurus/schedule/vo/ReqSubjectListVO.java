@@ -1,5 +1,6 @@
 package codegurus.schedule.vo;
 
+import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.vo.req.ReqBaseVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -18,6 +19,6 @@ public class ReqSubjectListVO extends ReqBaseVO {
 
     // 신버전
     @ApiModelProperty(notes = "1:스마트독서, 2:플라톤2.0", example ="1")
-    private String productId;
+    private String productId = ProductEnum.상품_스마트독서.getProductId();
 
 }

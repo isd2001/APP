@@ -1,12 +1,11 @@
 package codegurus.auth.vo;
 
 import codegurus.cmm.vo.BaseVO;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 자녀 정보 VO
+ * 스케줄 정보 VO
  */
 @Getter
 @Setter

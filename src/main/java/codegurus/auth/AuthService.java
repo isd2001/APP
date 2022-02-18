@@ -434,7 +434,7 @@ public class AuthService implements UserDetailsService {
         // 방급 가입한 회원정보와 대조 - TODO: 이 제약조건이 과하면 삭제하자.
         Map<String, String> params = new HashMap<>();
         params.put("userManageId", userManageId);
-        params.put("productId", reqVo.getProductId());
+        params.put("productId", ProductEnum.상품_스마트독서.getProductId());
         UserVO userVo = commonDAO.selectUserByUserManageId(params);
         log.debug("## userVo:[{}]", JsonUtil.toJson(userVo));
         log.debug("## 정회원인증 > 개인정보 대조 - 회원정보 사용자명:[{}], 파라미터 사용자 명:[{}], 회원정보 생년월일:[{}], 파라미터 생년월일:[{}]", userVo.getName(), reqVo.getName(), userVo.getBirth(), reqVo.getBirth());

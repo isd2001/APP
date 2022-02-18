@@ -68,7 +68,7 @@ public class ReqVocBaseVO extends ReqBaseVO {
     @ApiModelProperty(notes = "우편번호시퀀스", example = "00044", position = 12)
     protected String zipcodeSq = "";
 
-    @ApiModelProperty(notes = "상품 ID (스마트독서 : 1, 플라톤 : 2, 공백은 전체)", example = "", position = 13)
+    @ApiModelProperty(notes = "상품 ID (스마트독서 : 1, 플라톤 : 2)", example = "1", position = 13)
     private String productId = ProductEnum.상품_스마트독서.getProductId();
 
     /**
