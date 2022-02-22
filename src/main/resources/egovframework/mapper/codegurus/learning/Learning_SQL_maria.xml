@@ -602,4 +602,43 @@
 		and template.template_id=14
 		and history.contents_history_id =#{contentsHistoryId}
 	</select>
+
+	<!-- 수업 준비 이력 조회 -->
+	<select id="selectClassPreparationHistory" resultType="ClassPreparationHistoryVO">
+		SELECT /* selectClassPreparationHistory */
+			class_preparation_history_id
+			, user_manage_id
+			, contents_id
+			, readingbook_complete
+			, koreanfile_complete
+		FROM class_preparation_history
+		WHERE delete_ornot = 'N'
+			AND user_manage_id = #{userManageId}
+			AND contents_id = #{contentsId}
+		ORDER BY modify_date DESC
+		LIMIT 1
+	</select>
+
+	<!-- 수업 준비 이력 등록 -->
+	<insert id="insertClassPreparationHistory" useGeneratedKeys="true" keyProperty="ClassPreparationHistoryVO">
+		INSERT /* insertClassPreparationHistory */
+		INTO class_preparation_history
+		(
+			user_manage_id
+			, contents_id
+			, readingbook_complete
+			, koreanfile_complete
+			, reg_id
+			, modify_id
+		)
+		VALUES
+		(
+			#{userManageId}
+			, #{contentsId}
+			, #{readingbookComplete}
+			, #{koreanfileComplete}
+			, #{userManageId}
+			, #{userManageId}
+		)
+	</insert>
 </mapper>

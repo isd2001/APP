@@ -79,4 +79,7 @@ public class BookVO {
 
     @ApiModelProperty(notes = "책 라벨 목록")
     private List<LabelVO> labelList;
+
+    @ApiModelProperty(notes = "수업 준비 이력, 이력이 없을시 공백")
+    private ClassPreparationHistoryVO classPreparationHistory;
 }

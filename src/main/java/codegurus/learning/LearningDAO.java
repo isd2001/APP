@@ -21,4 +21,7 @@ public interface LearningDAO {
     void insertTemplateInstHistory(List<TemplateInstHistorySaveVo> insertTemplateInstList);
 
     ContentsHistoryVO selectContentsHistory(ReqLearningResultVO reqVo);
+
+    ClassPreparationHistoryVO selectClassPreparationHistory(ClassPreparationHistoryVO reqVo);
+    void insertClassPreparationHistory(ClassPreparationHistoryVO reqVo);
 }

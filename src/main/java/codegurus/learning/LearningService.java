@@ -1,5 +1,6 @@
 package codegurus.learning;
 
+import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.service.FileService;
 import codegurus.cmm.util.SystemUtil;
 import codegurus.learning.vo.*;
@@ -24,6 +25,8 @@ public class LearningService {
     private FileService fileService;
     @Autowired
     private LearningDAO learningDAO;
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * 오늘의 학습 책 조회
@@ -35,6 +38,14 @@ public class LearningService {
 
         BookVO item = learningDAO.selectBookDetail(reqVo);
         if(item == null){ SystemUtil.returnNoSearchResult(); }  // 조회 결과 없음 리턴
+
+        ClassPreparationHistoryVO classPreparationHistory = new ClassPreparationHistoryVO();
+        classPreparationHistory.setContentsId(item.getContentsId());
+        classPreparationHistory.setUserManageId(cacheService.getUserManageId());
+
+        ClassPreparationHistoryVO item2 = learningDAO.selectClassPreparationHistory(classPreparationHistory);
+
+        item.setClassPreparationHistory(item2);
 
         resVo.setItem(item);
 
@@ -85,6 +96,15 @@ public class LearningService {
                 resVo.setResMsg("템플릿 인스턴스 이력 리스트 등록 완료");
             }
         }
+
+        if(reqVo.getClassPreparationHistory() != null && reqVo.getContentsId() != null) {
+            ClassPreparationHistoryVO classPreparationHistory = reqVo.getClassPreparationHistory();
+            classPreparationHistory.setUserManageId(reqVo.getUserManageId());
+            classPreparationHistory.setContentsId(reqVo.getContentsId());
+
+            learningDAO.insertClassPreparationHistory(classPreparationHistory);
+        }
+
         // 응답에 contentsId 바인딩
         resVo.setContentsHistoryId(reqVo.getContentsHistoryId());
         resVo.setOnlineSubjectScheduleId(reqVo.getOnlineSubjectScheduleId());
