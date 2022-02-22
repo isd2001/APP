@@ -1,5 +1,6 @@
 package codegurus.auth.vo;
 
+import codegurus.cmm.constants.AuthEnum;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.vo.req.ReqBaseVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,5 +36,11 @@ public class ReqRegisterBaseVO extends ReqBaseVO {
     // 평문 패스워드의 뒤 몇 글자를 마스킹 한 후, 암호화한 필드 (추후 비밀번호 찾기에서 사용하기 위해)
     @JsonIgnore
     protected String passwordMask;
+
+    // 권한구분
+    @JsonIgnore
+    private String authId = AuthEnum.스마트독서_학생일반회원.getAuthId();   // user_auth insert용
+    @JsonIgnore
+    private String authCode = AuthEnum.스마트독서_학생일반회원.getAuthCode(); // mybatis 분기 처리용
 
 }

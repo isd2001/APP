@@ -240,7 +240,11 @@ public class AuthService implements UserDetailsService {
         // INSERT (사용자관리)
         authDAO.insertRegisterInfo(reqVo);
 
-        // INSERT (사용자 권한 매핑)
+        // INSERT (사용자 권한 매핑) 상품별로 다 해줘야함.
+        // TODO 상품이 추가될때 수정
+        reqVo.setAuthId(AuthEnum.getAuthIdByAuthCode(ProductEnum.상품_스마트독서.getProductId(), "01"));
+        authDAO.insertUserAuth(reqVo);
+        reqVo.setAuthId(AuthEnum.getAuthIdByAuthCode(ProductEnum.상품_플라톤.getProductId(), "01"));
         authDAO.insertUserAuth(reqVo);
 
         // 회원가입시 상품별 스케줄 간격 추가
@@ -274,11 +278,13 @@ public class AuthService implements UserDetailsService {
                 scheduleIntervalVO.setValue((selectGrade - birthGrade) * 12);
                 scheduleIntervalVO.setUserManageId(reqVo.getUserManageId());
 
+                // TODO 상품이 추가될때 수정
                 scheduleIntervalVO.setProductId(ProductEnum.상품_스마트독서.getProductId());
                 authDAO.insertScheduleInterval(scheduleIntervalVO);
 
-                // TODO 플라톤은 4개로 쪼개져있어서 조금 다르게 구현해야할듯하다..
+                // 플라톤 상품은 4개 과목이 각각 계약이 따로여서 일단 월별로만 수정이 가능할듯해서 0으로 초기화한다
                 scheduleIntervalVO.setProductId(ProductEnum.상품_플라톤.getProductId());
+                scheduleIntervalVO.setValue(0);
                 authDAO.insertScheduleInterval(scheduleIntervalVO);
             }
         }

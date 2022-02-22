@@ -24,12 +24,6 @@ import javax.validation.constraints.Size;
 @Setter
 public class ReqRegisterParentVO extends ReqRegisterBaseVO {
 
-    // 권한구분
-    @JsonIgnore
-    private final String authId = AuthEnum.스마트독서_학부모.getAuthId();   // user_auth insert용
-    @JsonIgnore
-    private final String authCode = AuthEnum.스마트독서_학부모.getAuthCode(); // mybatis 분기 처리용
-
     @ApiModelProperty(notes = "이름", required = false, example = "김수현", position = 3)
     @Size(min = 0, max = 20)
     protected String name;
