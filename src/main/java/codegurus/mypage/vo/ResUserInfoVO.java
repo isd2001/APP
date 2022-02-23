@@ -45,7 +45,7 @@ public class ResUserInfoVO extends ResBaseVO {
 
     @ApiModelProperty(example = "Y", notes = "앱 푸시 동의 여부(Y, N)")
     private String appPushAgreeOrnot;
-    
+
     @ApiModelProperty(notes = "학년(예비초등, 1~4학년), 정회원 조회시에만 리턴됨", position = 18)
     protected String grade;
 
