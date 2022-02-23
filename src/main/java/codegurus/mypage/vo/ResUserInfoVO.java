@@ -51,5 +51,4 @@ public class ResUserInfoVO extends ResBaseVO {
 
     @ApiModelProperty(notes = "월(1~12), 정회원 조회시에만 리턴됨", position = 19)
     protected String month;
-    
 }
