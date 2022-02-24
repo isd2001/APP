@@ -242,9 +242,9 @@ public class AuthService implements UserDetailsService {
 
         // INSERT (사용자 권한 매핑) 상품별로 다 해줘야함.
         // TODO 상품이 추가될때 수정
-        reqVo.setAuthId(AuthEnum.getAuthIdByAuthCode(ProductEnum.상품_스마트독서.getProductId(), "01"));
+        reqVo.setAuthId(AuthEnum.getAuthIdByAuthCode(ProductEnum.상품_스마트독서.getProductId(), "02"));
         authDAO.insertUserAuth(reqVo);
-        reqVo.setAuthId(AuthEnum.getAuthIdByAuthCode(ProductEnum.상품_플라톤.getProductId(), "01"));
+        reqVo.setAuthId(AuthEnum.getAuthIdByAuthCode(ProductEnum.상품_플라톤.getProductId(), "02"));
         authDAO.insertUserAuth(reqVo);
 
         // 회원가입시 상품별 스케줄 간격 추가
