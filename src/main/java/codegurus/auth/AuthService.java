@@ -296,6 +296,46 @@ public class AuthService implements UserDetailsService {
     }
 
     /**
+     * 회원가입 학부모
+     *
+     * @param reqVo
+     * @return
+     */
+    public <T extends ReqRegisterBaseVO> ResRegisterVO registerParent(T reqVo) {
+
+        ResRegisterVO resVo = new ResRegisterVO();
+        reqVo.setAuthId(AuthEnum.스마트독서_학부모.getAuthId());
+        reqVo.setAuthCode(AuthEnum.스마트독서_학부모.getAuthId());
+
+        //------------- 기 등록 회원 여부 체크 - start -------------
+        // 화면에서 selectUserDup()를 통해 체크하고 있지만, 그래도 한 번 더 체크해 주자.
+        ReqDupCheckVO tmpVo = new ReqDupCheckVO();
+        tmpVo.setUsername(reqVo.getUsername());
+        int cnt = authDAO.selectUserDup(tmpVo);
+        log.debug("## 사용자 중복 확인 조회 카운트:[{}]", cnt);
+        if (cnt > 0) {
+            throw new CustomException(ResCodeEnum.INFO_0011);
+        }
+        //------------- 기 등록 회원 여부 체크 - end ---------------
+
+        String passwordRaw = reqVo.getPassword();
+        // 마스킹된 패스워드의 암호화 저장을 위한 처리 (비밀번호 찾기 화면에서 사용자에게 패스워드를 노출해 주어야 하는 요건 때문에 추가함.)
+        reqVo.setPasswordMask(cryptoService.encrypt(StringUtil.maskPW(passwordRaw)));
+        // 패스워드 해싱
+        reqVo.setPassword(passwordEncoder.encode(passwordRaw));
+
+        // INSERT (사용자관리)
+        authDAO.insertRegisterParentInfo(reqVo);
+
+        authDAO.insertUserAuth(reqVo);
+
+        // 웅답에 암호화된 사용자관리ID 바인딩 (이후 정회원인증을 위해서)
+        resVo.setUserManageIdEnc(cryptoService.encrypt(reqVo.getUserManageId()));
+
+        return resVo;
+    }
+
+    /**
      *　체험회원 등록
      *
      * @param reqVo

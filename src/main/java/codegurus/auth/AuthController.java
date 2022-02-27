@@ -93,7 +93,7 @@ public class AuthController extends BaseController {
 	@PostMapping("/registerParent")
 	public Res<ResRegisterVO> registerParent(@RequestBody @Valid ReqRegisterParentVO reqVo) {
 
-		ResRegisterVO resVo = authService.register(reqVo);
+		ResRegisterVO resVo = authService.registerParent(reqVo);
 		return new Res<ResRegisterVO>(resVo);
 	}
 
