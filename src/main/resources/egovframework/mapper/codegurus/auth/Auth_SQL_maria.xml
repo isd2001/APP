@@ -24,25 +24,16 @@
             birth,
             birth_year,
             gender,
-            <if test='authCode == "11"'><!-- 학부모 회원가입일 경우 -->
-                cellphone,
-                email,
-                zipcode,
-                address,
-                address_detail,
-            </if>
-            <if test='authCode != "11"'><!-- 학부모 회원가입이 아닐 경우 --><!-- 프렌즈몬의 기획에 따라 사용하게 될 수도 있음 -->
-                termofuse_agree_ornot,
-                personalinfo_agree_ornot,
-                promotion_agree_ornot,
-                app_push_agree_ornot,
-                <!-- locationinfo_agree_ornot, --><!-- 필요하면 사용  -->
-                termofuse_agree_date,
-                personalinfo_agree_date,
-                promotion_agree_date,
-                app_push_agree_date,
-                <!-- locationinfo_agree_date, --><!-- 필요하면 사용  -->
-            </if>
+            termofuse_agree_ornot,
+            personalinfo_agree_ornot,
+            promotion_agree_ornot,
+            app_push_agree_ornot,
+            <!-- locationinfo_agree_ornot, --><!-- 필요하면 사용  -->
+            termofuse_agree_date,
+            personalinfo_agree_date,
+            promotion_agree_date,
+            app_push_agree_date,
+            <!-- locationinfo_agree_date, --><!-- 필요하면 사용  -->
             reg_id,
             reg_date,
             modify_id,
@@ -57,46 +48,80 @@
            #{birth},
            SUBSTR(#{birth}, 1, 4),
            #{gender},
-           <if test='authCode == "11"'><!-- 학부모 회원가입일 경우 -->
-              #{cellphone},
-              #{email},
-              #{zipcode},
-              #{address},
-              #{addressDetail},
-           </if>
-           <if test='authCode != "11"'><!-- 학부모 회원가입이 아닐 경우 -->
-               #{termofuseAgreeOrnot},
-               #{personalinfoAgreeOrnot},
-               #{promotionAgreeOrnot},
-               #{promotionAgreeOrnot},
-               <!-- #{locationinfoAgreeOrnot}, -->
-               <choose>
-                   <when test='termofuseAgreeOrnot != null and termofuseAgreeOrnot != "" and termofuseAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
-                   <otherwise>null,</otherwise>
-               </choose>
-               <choose>
-                   <when test='personalinfoAgreeOrnot != null and personalinfoAgreeOrnot != "" and personalinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
-                   <otherwise>null,</otherwise>
-               </choose>
-               <choose>
-                   <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
-                   <otherwise>null,</otherwise>
-               </choose>
-               <choose>
-                   <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
-                   <otherwise>null,</otherwise>
-               </choose>
-               <!--
-               <choose>
-                   <when test='locationinfoAgreeOrnot != null and locationinfoAgreeOrnot != "" and locationinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
-                   <otherwise>null,</otherwise>
-               </choose>
-               -->
-           </if>
+           #{termofuseAgreeOrnot},
+           #{personalinfoAgreeOrnot},
+           #{promotionAgreeOrnot},
+           #{promotionAgreeOrnot},
+           <!-- #{locationinfoAgreeOrnot}, -->
+           <choose>
+               <when test='termofuseAgreeOrnot != null and termofuseAgreeOrnot != "" and termofuseAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+               <otherwise>null,</otherwise>
+           </choose>
+           <choose>
+               <when test='personalinfoAgreeOrnot != null and personalinfoAgreeOrnot != "" and personalinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+               <otherwise>null,</otherwise>
+           </choose>
+           <choose>
+               <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+               <otherwise>null,</otherwise>
+           </choose>
+           <choose>
+               <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+               <otherwise>null,</otherwise>
+           </choose>
+           <!--
+           <choose>
+               <when test='locationinfoAgreeOrnot != null and locationinfoAgreeOrnot != "" and locationinfoAgreeOrnot == "Y"'>CURRENT_TIMESTAMP,</when>
+               <otherwise>null,</otherwise>
+           </choose>
+           -->
            0, /* reg_id (아직 user_manage_id 가 없는 상태이기 때문에) */
            CURRENT_TIMESTAMP,
            0,
            CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <!-- 학부모 사용자 등록 (회원가입) -->
+    <insert id="insertRegisterParentInfo" useGeneratedKeys="true" keyProperty="userManageId">
+        INSERT /* insertRegisterParentInfo */
+        INTO user_manage
+        (
+        user_id,
+        password,
+        password_mask,
+        name,
+        birth,
+        birth_year,
+        gender,
+        cellphone,
+        email,
+        zipcode,
+        address,
+        address_detail,
+        reg_id,
+        reg_date,
+        modify_id,
+        modify_date
+        )
+        values
+        (
+        #{username},
+        #{password},
+        #{passwordMask},
+        #{name},
+        #{birth},
+        SUBSTR(#{birth}, 1, 4),
+        #{gender},
+        #{cellphone},
+        #{email},
+        #{zipcode},
+        #{address},
+        #{addressDetail},
+        0, /* reg_id (아직 user_manage_id 가 없는 상태이기 때문에) */
+        CURRENT_TIMESTAMP,
+        0,
+        CURRENT_TIMESTAMP
         )
     </insert>
 

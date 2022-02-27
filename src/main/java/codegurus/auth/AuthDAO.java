@@ -10,6 +10,7 @@ public interface AuthDAO {
 
     int selectUserDup(ReqDupCheckVO reqVo);
     void insertRegisterInfo(ReqRegisterBaseVO reqVo);
+    void insertRegisterParentInfo(ReqRegisterBaseVO reqVo);
     void insertTrialRegister(ReqTrialRegisterVO reqVo);
     void insertUserAuth(ReqRegisterBaseVO params);
     int selectUserAuthCount(Map<String, String> map);
