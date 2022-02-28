@@ -89,6 +89,7 @@
 			online_subject_schedule.`position`,
 			online_subject_schedule.`month`,
 			online_subject_schedule.seq,
+			online_subject.subject_title,
 
 			book.book_id,
 			book.book_title,
@@ -96,6 +97,8 @@
 
 			case when contents_history.end_date is not null then 'Y' else 'N' end as resultYn -- 조회된 도서 목록 중 완료된 학습 여부
         FROM online_subject_schedule
+		LEFT JOIN online_subject
+        ON online_subject.online_subject_id = online_subject_schedule.online_subject_id
 		LEFT JOIN contents
 		on online_subject_schedule.contents_id = contents.contents_id
 		LEFT JOIN book

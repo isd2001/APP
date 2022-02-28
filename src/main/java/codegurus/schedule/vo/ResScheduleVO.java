@@ -56,6 +56,9 @@ public class ResScheduleVO extends BaseVO {
     @ApiModelProperty(notes = "콘텐츠 이력 정보")
     private ContentsHistoryVO contentsHistory;
 
-    @ApiModelProperty(notes = "학습 완료 여부")
+    @ApiModelProperty(notes = "학습 완료 여부 (Y:학습완료, N:학습미완료)", example = "Y")
     private String resultYn;
+
+    @ApiModelProperty(notes = "과목 명", example = "독서캠프 1")
+    private String subjectTitle;
 }
