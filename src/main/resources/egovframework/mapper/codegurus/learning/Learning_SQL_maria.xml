@@ -24,6 +24,8 @@
 		</association>
 		<collection property="labelList" ofType="LabelVO" autoMapping="true" />
 	</resultMap>
+
+	<!-- 책 정보 조회 -->
 	<select id="selectBookDetail" resultMap="BookDetailMap">
 		SELECT /* selectBookDetail */
 		    schedule.online_subject_schedule_id,
@@ -641,4 +643,29 @@
 			, #{userManageId}
 		)
 	</insert>
+
+	<!-- 다음 콘텐츠 아이디 조회 -->
+	<select id="selectNextContentsId" resultType="String">
+		SELECT /* selectNextContentsId */
+			online_subject_schedule.online_subject_schedule_id
+		FROM online_subject_schedule
+		INNER JOIN (
+			SELECT
+			online_subject_id AS current_online_subject_id
+			, `month` AS current_month
+			, seq AS current_seq
+			FROM online_subject_schedule
+			WHERE online_subject_schedule_id = #{onlineSubjectScheduleId}
+		) current_data
+		ON current_online_subject_id = online_subject_schedule.online_subject_id
+		AND (
+			(current_month = online_subject_schedule.`month` AND online_subject_schedule.seq > current_seq)
+			OR (online_subject_schedule.`month` > current_month)
+		)
+		AND online_subject_schedule.active_ornot = 'Y'
+		AND online_subject_schedule.delete_ornot = 'N'
+		ORDER BY online_subject_schedule.`month` ASC, online_subject_schedule.seq ASC
+		LIMIT 1
+	</select>
+
 </mapper>

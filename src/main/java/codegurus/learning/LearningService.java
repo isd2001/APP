@@ -2,6 +2,7 @@ package codegurus.learning;
 
 import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.service.FileService;
+import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.SystemUtil;
 import codegurus.learning.vo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -128,5 +129,27 @@ public class LearningService {
         resVO.setItem(item);
 
         return resVO;
+    }
+
+    /**
+     * 다음 콘텐츠 정보 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResLearningBookVO nextContentsInfo(ReqLearningNextContentsInfoVO reqVo, ResLearningBookVO resVo) {
+
+        String onlineSubjectScheduleId = learningDAO.selectNextContentsId(reqVo);
+
+        if(StringUtil.isBlank(onlineSubjectScheduleId)){ SystemUtil.returnNoSearchResult(); }  // 조회 결과 없음 리턴
+
+        ReqLearningBookVO reqLearningBookVO = new ReqLearningBookVO();
+        reqLearningBookVO.setOnlineSubjectScheduleId(onlineSubjectScheduleId);
+        BookVO item = learningDAO.selectBookDetail(reqLearningBookVO);
+        if(item == null){ SystemUtil.returnNoSearchResult(); }  // 조회 결과 없음 리턴
+
+        resVo.setItem(item);
+
+        return resVo;
     }
 }

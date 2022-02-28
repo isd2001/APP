@@ -117,4 +117,19 @@ public class LearningController extends BaseController {
         learningService.selectLearningResult(reqVo, resVo);
         return new Res<ResLearningResultVO>(resVo);
     }
+
+    /**
+     * 다음 콘텐츠 정보 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/nextContentsInfo")
+    @ApiOperation(value = "다음 콘텐츠 정보 조회")
+    public Res<ResLearningBookVO> nextContentsInfo(@RequestBody @Valid ReqLearningNextContentsInfoVO reqVo) {
+
+        ResLearningBookVO resVo = new ResLearningBookVO();
+        learningService.nextContentsInfo(reqVo, resVo);
+        return new Res<ResLearningBookVO>(resVo);
+    }
 }
