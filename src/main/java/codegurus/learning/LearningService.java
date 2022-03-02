@@ -1,9 +1,12 @@
 package codegurus.learning;
 
 import codegurus.cmm.cache.CacheService;
+import codegurus.cmm.constants.ResCodeEnum;
+import codegurus.cmm.exception.CustomException;
 import codegurus.cmm.service.FileService;
 import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.SystemUtil;
+import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.learning.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,5 +154,26 @@ public class LearningService {
         resVo.setItem(item);
 
         return resVo;
+    }
+
+    /**
+     * 수업 체크
+     *
+     * @param reqVo
+     * @param resVo
+     * @return
+     */
+    public void classCheck(ReqLearningClassCheckVO reqVo, ResBaseVO resVo) {
+
+        ClassManageVO classManageVO = learningDAO.selectClassManage(reqVo);
+
+        if(classManageVO == null) {
+            throw new CustomException(ResCodeEnum.INFO_0018);
+        } else {
+            if(StringUtil.isBlank(classManageVO.getClassAttendHistoryId())) {
+                reqVo.setClassManageId(classManageVO.getClassManageId());
+                learningDAO.insertClassAttendHistory(reqVo);
+            }
+        }
     }
 }

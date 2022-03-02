@@ -33,8 +33,12 @@
     </resultMap>
     <select id="selectmagnitudeList" resultMap="MagnitudeMap">
         SELECT /* selectmagnitudeList */
+            online_subject.subject_title,
+
             online_subject_schedule.online_subject_schedule_id,
-            online_subject_schedule.`POSITION`,
+            online_subject_schedule.month,
+            online_subject_schedule.position,
+
             contents_history.contents_history_id ,
             DF8(contents_history.end_date) end_date,
             contents.contents_id,
@@ -110,6 +114,8 @@
         from contents_history
             left join online_subject_schedule
                 on contents_history.online_subject_schedule_id=online_subject_schedule.online_subject_schedule_id
+            LEFT JOIN online_subject
+                on online_subject_schedule.online_subject_id = online_subject.online_subject_id
             left join contents
                 on online_subject_schedule.contents_id=contents.contents_id
             left join book

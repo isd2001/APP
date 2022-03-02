@@ -16,6 +16,10 @@ public class ContentsHistoryVO {
 
     @ApiModelProperty(notes = "온라인 과목 ID")
     private String onlineSubjectId;
+    @ApiModelProperty(notes = "월", example="01")
+    private String month;
+    @ApiModelProperty(notes = "위치값, 다음 콘텐츠 조회시에는 차시로 활용", example="1")
+    private String position;
 
     @ApiModelProperty(notes = "과목명")
     private String subjectTitle;

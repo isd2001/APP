@@ -26,4 +26,7 @@ public interface LearningDAO {
     void insertClassPreparationHistory(ClassPreparationHistoryVO reqVo);
 
     String selectNextContentsId(ReqLearningNextContentsInfoVO reqVo);
+
+    ClassManageVO selectClassManage(ReqLearningClassCheckVO reqVo);
+    void insertClassAttendHistory(ReqLearningClassCheckVO reqVo);
 }

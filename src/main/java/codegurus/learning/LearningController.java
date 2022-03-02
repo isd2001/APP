@@ -3,9 +3,11 @@ package codegurus.learning;
 import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.res.Res;
+import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.learning.vo.*;
 import codegurus.oneline.OnelineService;
-import codegurus.oneline.vo.*;
+import codegurus.oneline.vo.ReqStarScoreVO;
+import codegurus.oneline.vo.ResStarScoreVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -99,7 +101,6 @@ public class LearningController extends BaseController {
         learningService.saveLearningContentsHistory(reqVo, resVo);
 
         return new Res<ResLearningContentsHistorySaveVO>(resVo);
-
     }
 
     /**
@@ -131,5 +132,23 @@ public class LearningController extends BaseController {
         ResLearningBookVO resVo = new ResLearningBookVO();
         learningService.nextContentsInfo(reqVo, resVo);
         return new Res<ResLearningBookVO>(resVo);
+    }
+
+    /**
+     * 수업 체크
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/classCheck")
+    @ApiOperation(value = "수업 체크")
+    public Res<ResBaseVO> classCheck(@RequestBody @Valid ReqLearningClassCheckVO reqVo) {
+
+        ResBaseVO resVo= new ResBaseVO();
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        learningService.classCheck(reqVo, resVo);
+
+        return new Res<ResBaseVO>(resVo);
+
     }
 }

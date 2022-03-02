@@ -28,7 +28,10 @@
 	<!-- 책 정보 조회 -->
 	<select id="selectBookDetail" resultMap="BookDetailMap">
 		SELECT /* selectBookDetail */
-		    schedule.online_subject_schedule_id,
+			schedule.online_subject_schedule_id,
+			schedule.month,
+			schedule.position,
+
 		    contents.contents_id,
 		    contents.book_id,
 
@@ -167,8 +170,6 @@
 	</resultMap>
 	<select id="selectLearningContents" resultMap="contentsMap">
 		SELECT /* selectLearningContents */
-			schedule.online_subject_schedule_id,
-
 			contents.contents_id as contents_contents_id,
 			contents.contents_title,
 			contents.inspection_status,
@@ -252,9 +253,7 @@
 			template_inst_cate.eight_cate_id as template_inst_cate_eight_cate_id,
 			template_inst_cate.ninth_cate_id as template_inst_cate_ninth_cate_id,
 			template_inst_cate.tenth_cate_id as template_inst_cate_tenth_cate_id
-		FROM online_subject_schedule schedule
-		LEFT JOIN contents
-			on schedule.contents_id = contents.contents_id
+		FROM contents
 		LEFT JOIN book
 			on contents.book_id = book.book_id
 		LEFT JOIN COMTNFILE
@@ -622,7 +621,7 @@
 	</select>
 
 	<!-- 수업 준비 이력 등록 -->
-	<insert id="insertClassPreparationHistory" useGeneratedKeys="true" keyProperty="ClassPreparationHistoryVO">
+	<insert id="insertClassPreparationHistory" useGeneratedKeys="true" keyProperty="classPreparationHistoryId">
 		INSERT /* insertClassPreparationHistory */
 		INTO class_preparation_history
 		(
@@ -667,5 +666,59 @@
 		ORDER BY online_subject_schedule.`month` ASC, online_subject_schedule.seq ASC
 		LIMIT 1
 	</select>
+
+	<!-- 수업 관리 조회 -->
+	<select id="selectClassManage" resultType="ClassManageVO">
+		SELECT /* selectClassManage */
+			svc_mh_edu_cntr_cp.LEGACY_TCHER_ID
+			, online_subject_schedule.ONLINE_SUBJECT_SCHEDULE_ID
+			, class_manage.class_manage_id
+			, class_attend_history.class_attend_history_id
+		FROM online_subject_schedule
+		INNER JOIN online_subject_sap_mapping
+		ON online_subject_sap_mapping.ONLINE_SUBJECT_ID = online_subject_schedule.ONLINE_SUBJECT_ID
+		AND online_subject_schedule.ONLINE_SUBJECT_SCHEDULE_ID = #{onlineSubjectScheduleId}
+		INNER JOIN user_subject
+		ON user_subject.SAP_SUBJ_ID = online_subject_sap_mapping.SAP_SUBJECT_ID
+		AND user_subject.USER_MANAGE_ID = #{userManageId}
+		AND user_subject.DELETE_ORNOT = 'N'
+		INNER JOIN svc_mh_edu_cntr_cp
+		ON svc_mh_edu_cntr_cp.EDU_CNTR_OID = user_subject.EDU_CNTR_OID
+		AND svc_mh_edu_cntr_cp.EDU_STAT_CD = 'DA21010'
+		LEFT JOIN class_manage
+		ON class_manage.legacy_tcher_id = svc_mh_edu_cntr_cp.LEGACY_TCHER_ID
+		AND class_manage.online_subject_schedule_id = online_subject_schedule.ONLINE_SUBJECT_SCHEDULE_ID
+		AND class_manage.delete_ornot = 'N'
+		AND NOW() > class_manage.class_start_date
+		AND (
+		    class_manage.class_end_date > NOW()
+		    OR class_manage.class_end_date is null
+		)
+		LEFT JOIN class_attend_history
+		ON class_attend_history.class_manage_id = class_manage.class_manage_id
+		AND class_attend_history.user_manage_id = user_subject.USER_MANAGE_ID
+		AND class_attend_history.delete_ornot = 'N'
+		ORDER BY class_manage.class_start_date DESC
+		LIMIT 1 /* 혹시 중복값이 있을까 해서 limit */
+	</select>
+
+	<!-- 수업 출석 이력 등록 -->
+	<insert id="insertClassAttendHistory" useGeneratedKeys="true" keyProperty="classAttendHistoryId">
+		INSERT /* insertClassAttendHistory */
+		INTO class_attend_history
+		(
+			class_manage_id
+			, user_manage_id
+			, reg_id
+			, modify_id
+		)
+		VALUES
+		(
+			#{classManageId}
+			, #{userManageId}
+			, #{userManageId}
+			, #{userManageId}
+		)
+	</insert>
 
 </mapper>

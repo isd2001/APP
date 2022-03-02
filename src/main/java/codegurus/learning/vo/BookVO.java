@@ -14,13 +14,17 @@ import java.util.List;
 @Setter
 public class BookVO {
 
-    @ApiModelProperty(notes = "온라인 과목 스케줄 ID", example="2", position = 1)
+    @ApiModelProperty(notes = "온라인 과목 스케줄 ID", example="2")
     private String onlineSubjectScheduleId;
+    @ApiModelProperty(notes = "월", example="01")
+    private String month;
+    @ApiModelProperty(notes = "위치값, 다음 콘텐츠 조회시에는 차시로 활용", example="1")
+    private String position;
 
-    @ApiModelProperty(notes = "콘텐츠 ID", example="2", position = 2)
+    @ApiModelProperty(notes = "콘텐츠 ID", example="2")
     private String contentsId;
 
-    @ApiModelProperty(notes = "책 ID", example = "139", position = 3)
+    @ApiModelProperty(notes = "책 ID", example = "139")
     private String bookId;
 
     @ApiModelProperty(notes = "책 명", example = "그리스 로마 신화 23")
