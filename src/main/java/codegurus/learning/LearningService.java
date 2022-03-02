@@ -167,7 +167,7 @@ public class LearningService {
 
         ClassManageVO classManageVO = learningDAO.selectClassManage(reqVo);
 
-        if(classManageVO == null) {
+        if(classManageVO == null || StringUtil.isBlank(classManageVO.getClassManageId())) {
             throw new CustomException(ResCodeEnum.INFO_0018);
         } else {
             if(StringUtil.isBlank(classManageVO.getClassAttendHistoryId())) {
