@@ -667,7 +667,7 @@
 		LIMIT 1
 	</select>
 
-	수업 관리 조회 -->
+	<!-- 수업 관리 조회 -->
 	<select id="selectClassManage" resultType="ClassManageVO">
 		SELECT /* selectClassManage */
 			svc_mh_edu_cntr_cp.LEGACY_TCHER_ID
