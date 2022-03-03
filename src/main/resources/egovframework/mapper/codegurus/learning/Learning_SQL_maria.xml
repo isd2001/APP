@@ -670,7 +670,7 @@
 	<!-- 수업 관리 조회 -->
 	<select id="selectClassManage" resultType="ClassManageVO">
 		SELECT /* selectClassManage */
-			svc_mh_edu_cntr_cp.LEGACY_TCHER_ID
+			user_subject.LEGACY_TCHER_ID
 			, online_subject_schedule.ONLINE_SUBJECT_SCHEDULE_ID
 			, class_manage.class_manage_id
 			, class_attend_history.class_attend_history_id
@@ -682,13 +682,6 @@
 		ON user_subject.SAP_SUBJ_ID = online_subject_sap_mapping.SAP_SUBJECT_ID
 		AND user_subject.USER_MANAGE_ID = #{userManageId}
 		AND user_subject.DELETE_ORNOT = 'N'
-		<!-- 일단 테스트 용도로 막아둠. 추후에 등록시에 legacy_tcher_id를 user_subject로 등록하도록 하던지
-		밑에 코드를 활성하던지 선택해야함. 전자로하면 계약정보를 안보고도 인증할수있어서 언제든 테스트가 가능하지만 완벽하게 인증확인이 아니라는게 걸림
-		INNER JOIN svc_mh_edu_cntr_cp
-		ON svc_mh_edu_cntr_cp.EDU_CNTR_OID = user_subject.EDU_CNTR_OID
-		AND svc_mh_edu_cntr_cp.EDU_STAT_CD = 'DA21010'
-		LEFT JOIN class_manage
-		ON class_manage.legacy_tcher_id = svc_mh_edu_cntr_cp.LEGACY_TCHER_ID -->
 		LEFT JOIN class_manage
 		ON class_manage.legacy_tcher_id = user_subject.LEGACY_TCHER_ID
 		AND class_manage.online_subject_schedule_id = online_subject_schedule.ONLINE_SUBJECT_SCHEDULE_ID
@@ -703,7 +696,41 @@
 		AND class_attend_history.user_manage_id = user_subject.USER_MANAGE_ID
 		AND class_attend_history.delete_ornot = 'N'
 		ORDER BY class_manage.class_start_date DESC
-		LIMIT 1 /* 혹시 중복값이 있을까 해서 limit */
+		LIMIT 1 <!-- 혹시 중복값이 있을까 해서 limit -->
+		<!-- 일단 테스트 용도로 막아둠. 추후에 등록시에 legacy_tcher_id를 user_subject로 등록하도록 하던지
+		밑에 코드를 활성하던지 선택해야함. 전자로하면 계약정보를 안보고도 인증할수있어서 언제든 테스트가 가능하지만 완벽하게 인증확인이 아니라는게 걸림
+		SELECT /* selectClassManage */
+			svc_mh_edu_cntr_cp.LEGACY_TCHER_ID
+			, online_subject_schedule.ONLINE_SUBJECT_SCHEDULE_ID
+			, class_manage.class_manage_id
+			, class_attend_history.class_attend_history_id
+		FROM online_subject_schedule
+		INNER JOIN online_subject_sap_mapping
+		ON online_subject_sap_mapping.ONLINE_SUBJECT_ID = online_subject_schedule.ONLINE_SUBJECT_ID
+		AND online_subject_schedule.ONLINE_SUBJECT_SCHEDULE_ID = #{onlineSubjectScheduleId}
+		INNER JOIN user_subject
+		ON user_subject.SAP_SUBJ_ID = online_subject_sap_mapping.SAP_SUBJECT_ID
+		AND user_subject.USER_MANAGE_ID = #{userManageId}
+		AND user_subject.DELETE_ORNOT = 'N'
+		INNER JOIN svc_mh_edu_cntr_cp
+		ON svc_mh_edu_cntr_cp.EDU_CNTR_OID = user_subject.EDU_CNTR_OID
+		AND svc_mh_edu_cntr_cp.EDU_STAT_CD = 'DA21010'
+		LEFT JOIN class_manage
+		ON class_manage.legacy_tcher_id = svc_mh_edu_cntr_cp.LEGACY_TCHER_ID
+		AND class_manage.online_subject_schedule_id = online_subject_schedule.ONLINE_SUBJECT_SCHEDULE_ID
+		AND class_manage.delete_ornot = 'N'
+		AND NOW() > class_manage.class_start_date
+		AND (
+		    class_manage.class_end_date > NOW()
+		    OR class_manage.class_end_date is null
+		)
+		LEFT JOIN class_attend_history
+		ON class_attend_history.class_manage_id = class_manage.class_manage_id
+		AND class_attend_history.user_manage_id = user_subject.USER_MANAGE_ID
+		AND class_attend_history.delete_ornot = 'N'
+		ORDER BY class_manage.class_start_date DESC
+		LIMIT 1
+		 -->
 	</select>
 
 	<!-- 수업 출석 이력 등록 -->
