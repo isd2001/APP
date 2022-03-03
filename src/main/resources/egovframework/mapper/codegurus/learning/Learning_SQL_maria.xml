@@ -689,6 +689,7 @@
 		AND svc_mh_edu_cntr_cp.EDU_STAT_CD = 'DA21010'
 		LEFT JOIN class_manage
 		ON class_manage.legacy_tcher_id = svc_mh_edu_cntr_cp.LEGACY_TCHER_ID -->
+		LEFT JOIN class_manage
 		ON class_manage.legacy_tcher_id = user_subject.LEGACY_TCHER_ID
 		AND class_manage.online_subject_schedule_id = online_subject_schedule.ONLINE_SUBJECT_SCHEDULE_ID
 		AND class_manage.delete_ornot = 'N'
