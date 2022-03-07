@@ -1,10 +1,10 @@
 package codegurus.mypage;
 
 import codegurus.auth.vo.ReqUpdatePWVO;
+import codegurus.mypage.vo.ReqPromotionAgreeVO;
 import codegurus.learning.vo.BookVO;
 import codegurus.learning.vo.ContentsHistoryVO;
 import codegurus.mypage.vo.*;
-import codegurus.schedule.vo.ResScheduleVO;
 
 import java.util.List;
 import java.util.Map;
@@ -25,4 +25,11 @@ public interface MypageDAO {
     int updateUserInfo(ReqUserUpdateVO reqVo);
     int updateUserPassword(ReqUpdatePWVO reqVo);
     int deleteUser(String userManageId);
+
+    int updatePromotionAgree(ReqPromotionAgreeVO reqVo);
+
+    int updateAppPushAgree(ReqAppPushAgreeVO reqVo);
+    int updateSoundtrackPlay(ReqSoundtrackPlayUpdateVO reqVo);
+    int updateGuideActivate(ReqGuideActivateUpdateVO reqVo);
+    int updateThemeMode(ReqThemeModeUpdateVO reqVo);
 }

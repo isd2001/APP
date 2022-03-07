@@ -38,6 +38,9 @@
 			book.book_introduction,
 		    book.book_thumbnail_file_id,
 			book.book_json,
+			book.book_title,
+			book.illustrator,
+			book.author,
 
 			labelManage.label_manage_id,
 			labelManage.label_title,
@@ -295,6 +298,12 @@
 			end_date,
 		 	summary_doing_drawing_file_id,
 			summary_doing_voice_file_id,
+			debate_topic_photo_file_id_1,
+			debate_topic_photo_file_id_2,
+			debate_topic_photo_file_id_3,
+			writing_topic_photo_file_id_1,
+			writing_topic_photo_file_id_2,
+			writing_topic_photo_file_id_3,
 		 	delete_ornot
 		)
 		VALUES
@@ -305,6 +314,12 @@
 			CURRENT_TIMESTAMP,
 			#{summaryDoingDrawingFileId},
 			#{summaryDoingVoiceFileId},
+			#{debateTopicPhotoFileId1},
+			#{debateTopicPhotoFileId2},
+			#{debateTopicPhotoFileId3},
+			#{writingTopicPhotoFileId1},
+			#{writingTopicPhotoFileId2},
+			#{writingTopicPhotoFileId3},
 			'N'
 		)
 	</insert>
@@ -372,51 +387,70 @@
 	</resultMap>
 	<select id="selectContentsHistory" resultMap="ContentsHistoryMap">
 		SELECT /* selectContentsHistory */
-			contents_history.contents_history_id ,
-			contents_history.online_subject_schedule_id,
-			DF14(contents_history.end_date) as end_date,
-			contents_history.summary_doing_drawing_file_id ,
-			contents_history.summary_doing_voice_file_id,
-		    contents_history.user_manage_id,
+			A.*
+			, ROUND((voca_correctanswer_count + reading_correctanswer_count) / (voca_question_count + reading_question_count) * 100) AS score
+		FROM (
+			SELECT
+				contents_history.contents_history_id ,
+				contents_history.online_subject_schedule_id,
+				DF14(contents_history.end_date) as end_date,
+				contents_history.summary_doing_drawing_file_id ,
+				contents_history.summary_doing_voice_file_id,
+				contents_history.user_manage_id,
 
-			DRAWING_COMTNFILE.ATCH_FILE_ID as DRAWING_ATCH_FILE_ID,
-			DRAWING_COMTNFILEDETAIL.FILE_CN as DRAWING_FILE_CN,
-			DRAWING_COMTNFILEDETAIL.FILE_SN as DRAWING_FILE_SN,
-			DRAWING_COMTNFILEDETAIL.FILE_STRE_COURS as DRAWING_FILE_STRE_COURS,
-			DRAWING_COMTNFILEDETAIL.STRE_FILE_NM as DRAWING_STRE_FILE_NM,
-			DRAWING_COMTNFILEDETAIL.FILE_EXTSN as DRAWING_FILE_EXTSN,
-			DRAWING_COMTNFILEDETAIL.ORIGNL_FILE_NM as DRAWING_ORIGNL_FILE_NM,
-			DRAWING_COMTNFILEDETAIL.FILE_SIZE as DRAWING_FILE_SIZE,
-			DRAWING_COMTNFILE.CREAT_DT as DRAWING_CREAT_DT,
-			DRAWING_COMTNFILEDETAIL.DOWNLOAD_CNT as DRAWING_DOWNLOAD_CNT,
+				DRAWING_COMTNFILE.ATCH_FILE_ID as DRAWING_ATCH_FILE_ID,
+				DRAWING_COMTNFILEDETAIL.FILE_CN as DRAWING_FILE_CN,
+				DRAWING_COMTNFILEDETAIL.FILE_SN as DRAWING_FILE_SN,
+				DRAWING_COMTNFILEDETAIL.FILE_STRE_COURS as DRAWING_FILE_STRE_COURS,
+				DRAWING_COMTNFILEDETAIL.STRE_FILE_NM as DRAWING_STRE_FILE_NM,
+				DRAWING_COMTNFILEDETAIL.FILE_EXTSN as DRAWING_FILE_EXTSN,
+				DRAWING_COMTNFILEDETAIL.ORIGNL_FILE_NM as DRAWING_ORIGNL_FILE_NM,
+				DRAWING_COMTNFILEDETAIL.FILE_SIZE as DRAWING_FILE_SIZE,
+				DRAWING_COMTNFILE.CREAT_DT as DRAWING_CREAT_DT,
+				DRAWING_COMTNFILEDETAIL.DOWNLOAD_CNT as DRAWING_DOWNLOAD_CNT,
 
-			VOICE_COMTNFILE.ATCH_FILE_ID as VOICE_ATCH_FILE_ID,
-			VOICE_COMTNFILEDETAIL.FILE_CN as VOICE_FILE_CN,
-			VOICE_COMTNFILEDETAIL.FILE_SN as VOICE_FILE_SN,
-			VOICE_COMTNFILEDETAIL.FILE_STRE_COURS as VOICE_FILE_STRE_COURS,
-			VOICE_COMTNFILEDETAIL.STRE_FILE_NM as VOICE_STRE_FILE_NM,
-			VOICE_COMTNFILEDETAIL.FILE_EXTSN as VOICE_FILE_EXTSN,
-			VOICE_COMTNFILEDETAIL.ORIGNL_FILE_NM as VOICE_ORIGNL_FILE_NM,
-			VOICE_COMTNFILEDETAIL.FILE_SIZE as VOICE_FILE_SIZE,
-			VOICE_COMTNFILE.CREAT_DT as VOICE_CREAT_DT,
-			VOICE_COMTNFILEDETAIL.DOWNLOAD_CNT as VOICE_DOWNLOAD_CNT,
+				VOICE_COMTNFILE.ATCH_FILE_ID as VOICE_ATCH_FILE_ID,
+				VOICE_COMTNFILEDETAIL.FILE_CN as VOICE_FILE_CN,
+				VOICE_COMTNFILEDETAIL.FILE_SN as VOICE_FILE_SN,
+				VOICE_COMTNFILEDETAIL.FILE_STRE_COURS as VOICE_FILE_STRE_COURS,
+				VOICE_COMTNFILEDETAIL.STRE_FILE_NM as VOICE_STRE_FILE_NM,
+				VOICE_COMTNFILEDETAIL.FILE_EXTSN as VOICE_FILE_EXTSN,
+				VOICE_COMTNFILEDETAIL.ORIGNL_FILE_NM as VOICE_ORIGNL_FILE_NM,
+				VOICE_COMTNFILEDETAIL.FILE_SIZE as VOICE_FILE_SIZE,
+				VOICE_COMTNFILE.CREAT_DT as VOICE_CREAT_DT,
+				VOICE_COMTNFILEDETAIL.DOWNLOAD_CNT as VOICE_DOWNLOAD_CNT,
 
-		    '1' as learning_rate
-		from contents_history as contents_history
-		LEFT join COMTNFILE as DRAWING_COMTNFILE
-			on contents_history.summary_doing_drawing_file_id = DRAWING_COMTNFILE.ATCH_FILE_ID
-		LEFT JOIN COMTNFILEDETAIL as DRAWING_COMTNFILEDETAIL
-			on contents_history.summary_doing_drawing_file_id = DRAWING_COMTNFILEDETAIL.ATCH_FILE_ID
-		LEFT join COMTNFILE as VOICE_COMTNFILE
-			on contents_history.summary_doing_voice_file_id = VOICE_COMTNFILE.ATCH_FILE_ID
-		LEFT JOIN COMTNFILEDETAIL as VOICE_COMTNFILEDETAIL
-			on contents_history.summary_doing_voice_file_id = VOICE_COMTNFILEDETAIL.ATCH_FILE_ID
-		where 1=1
-			and contents_history.user_manage_id = #{userManageId}
-		  	and contents_history.online_subject_schedule_id = #{onlineSubjectScheduleId}
-		  	and contents_history.delete_ornot = 'N'
-		ORDER BY end_date DESC
-		LIMIT 1;
+				contents_history.debate_topic_photo_file_id_1,
+				contents_history.debate_topic_photo_file_id_2,
+				contents_history.debate_topic_photo_file_id_3,
+				contents_history.writing_topic_photo_file_id_1,
+				contents_history.writing_topic_photo_file_id_2,
+				contents_history.writing_topic_photo_file_id_3,
+
+				(select count(*) from template_inst where contents_id=online_subject_schedule.contents_id and type='어휘' and delete_ornot='N' and template_id not in ('1', '14')) as voca_question_count, -- 어휘 총 문제 수
+				(select count(*) from template_inst where contents_id=online_subject_schedule.contents_id and type='독해' and delete_ornot='N' and template_id not in ('1', '14')) as reading_question_count, -- 독해 총 문제 수
+				(select count(*) from template_inst a, template_inst_history b where a.type='어휘' AND a.template_id not in ('1', '14') and a.template_inst_id = b.template_inst_id and b.contents_history_id=contents_history.contents_history_id and (b.correctanswer_status=1 or b.correctanswer_status=2)) as voca_correctanswer_count, -- 어휘 정답 수
+				(select count(*) from template_inst a, template_inst_history b where a.type='독해' AND a.template_id not in ('1', '14') and a.template_inst_id = b.template_inst_id and b.contents_history_id=contents_history.contents_history_id and (b.correctanswer_status=1 or b.correctanswer_status=2)) as reading_correctanswer_count, -- 독해 정답 수
+
+				'1' as learning_rate
+			from contents_history
+			inner join online_subject_schedule
+				on contents_history.online_subject_schedule_id = online_subject_schedule.online_subject_schedule_id
+			LEFT join COMTNFILE as DRAWING_COMTNFILE
+				on contents_history.summary_doing_drawing_file_id = DRAWING_COMTNFILE.ATCH_FILE_ID
+			LEFT JOIN COMTNFILEDETAIL as DRAWING_COMTNFILEDETAIL
+				on contents_history.summary_doing_drawing_file_id = DRAWING_COMTNFILEDETAIL.ATCH_FILE_ID
+			LEFT join COMTNFILE as VOICE_COMTNFILE
+				on contents_history.summary_doing_voice_file_id = VOICE_COMTNFILE.ATCH_FILE_ID
+			LEFT JOIN COMTNFILEDETAIL as VOICE_COMTNFILEDETAIL
+				on contents_history.summary_doing_voice_file_id = VOICE_COMTNFILEDETAIL.ATCH_FILE_ID
+			where 1=1
+				and contents_history.user_manage_id = #{userManageId}
+				and contents_history.online_subject_schedule_id = #{onlineSubjectScheduleId}
+				and contents_history.delete_ornot = 'N'
+			ORDER BY end_date DESC
+			LIMIT 1
+		) AS A
 	</select>
 
 	<!-- 학습 결과 조회(책 정보 조회) -->

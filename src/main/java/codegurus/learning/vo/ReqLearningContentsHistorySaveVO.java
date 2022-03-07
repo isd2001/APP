@@ -31,6 +31,20 @@ public class ReqLearningContentsHistorySaveVO extends ReqBaseVO {
     @ApiModelProperty(notes = "요약하기 음성 파일 ID", required = false, example = "FILE_000000000000011")
     private String summaryDoingVoiceFileId;
 
+    @ApiModelProperty(notes = "토론 주제 사진 파일 ID 1", required = false, example = "FILE_000000000000011")
+    private String debateTopicPhotoFileId1;
+    @ApiModelProperty(notes = "토론 주제 사진 파일 ID 2", required = false, example = "FILE_000000000000011")
+    private String debateTopicPhotoFileId2;
+    @ApiModelProperty(notes = "토론 주제 사진 파일 ID 2", required = false, example = "FILE_000000000000011")
+    private String debateTopicPhotoFileId3;
+
+    @ApiModelProperty(notes = "쓰기 주제 사진 파일 ID 1", required = false, example = "FILE_000000000000011")
+    private String writingTopicPhotoFileId1;
+    @ApiModelProperty(notes = "쓰기 주제 사진 파일 ID 2", required = false, example = "FILE_000000000000011")
+    private String writingTopicPhotoFileId2;
+    @ApiModelProperty(notes = "쓰기 주제 사진 파일 ID 3", required = false, example = "FILE_000000000000011")
+    private String writingTopicPhotoFileId3;
+
     @ApiModelProperty(notes = "템플릿 인스턴스 이력 리스트")
     private List<TemplateInstHistorySaveVo> templateInstHistorySaveList;
 

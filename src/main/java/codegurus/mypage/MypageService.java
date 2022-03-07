@@ -1,9 +1,13 @@
 package codegurus.mypage;
 
 import codegurus.auth.AuthDAO;
-import codegurus.auth.vo.*;
+import codegurus.auth.vo.ReqDeleteUserVO;
+import codegurus.auth.vo.ReqUpdatePWVO;
+import codegurus.auth.vo.ScheduleIntervalVO;
+import codegurus.auth.vo.UserVO;
 import codegurus.cmm.CommonDAO;
 import codegurus.cmm.cache.CacheService;
+import codegurus.cmm.constants.AuthEnum;
 import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.exception.CustomException;
@@ -150,12 +154,14 @@ public class MypageService {
         resVo.setUsername(userVO.getUsername());
         resVo.setName(userVO.getName());
         resVo.setGender(userVO.getGender());
-        // resVo.setBirth(DateUtil.convertDateFormat(vo.getBirth(), Constants.DF8, Constants.DF8_HAN_NO_ZEROS)); // 화면에 출력하는 건 한글이 좋은데, 수정UI에서 datepicker가 없는 이상 혼선이 예상되므로 DF8을 사용함.
         resVo.setBirth(userVO.getBirth());
         resVo.setAuthCode(userVO.getAuthCode());
         resVo.setTrialEndDate(userVO.getTrialEndDate());
         resVo.setPromotionAgreeOrnot(userVO.getPromotionAgreeOrnot());
         resVo.setAppPushAgreeOrnot(userVO.getAppPushAgreeOrnot());
+        resVo.setSoundtrackPlayOrnot(userVO.getSoundtrackPlayOrnot());
+        resVo.setGuideActivateOrnot(userVO.getGuideActivateOrnot());
+        resVo.setThemeMode(userVO.getThemeMode());
 
         if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)) {
             // 체험회원 정보 조회
@@ -174,7 +180,7 @@ public class MypageService {
         }
 
         // 회원 학년 가져오기  정회원 일때만 가능 하도록 확인
-        if("01".equals(userVO.getAuthCode())){
+        if(AuthEnum.스마트독서_학생정회원.getAuthCode().equals(userVO.getAuthCode())){
 
             ScheduleIntervalVO scheduleIntervalVO = new ScheduleIntervalVO();
             scheduleIntervalVO.setUserManageId(userVO.getUserManageId());
@@ -374,5 +380,75 @@ public class MypageService {
         SystemUtil.checkUpdatedCount(updated, 1);
 
         return resVo;
+    }
+
+    /**
+     * 마케팅 활용 동의
+     *
+     * @param reqVo
+     * @param resVo
+     * @return
+     */
+    public void promotionAgree(ReqPromotionAgreeVO reqVo, ResBaseVO resVo) {
+
+        int updated = mypageDAO.updatePromotionAgree(reqVo);
+
+        SystemUtil.checkUpdatedCount(updated, 1);
+    }
+
+    /**
+     * 앱 푸시 동의
+     *
+     * @param reqVo
+     * @param resVo
+     * @return
+     */
+    public void appPushAgree(ReqAppPushAgreeVO reqVo, ResBaseVO resVo) {
+
+        int updated = mypageDAO.updateAppPushAgree(reqVo);
+
+        SystemUtil.checkUpdatedCount(updated, 1);
+    }
+
+    /**
+     * 음원 재생 여부 수정
+     *
+     * @param reqVo
+     * @param resVo
+     * @return
+     */
+    public void soundtrackPlayUpdate(ReqSoundtrackPlayUpdateVO reqVo, ResBaseVO resVo) {
+
+        int updated = mypageDAO.updateSoundtrackPlay(reqVo);
+
+        SystemUtil.checkUpdatedCount(updated, 1);
+    }
+
+    /**
+     * 가이드 활성화 수정
+     *
+     * @param reqVo
+     * @param resVo
+     * @return
+     */
+    public void guideActivateUpdate(ReqGuideActivateUpdateVO reqVo, ResBaseVO resVo) {
+
+        int updated = mypageDAO.updateGuideActivate(reqVo);
+
+        SystemUtil.checkUpdatedCount(updated, 1);
+    }
+
+    /**
+     * 테마 모드 수정
+     *
+     * @param reqVo
+     * @param resVo
+     * @return
+     */
+    public void themeModeUpdate(ReqThemeModeUpdateVO reqVo, ResBaseVO resVo) {
+
+        int updated = mypageDAO.updateThemeMode(reqVo);
+
+        SystemUtil.checkUpdatedCount(updated, 1);
     }
 }

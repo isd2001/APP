@@ -3,8 +3,6 @@ package codegurus.mypage;
 import codegurus.auth.vo.ReqDeleteUserVO;
 import codegurus.auth.vo.ReqUpdatePWVO;
 import codegurus.board.BoardService;
-import codegurus.board.vo.ReqPromotionAgreeVO;
-import codegurus.board.vo.ResPromotionAgreeVO;
 import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.vo.res.Res;
@@ -244,13 +242,85 @@ public class MypageController extends BaseController {
      */
     @PostMapping("/promotionAgree")
     @ApiOperation(value = "마케팅 활용 동의")
-    public Res<ResPromotionAgreeVO> promotionAgree (@RequestBody @Valid ReqPromotionAgreeVO reqVo) {
+    public Res<ResBaseVO> promotionAgree (@RequestBody @Valid ReqPromotionAgreeVO reqVo) {
 
-        ResPromotionAgreeVO resVo = new ResPromotionAgreeVO();
+        ResBaseVO resVo = new ResBaseVO();
 
         reqVo.setUserManageId(cacheService.getUserManageId());
-        boardService.promotionAgree(reqVo, resVo);
+        mypageService.promotionAgree(reqVo, resVo);
 
-        return new Res<ResPromotionAgreeVO>(resVo);
+        return new Res<ResBaseVO>(resVo);
+    }
+
+    /**
+     * 앱 푸시 동의
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/appPushAgree")
+    @ApiOperation(value = "앱 푸시 동의")
+    public Res<ResBaseVO> appPushAgree(@RequestBody @Valid ReqAppPushAgreeVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        mypageService.appPushAgree(reqVo, resVo);
+
+        return new Res<ResBaseVO>(resVo);
+    }
+
+    /**
+     * 음원 재생 수정
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/soundtrackPlayUpdate")
+    @ApiOperation(value = "음원 재생 수정")
+    public Res<ResBaseVO> soundtrackPlayUpdate(@RequestBody @Valid ReqSoundtrackPlayUpdateVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        mypageService.soundtrackPlayUpdate(reqVo, resVo);
+
+        return new Res<ResBaseVO>(resVo);
+    }
+
+    /**
+     * 가이드 활성화 수정
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/guideActivateUpdate")
+    @ApiOperation(value = "가이드 활성화 수정")
+    public Res<ResBaseVO> guideActivateUpdate(@RequestBody @Valid ReqGuideActivateUpdateVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        mypageService.guideActivateUpdate(reqVo, resVo);
+
+        return new Res<ResBaseVO>(resVo);
+    }
+
+    /**
+     * 테마 모드 수정
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/themeModeUpdate")
+    @ApiOperation(value = "테마 모드 수정")
+    public Res<ResBaseVO> themeModeUpdate(@RequestBody @Valid ReqThemeModeUpdateVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        mypageService.themeModeUpdate(reqVo, resVo);
+
+        return new Res<ResBaseVO>(resVo);
     }
 }

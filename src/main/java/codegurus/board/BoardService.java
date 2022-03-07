@@ -81,21 +81,6 @@ public class BoardService {
     }
 
     /**
-     * 마케팅활용 동의
-     *
-     * @param reqVo
-     * @param resVo
-     * @return
-     */
-    public void promotionAgree(ReqPromotionAgreeVO reqVo, ResPromotionAgreeVO resVo) {
-
-        int updated =boardDAO.updatePromotionAgree(reqVo);
-
-        SystemUtil.checkUpdatedCount(updated, 1);
-        resVo.setResMsg("마케팅활용 동의 성공");
-    }
-
-    /**
      * 클라이언트 버전 체크
      *
      * @param reqVo

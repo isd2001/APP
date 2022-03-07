@@ -87,6 +87,13 @@ public class UserVO extends BaseVO {
 	private String locationinfoAgreeDate;
 
 	@JsonIgnore
+	private String soundtrackPlayOrnot;
+	@JsonIgnore
+	private String guideActivateOrnot;
+	@JsonIgnore
+	private String themeMode;
+
+	@JsonIgnore
 	private String lastPassword;
 
 	@JsonIgnore

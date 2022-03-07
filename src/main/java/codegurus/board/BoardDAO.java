@@ -19,7 +19,5 @@ public interface BoardDAO {
 
     int updateLookupCount(ReqBoardDetailVO reqVo);
 
-    int updatePromotionAgree(ReqPromotionAgreeVO reqVo);
-
     ClientVersionVO SelectClientVersionCheck(ReqClientVersionCheckVO reqVo);
 }

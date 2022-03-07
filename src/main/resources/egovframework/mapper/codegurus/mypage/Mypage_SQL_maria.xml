@@ -397,4 +397,63 @@
         WHERE user_manage_id = #{value}
     </update>
 
+    <!-- 마케팅 활용 동의 업데이트 -->
+    <update id="updatePromotionAgree">
+        /* updatePromotionAgree */
+        UPDATE user_manage
+        SET promotion_agree_ornot = #{promotionAgreeOrnot}
+        <choose>
+            <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>, promotion_agree_date = CURRENT_TIMESTAMP</when>
+            <otherwise>, promotion_agree_date = null</otherwise>
+        </choose>
+        WHERE user_manage_id = #{userManageId}
+    </update>
+
+    <!-- 앱 푸시 동의 업데이트 -->
+    <update id="updateAppPushAgree">
+        /* updateAppPushAgree */
+        UPDATE user_manage
+        SET app_push_agree_ornot = #{appPushAgreeOrnot}
+        <choose>
+            <when test='appPushAgreeOrnot != null and appPushAgreeOrnot != "" and appPushAgreeOrnot == "Y"'>, app_push_agree_date = CURRENT_TIMESTAMP</when>
+            <otherwise>, app_push_agree_date = null</otherwise>
+        </choose>
+        WHERE user_manage_id = #{userManageId}
+    </update>
+
+    <!-- 음원 재생 여부 업데이트 -->
+    <update id="updateSoundtrackPlay">
+        /* updateSoundtrackPlay */
+        UPDATE user_manage
+        SET soundtrack_play_ornot = #{soundtrackPlayOrnot}
+        WHERE user_manage_id = #{userManageId}
+    </update>
+
+    <!-- 가이드 활성화 여부 업데이트 -->
+    <update id="updateGuideActivate">
+        /* updateGuideActivate */
+        UPDATE user_auth
+        SET guide_activate_ornot = #{guideActivateOrnot}
+        WHERE user_auth.user_auth_id = (
+            SELECT user_auth_id
+            FROM user_auth, auth
+            WHERE user_auth.AUTH_ID = auth.AUTH_ID
+            AND auth.PRODUCT_ID = #{productId}
+            AND user_auth.USER_MANAGE_ID = #{userManageId}
+        )
+    </update>
+
+    <!-- 테마 모드 업데이트 -->
+    <update id="updateThemeMode">
+        /* updateThemeMode */
+        UPDATE user_auth
+        SET theme_mode = #{themeMode}
+        WHERE user_auth.user_auth_id = (
+            SELECT user_auth_id
+            FROM user_auth, auth
+            WHERE user_auth.AUTH_ID = auth.AUTH_ID
+            AND auth.PRODUCT_ID = #{productId}
+            AND user_auth.USER_MANAGE_ID = #{userManageId}
+        )
+    </update>
 </mapper>

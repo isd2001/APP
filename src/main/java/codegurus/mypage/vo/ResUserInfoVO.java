@@ -46,6 +46,15 @@ public class ResUserInfoVO extends ResBaseVO {
     @ApiModelProperty(example = "Y", notes = "앱 푸시 동의 여부(Y, N)")
     private String appPushAgreeOrnot;
 
+    @ApiModelProperty(example = "Y", notes = "음원 재생 여부(Y, N)")
+    private String soundtrackPlayOrnot;
+
+    @ApiModelProperty(example = "Y", notes = "가이드 활성화 여부(Y, N)")
+    private String guideActivateOrnot;
+
+    @ApiModelProperty(example = "1", notes = "테마 모드 (1, 2 상품별로 프론트에서 알아서 구분하여 사용)")
+    private String themeMode;
+
     @ApiModelProperty(notes = "학년(예비초등, 1~4학년), 정회원 조회시에만 리턴됨", position = 18)
     protected String grade;
 

@@ -1,4 +1,4 @@
-package codegurus.board.vo;
+package codegurus.mypage.vo;
 
 import codegurus.cmm.vo.req.ReqBaseVO;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,7 +15,7 @@ import javax.validation.constraints.Pattern;
 @Setter
 public class ReqPromotionAgreeVO extends ReqBaseVO {
 
-    @ApiModelProperty(notes = "마케팅 활용 동의 여부 구분(Y:동의, N: 비동의", example = "Y", position = 1)
+    @ApiModelProperty(notes = "마케팅 활용 동의 여부 구분(Y:동의, N: 비동의)", example = "Y", position = 1)
     @NotBlank
     @Pattern(regexp="^[YN]$")
     private String promotionAgreeOrnot;
