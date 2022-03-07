@@ -45,8 +45,8 @@
 		DF14(a.modify_date) as modify_date,
 		a.delete_ornot,
 		c.auth_code,
-		c.guide_activate_ornot,
-		c.theme_mode,
+		b.guide_activate_ornot,
+		b.theme_mode,
 		DF14(d.trial_end_date) as trial_end_date
 	</sql>
 
