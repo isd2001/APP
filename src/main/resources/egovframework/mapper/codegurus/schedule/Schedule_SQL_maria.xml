@@ -95,6 +95,8 @@
 			book.book_title,
 			book.book_thumbnail_file_id,
 
+			contents.contents_id,
+
 			case when contents_history.end_date is not null then 'Y' else 'N' end as resultYn -- 조회된 도서 목록 중 완료된 학습 여부
         FROM online_subject_schedule
 		LEFT JOIN online_subject
