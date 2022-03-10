@@ -301,9 +301,11 @@
 			debate_topic_photo_file_id_1,
 			debate_topic_photo_file_id_2,
 			debate_topic_photo_file_id_3,
+			debate_topic_photo_file_id_4,
 			writing_topic_photo_file_id_1,
 			writing_topic_photo_file_id_2,
 			writing_topic_photo_file_id_3,
+			writing_topic_photo_file_id_4,
 		 	delete_ornot
 		)
 		VALUES
@@ -317,9 +319,11 @@
 			#{debateTopicPhotoFileId1},
 			#{debateTopicPhotoFileId2},
 			#{debateTopicPhotoFileId3},
+			#{debateTopicPhotoFileId4},
 			#{writingTopicPhotoFileId1},
 			#{writingTopicPhotoFileId2},
 			#{writingTopicPhotoFileId3},
+			#{writingTopicPhotoFileId4},
 			'N'
 		)
 	</insert>
@@ -423,9 +427,11 @@
 				contents_history.debate_topic_photo_file_id_1,
 				contents_history.debate_topic_photo_file_id_2,
 				contents_history.debate_topic_photo_file_id_3,
+				contents_history.debate_topic_photo_file_id_4,
 				contents_history.writing_topic_photo_file_id_1,
 				contents_history.writing_topic_photo_file_id_2,
 				contents_history.writing_topic_photo_file_id_3,
+				contents_history.writing_topic_photo_file_id_4,
 
 				(select count(*) from template_inst where contents_id=online_subject_schedule.contents_id and type='어휘' and delete_ornot='N' and template_id not in ('1', '14')) as voca_question_count, -- 어휘 총 문제 수
 				(select count(*) from template_inst where contents_id=online_subject_schedule.contents_id and type='독해' and delete_ornot='N' and template_id not in ('1', '14')) as reading_question_count, -- 독해 총 문제 수

@@ -46,8 +46,10 @@ public class ContentsHistoryVO {
     private String debateTopicPhotoFileId1;
     @ApiModelProperty(notes = "토론 주제 사진 파일 ID 2", example = "FILE_000000000000011")
     private String debateTopicPhotoFileId2;
-    @ApiModelProperty(notes = "토론 주제 사진 파일 ID 2", example = "FILE_000000000000011")
+    @ApiModelProperty(notes = "토론 주제 사진 파일 ID 3", example = "FILE_000000000000011")
     private String debateTopicPhotoFileId3;
+    @ApiModelProperty(notes = "토론 주제 사진 파일 ID 4", example = "FILE_000000000000011")
+    private String debateTopicPhotoFileId4;
 
     @ApiModelProperty(notes = "쓰기 주제 사진 파일 ID 1", example = "FILE_000000000000011")
     private String writingTopicPhotoFileId1;
@@ -55,6 +57,8 @@ public class ContentsHistoryVO {
     private String writingTopicPhotoFileId2;
     @ApiModelProperty(notes = "쓰기 주제 사진 파일 ID 3", example = "FILE_000000000000011")
     private String writingTopicPhotoFileId3;
+    @ApiModelProperty(notes = "쓰기 주제 사진 파일 ID 4", example = "FILE_000000000000011")
+    private String writingTopicPhotoFileId4;
 
     @ApiModelProperty(notes = "책 썸네일 파일 정보", example = "{}")
     private FileVO voiceFile;
