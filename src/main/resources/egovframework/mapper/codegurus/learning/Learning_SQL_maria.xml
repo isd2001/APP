@@ -617,6 +617,8 @@
 			on schedule.online_subject_id = score.online_subject_id
 			and template_inst_history.correctanswer_status = score.correctanswer_status
 			and template_inst.cate_id = score.cate_id
+			AND (template_inst.`type`='어휘' OR template_inst.`type`='독해')
+			AND template_inst.template_id not in ('1', '14')
 		where contents_history.delete_ornot = 'N'
 			and contents_history.contents_history_id =#{contentsHistoryId}
 		group by score_cate.parents_id;
