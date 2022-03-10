@@ -435,8 +435,8 @@
 
 				(select count(*) from template_inst where contents_id=online_subject_schedule.contents_id and type='어휘' and delete_ornot='N' and template_id not in ('1', '14')) as voca_question_count, -- 어휘 총 문제 수
 				(select count(*) from template_inst where contents_id=online_subject_schedule.contents_id and type='독해' and delete_ornot='N' and template_id not in ('1', '14')) as reading_question_count, -- 독해 총 문제 수
-				(select count(*) from template_inst a, template_inst_history b where a.type='어휘' AND a.template_id not in ('1', '14') and a.template_inst_id = b.template_inst_id and b.contents_history_id=contents_history.contents_history_id and (b.correctanswer_status=1 or b.correctanswer_status=2)) as voca_correctanswer_count, -- 어휘 정답 수
-				(select count(*) from template_inst a, template_inst_history b where a.type='독해' AND a.template_id not in ('1', '14') and a.template_inst_id = b.template_inst_id and b.contents_history_id=contents_history.contents_history_id and (b.correctanswer_status=1 or b.correctanswer_status=2)) as reading_correctanswer_count, -- 독해 정답 수
+				(select count(*) from template_inst a, template_inst_history b where a.type='어휘' AND a.template_id not in ('1', '14') and a.template_inst_id = b.template_inst_id and b.contents_history_id=contents_history.contents_history_id and b.correctanswer_status != 0 ) as voca_correctanswer_count, -- 어휘 정답 수
+				(select count(*) from template_inst a, template_inst_history b where a.type='독해' AND a.template_id not in ('1', '14') and a.template_inst_id = b.template_inst_id and b.contents_history_id=contents_history.contents_history_id and b.correctanswer_status != 0 ) as reading_correctanswer_count, -- 독해 정답 수
 
 				'1' as learning_rate
 			from contents_history
@@ -575,9 +575,9 @@
 	</resultMap>
 	<select id="selectScoreList" resultMap="QuestionScoreMap">
 		select /* selectScore */
-			sum(score.assignment_score) as assignment_score,
-			sum(score.calculation_score) as calculation_score,
-			round((sum(score.calculation_score) / sum(score.assignment_score))*100,0) as score_percent,
+			sum(IFNULL(score.assignment_score, '1')) as assignment_score,
+			sum(IFNULL(score.calculation_score, IF(template_inst_history.correctanswer_status = 0, '0', '1'))) as calculation_score,
+			ROUND((sum(IFNULL(score.calculation_score, IF(template_inst_history.correctanswer_status = 0, '0', '1'))) / sum(IFNULL(score.assignment_score, '1')))*100,0) as score_percent,
 			score_cate.cate_id,
 			score_cate.parents_id,
 			score_cate.depth,
@@ -611,12 +611,12 @@
 			on template_inst_history.template_inst_id = template_inst.template_inst_id
 		left join online_subject_schedule as schedule
 			on contents_history.online_subject_schedule_id = schedule.online_subject_schedule_id
+		LEFT JOIN cate as score_cate
+		  	on template_inst.cate_id = score_cate.cate_id
 		left join question_score as score
 			on schedule.online_subject_id = score.online_subject_id
 			and template_inst_history.correctanswer_status = score.correctanswer_status
 			and template_inst.cate_id = score.cate_id
-		LEFT JOIN cate as score_cate
-			on score.cate_id = score_cate.cate_id
 		where contents_history.delete_ornot = 'N'
 			and contents_history.contents_history_id =#{contentsHistoryId}
 		group by score_cate.parents_id;
