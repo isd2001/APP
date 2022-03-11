@@ -86,7 +86,7 @@
 		SELECT /* selectThisMonthBookList */
 			online_subject_schedule.online_subject_schedule_id,
 			online_subject_schedule.online_subject_id,
-			online_subject_schedule.`position`,
+			online_subject_schedule.position,
 			online_subject_schedule.`month`,
 			online_subject_schedule.seq,
 			online_subject.subject_title,
@@ -114,7 +114,7 @@
 		  AND online_subject_schedule.active_ornot = 'Y'
 		  AND online_subject_schedule.delete_ornot = 'N'
 		GROUP BY online_subject_schedule.online_subject_schedule_id
-		ORDER BY online_subject_schedule.seq asc
+		ORDER BY online_subject_schedule.position asc, online_subject_schedule.seq asc
 	</select>
 
 	<!-- 이달의 도서 팝업 조회 -->

@@ -705,7 +705,7 @@
 		)
 		AND online_subject_schedule.active_ornot = 'Y'
 		AND online_subject_schedule.delete_ornot = 'N'
-		ORDER BY online_subject_schedule.`month` ASC, online_subject_schedule.seq ASC
+		ORDER BY online_subject_schedule.`month` ASC, online_subject_schedule.position ASC, online_subject_schedule.seq ASC
 		LIMIT 1
 	</select>
 
