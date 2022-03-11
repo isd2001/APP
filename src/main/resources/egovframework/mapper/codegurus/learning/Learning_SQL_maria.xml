@@ -694,13 +694,13 @@
 			SELECT
 			online_subject_id AS current_online_subject_id
 			, `month` AS current_month
-			, seq AS current_seq
+			, `position` AS current_position
 			FROM online_subject_schedule
 			WHERE online_subject_schedule_id = #{onlineSubjectScheduleId}
 		) current_data
 		ON current_online_subject_id = online_subject_schedule.online_subject_id
 		AND (
-			(current_month = online_subject_schedule.`month` AND online_subject_schedule.seq > current_seq)
+			(current_month = online_subject_schedule.`month` AND online_subject_schedule.`position` > current_position)
 			OR (online_subject_schedule.`month` > current_month)
 		)
 		AND online_subject_schedule.active_ornot = 'Y'
