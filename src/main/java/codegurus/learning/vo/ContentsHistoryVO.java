@@ -42,7 +42,7 @@ public class ContentsHistoryVO {
     @ApiModelProperty(notes = "요약하기 음성 파일 ID")
     private String summaryDoingVoiceFileId;
 
-    @ApiModelProperty(notes = "토론 주제 사진 파일 ID 1", required = false, example = "FILE_000000000000011")
+    @ApiModelProperty(notes = "토론 주제 사진 파일 ID 1", example = "FILE_000000000000011")
     private String debateTopicPhotoFileId1;
     @ApiModelProperty(notes = "토론 주제 사진 파일 ID 2", example = "FILE_000000000000011")
     private String debateTopicPhotoFileId2;
