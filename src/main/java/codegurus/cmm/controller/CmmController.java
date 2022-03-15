@@ -130,6 +130,9 @@ public class CmmController extends BaseController {
 			if(fvo.getFileExtsn().toLowerCase().equals("mp3")) {
 				mimetype = "audio/mpeg3";
 			}
+			if(fvo.getFileExtsn().toLowerCase().equals("wav")) {
+				mimetype = "audio/wav";
+			}
 			if(fvo.getFileExtsn().toLowerCase().equals("jpg")
 					|| fvo.getFileExtsn().toLowerCase().equals("png")
 					|| fvo.getFileExtsn().toLowerCase().equals("gif") ) {

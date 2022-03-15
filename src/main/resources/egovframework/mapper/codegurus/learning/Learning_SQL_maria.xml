@@ -70,7 +70,6 @@
 			VOICE_COMTNFILE.CREAT_DT as VOICE_CREAT_DT,
 			VOICE_COMTNFILEDETAIL.DOWNLOAD_CNT as VOICE_DOWNLOAD_CNT,
 
-
 		    book.trailer,
 		    book.trailer_active_ornot
 		FROM online_subject_schedule schedule
@@ -342,7 +341,6 @@
 		VALUES
 		<foreach collection="list" item="item" index="index" separator=",">
 			(
-
 			#{item.contentsHistoryId},
 			#{item.templateInstId},
 			#{item.correctanswerStatus},
@@ -504,6 +502,7 @@
 
 		    book.author,
 		    book.illustrator,
+			book.outline,
 
 		    book.cate_id,
 
@@ -545,7 +544,6 @@
 			COMTNFILEDETAIL.FILE_SIZE,
 			COMTNFILE.CREAT_DT,
 			COMTNFILEDETAIL.DOWNLOAD_CNT
-
 
 		FROM online_subject_schedule as schedule
         INNER JOIN contents as contents
@@ -628,7 +626,7 @@
 	<select id="selectDicList" resultType="TemplateInstVO">
 		SELECT /* selectDicList */
 			history.contents_history_id,
-			template_inst_history.template_inst_id ,
+			template_inst_history.template_inst_id,
 			template_inst.template_inst_id,
 			template_inst.json,
 			template_inst.template_id,
