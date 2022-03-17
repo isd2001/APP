@@ -573,53 +573,58 @@
 	</resultMap>
 	<select id="selectScoreList" resultMap="QuestionScoreMap">
 		select /* selectScore */
-			sum(IFNULL(score.assignment_score, '1')) as assignment_score,
-			sum(IFNULL(score.calculation_score, IF(template_inst_history.correctanswer_status = 0, '0', '1'))) as calculation_score,
-			ROUND((sum(IFNULL(score.calculation_score, IF(template_inst_history.correctanswer_status = 0, '0', '1'))) / sum(IFNULL(score.assignment_score, '1')))*100,0) as score_percent,
-			score_cate.cate_id,
-			score_cate.parents_id,
-			score_cate.depth,
-			score_cate.`order`,
-			score_cate.cate_title,
-			score_cate.first_cate_title,
-			score_cate.second_cate_title,
-			score_cate.third_cate_title,
-			score_cate.fourth_cate_title,
-			score_cate.fifth_cate_title,
-			score_cate.sixth_cate_title,
-			score_cate.seventh_cate_title,
-			score_cate.eight_cate_title,
-			score_cate.ninth_cate_title,
-			score_cate.tenth_cate_title,
-			score_cate.first_cate_id ,
-			score_cate.second_cate_id,
-			score_cate.third_cate_id ,
-			score_cate.fourth_cate_id ,
-			score_cate.fifth_cate_id ,
-			score_cate.sixth_cate_id,
-			score_cate.seventh_cate_id ,
-			score_cate.eight_cate_id ,
-			score_cate.ninth_cate_id ,
-			score_cate.tenth_cate_id
-		FROM contents_history as contents_history
-		left join template_inst_history as template_inst_history
-			on contents_history.contents_history_id = template_inst_history.contents_history_id
-			and template_inst_history.delete_ornot ='N'
-		left join template_inst as template_inst
-			on template_inst_history.template_inst_id = template_inst.template_inst_id
-			AND (template_inst.`type`='어휘' OR template_inst.`type`='독해')
-			AND template_inst.template_id not in ('1', '14')
-		left join online_subject_schedule as schedule
-			on contents_history.online_subject_schedule_id = schedule.online_subject_schedule_id
-		LEFT JOIN cate as score_cate
-		  	on template_inst.cate_id = score_cate.cate_id
-		left join question_score as score
-			on schedule.online_subject_id = score.online_subject_id
-			and template_inst_history.correctanswer_status = score.correctanswer_status
-			and template_inst.cate_id = score.cate_id
-		where contents_history.delete_ornot = 'N'
-			and contents_history.contents_history_id =#{contentsHistoryId}
-		group by score_cate.parents_id;
+			*
+		FROM (
+			SELECT
+				sum(IFNULL(score.assignment_score, '1')) as assignment_score,
+				sum(IFNULL(score.calculation_score, IF(template_inst_history.correctanswer_status = 0, '0', '1'))) as calculation_score,
+				ROUND((sum(IFNULL(score.calculation_score, IF(template_inst_history.correctanswer_status = 0, '0', '1'))) / sum(IFNULL(score.assignment_score, '1')))*100,0) as score_percent,
+				score_cate.cate_id,
+				score_cate.parents_id,
+				score_cate.depth,
+				score_cate.`order`,
+				score_cate.cate_title,
+				score_cate.first_cate_title,
+				score_cate.second_cate_title,
+				score_cate.third_cate_title,
+				score_cate.fourth_cate_title,
+				score_cate.fifth_cate_title,
+				score_cate.sixth_cate_title,
+				score_cate.seventh_cate_title,
+				score_cate.eight_cate_title,
+				score_cate.ninth_cate_title,
+				score_cate.tenth_cate_title,
+				score_cate.first_cate_id ,
+				score_cate.second_cate_id,
+				score_cate.third_cate_id ,
+				score_cate.fourth_cate_id ,
+				score_cate.fifth_cate_id ,
+				score_cate.sixth_cate_id,
+				score_cate.seventh_cate_id ,
+				score_cate.eight_cate_id ,
+				score_cate.ninth_cate_id ,
+				score_cate.tenth_cate_id
+			FROM contents_history as contents_history
+			left join template_inst_history as template_inst_history
+				on contents_history.contents_history_id = template_inst_history.contents_history_id
+				and template_inst_history.delete_ornot ='N'
+			left join template_inst as template_inst
+				on template_inst_history.template_inst_id = template_inst.template_inst_id
+				AND (template_inst.`type`='어휘' OR template_inst.`type`='독해')
+				AND template_inst.template_id not in ('1', '14')
+			left join online_subject_schedule as schedule
+				on contents_history.online_subject_schedule_id = schedule.online_subject_schedule_id
+			LEFT JOIN cate as score_cate
+				on template_inst.cate_id = score_cate.cate_id
+			left join question_score as score
+				on schedule.online_subject_id = score.online_subject_id
+				and template_inst_history.correctanswer_status = score.correctanswer_status
+				and template_inst.cate_id = score.cate_id
+			where contents_history.delete_ornot = 'N'
+				and contents_history.contents_history_id = #{contentsHistoryId}
+			group by score_cate.parents_id
+		) A
+		WHERE A.second_cate_title IS NOT NULL
 	</select>
 
 	<!-- 어휘 조회 -->
