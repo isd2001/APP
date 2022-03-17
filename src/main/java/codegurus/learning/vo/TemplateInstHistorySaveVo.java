@@ -20,6 +20,9 @@ public class TemplateInstHistorySaveVo {
     @ApiModelProperty(notes = "정답 상태", example = "1")
     private String correctanswerStatus;
 
+    @ApiModelProperty(notes = "정답 내용", example = "각 템플릿별 정답 정리 내용")
+    private String correctanswerContent = "";
+
     @ApiModelProperty(hidden = true)
     private String userManageId;
 

@@ -335,6 +335,7 @@
 			contents_history_id,
 			template_inst_id,
 		 	correctanswer_status,
+			correctanswer_content,
 		 	user_manage_id,
 		 	delete_ornot
 		)
@@ -344,6 +345,7 @@
 			#{item.contentsHistoryId},
 			#{item.templateInstId},
 			#{item.correctanswerStatus},
+			#{item.correctanswerContent},
 			#{item.userManageId},
 			'N'
 			)
