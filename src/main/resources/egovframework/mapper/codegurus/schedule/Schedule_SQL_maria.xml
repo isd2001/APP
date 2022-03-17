@@ -52,6 +52,7 @@
 
 		    book.book_id,
 			book.book_thumbnail_file_id,
+			book.book_introduction,
 
 		    COMTNFILE.ATCH_FILE_ID,
 			COMTNFILEDETAIL.FILE_CN,
