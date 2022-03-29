@@ -21,4 +21,5 @@ public class ScheduleInfoVO extends BaseVO {
     private String eduStatCdNm;
     private String NoClassChagDt;
     private int value;
+    private String sapSubjId;
 }

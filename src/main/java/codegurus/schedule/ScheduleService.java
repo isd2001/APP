@@ -137,27 +137,8 @@ public class ScheduleService {
 
             month = nowMonth;
         }
-        // TODO test 계정 하드코딩 추후 제거
-        /*else if(userVO.getUsername().startsWith("test") && userVO.getName().startsWith("예비초등")) {
-            onlineSubjectId = 1;
-            month = nowMonth;
-        }
-        else if(userVO.getUsername().startsWith("test") && userVO.getName().startsWith("1학년")) {
-            onlineSubjectId = 2;
-            month = nowMonth;
-        }
-        else if(userVO.getUsername().startsWith("test") && userVO.getName().startsWith("2학년")) {
-            onlineSubjectId = 3;
-            month = nowMonth;
-        }
-        else if((userVO.getUsername().startsWith("test") && userVO.getName().startsWith("3학년"))
-            || (userVO.getUsername().startsWith("sj") && userVO.getName().startsWith("성자초"))) {
-            onlineSubjectId = 4;
-            month = nowMonth;
-        }*/
-        // 여기까지 하드코딩
         // 실제 정회원, 수업중이 하나라도 있으면 해당
-        // TODO 리터러시 스케줄 관련해서 수정해야함
+        // TODO 플라톤 스케줄 관련해서 수정해야함
         else {
             ScheduleInfoVO scheduleInfoVO = new ScheduleInfoVO();
             scheduleInfoVO.setProductId(reqVo.getProductId());
@@ -169,6 +150,7 @@ public class ScheduleService {
 
             String birth = null;
             int scheduleIntervalValue = 0;
+            String sapSubjId = null;
 
             for(ScheduleInfoVO info : scheduleInfoList) {
                 // DW에 정보가 없어도 강제 인증한것으로 인식
@@ -176,40 +158,42 @@ public class ScheduleService {
                     isSet = true;
                     birth = info.getBirth();
                     scheduleIntervalValue = info.getValue();
+                    sapSubjId = info.getSapSubjId();
                 }
-
                 // 하나라도 수업중이면 인증한것으로 인식
-                if(info.getEduStatCd() != null && info.getEduStatCd().equals(EduStatCdEnum.수업중.getCode())) {
+                else if(info.getEduStatCd() != null && info.getEduStatCd().equals(EduStatCdEnum.수업중.getCode())) {
                     isSet = true;
                     birth = info.getBirth();
                     scheduleIntervalValue = info.getValue();
+                    sapSubjId = info.getSapSubjId();
                 }
             }
 
             // 스케줄 정보 가져오기
             if(isSet) {
-                // 값 비교를 위해 현재 나이x12+현재월을 계산한다.
+                // 값 비교를 위해 현재 나이x12+현재월을 계산한다. 플라톤는 학년과 상관없어서 나이를 0으로 변환
                 int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
-                int currentAge = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(birth.substring(0, 4)) + 1;
+                int currentAge = reqVo.getProductId().equals(ProductEnum.상품_플라톤.getProductId()) ? 0 : Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(birth.substring(0, 4)) + 1;
 
                 int totalMonth = currentAge * 12 + currentMonth + scheduleIntervalValue;
 
                 // 범위가 벗어나면 가장 가까운 값을 보내주는것으로 한다. 예외에 대해 안정해줌
-                // 상품별로 구간이 다르다 스마트독서 7살1월 ~ 10살12월, 리터러시 8살1월 ~ 11살12월
+                // 상품별로 구간이 다르다 스마트독서 7살1월 ~ 10살12월, 플라톤 1월 ~ 12월
                 int minMonth = 0;
                 int maxMonth = 0;
                 if(reqVo.getProductId().equals(ProductEnum.상품_스마트독서.getProductId())) {
                     minMonth = 7 * 12 + 1;
                     maxMonth = 10 * 12 + 12;
-                } else if(reqVo.getProductId().equals(ProductEnum.상품_플라톤.getProductId())) {
-                    minMonth = 8 * 12 + 1;
-                    maxMonth = 11 * 12 + 12;
-                }
 
-                if(totalMonth < minMonth) {
-                    totalMonth = minMonth;
-                } else if(maxMonth < totalMonth) {
-                    totalMonth = maxMonth;
+                    if(totalMonth < minMonth) {
+                        totalMonth = minMonth;
+                    } else if(maxMonth < totalMonth) {
+                        totalMonth = maxMonth;
+                    }
+                } else if(reqVo.getProductId().equals(ProductEnum.상품_플라톤.getProductId())) {
+                    if(totalMonth > 12) {
+                        totalMonth -= 12;
+                    }
                 }
 
                 monthValue = (totalMonth % 12 == 0 ? 12 : totalMonth % 12);
@@ -219,11 +203,12 @@ public class ScheduleService {
                     month = "" + monthValue;
                 }
 
-                if(month.equals("12")) {
-                    totalMonth -= 12;
-                }
-
                 if(reqVo.getProductId().equals(ProductEnum.상품_스마트독서.getProductId())) {
+
+                    if(month.equals("12")) {
+                        totalMonth -= 12;
+                    }
+
                     switch (totalMonth / 12) {
                         case 7:
                             onlineSubjectId = 1;
@@ -239,17 +224,26 @@ public class ScheduleService {
                             break;
                     }
                 } else if(reqVo.getProductId().equals(ProductEnum.상품_플라톤.getProductId())) {
-                    switch (totalMonth / 12) {
-                        case 8:
+                    // 플라톤은 상품코드에 따라 다르다.
+                    switch (sapSubjId) {
+                        case "802450":
+                        case "802459":
+                        case "802468":
                             onlineSubjectId = 5;
                             break;
-                        case 9:
+                        case "802451":
+                        case "802460":
+                        case "802469":
                             onlineSubjectId = 6;
                             break;
-                        case 10:
+                        case "802452":
+                        case "802461":
+                        case "802470":
                             onlineSubjectId = 7;
                             break;
-                        case 11:
+                        case "802453":
+                        case "802462":
+                        case "802471":
                             onlineSubjectId = 8;
                             break;
                     }

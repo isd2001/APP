@@ -527,7 +527,7 @@ public class AuthService implements UserDetailsService {
             vp.put("regId", userManageId);
 
             // 이미 연결된 계약정보일 수 있어서 확인 필요, 있는 경우에는 스킵
-            int cnt = authDAO.selecttUserSubjectCount(vp);
+            int cnt = authDAO.selectUserSubjectCount(vp);
 
             if(cnt < 1) {
                 authDAO.insertUserSubject(vp);

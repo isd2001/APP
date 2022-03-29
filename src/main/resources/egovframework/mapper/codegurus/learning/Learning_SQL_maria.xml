@@ -768,4 +768,26 @@
 		)
 	</insert>
 
+	<!-- 수업 관리 강제 패스 정보 수 조회 -->
+	<select id="selectClassManageForcePassInfoCount" resultType="int">
+		SELECT /* selectClassManageForcePassInfoCount */
+			COUNT(*)
+		FROM online_subject_schedule
+		INNER JOIN online_subject_sap_mapping
+		ON online_subject_schedule.ONLINE_SUBJECT_ID = online_subject_sap_mapping.ONLINE_SUBJECT_ID
+			AND online_subject_schedule.ONLINE_SUBJECT_SCHEDULE_ID = #{onlineSubjectScheduleId}
+		INNER JOIN user_subject
+		ON user_subject.SAP_SUBJ_ID = online_subject_sap_mapping.SAP_SUBJECT_ID
+			AND user_subject.DELETE_ORNOT = 'N'
+			AND user_subject.USER_MANAGE_ID = #{userManageId}
+		INNER JOIN online_subject
+		ON online_subject.ONLINE_SUBJECT_ID = online_subject_schedule.ONLINE_SUBJECT_ID
+		INNER JOIN user_auth
+		ON user_auth.USER_MANAGE_ID = user_subject.USER_MANAGE_ID
+			AND user_auth.DELETE_ORNOT = 'N'
+			AND user_auth.USER_STATUS_CODE = '01'
+		INNER JOIN auth
+		ON auth.AUTH_ID = user_auth.AUTH_ID
+			AND auth.PRODUCT_ID = online_subject.PRODUCT_ID
+	</select>
 </mapper>

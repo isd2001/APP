@@ -3,6 +3,7 @@ package codegurus.learning;
 import codegurus.learning.vo.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 학습 DAO
@@ -29,4 +30,6 @@ public interface LearningDAO {
 
     ClassManageVO selectClassManage(ReqLearningClassCheckVO reqVo);
     void insertClassAttendHistory(ReqLearningClassCheckVO reqVo);
+
+    int selectClassManageForcePassInfoCount(ReqLearningClassCheckVO reqVo);
 }

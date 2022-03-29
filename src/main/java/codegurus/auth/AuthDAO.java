@@ -26,7 +26,7 @@ public interface AuthDAO {
     List<ResContractInfoElemVO> selectContractInfo(ReqContractInfoVO reqVo);
     Map<String, Object> callGetOnlineSubjInfo(Map<String, Object> map);
     void insertUserSubject(Map<String, String> map);
-    int selecttUserSubjectCount(Map<String, String> map);
+    int selectUserSubjectCount(Map<String, String> map);
     int updateUserAuth(Map<String, Object> map);
     List<String> selectUserSubjectList(String userManageId);
     int updateUserInfoByFullmemberAuth(ReqContractInfoVO reqVo);

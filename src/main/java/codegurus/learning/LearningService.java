@@ -165,6 +165,13 @@ public class LearningService {
      */
     public void classCheck(ReqLearningClassCheckVO reqVo, ResBaseVO resVo) {
 
+        // 수업 관리 강제 패스 정보 수 체크
+        int cnt = learningDAO.selectClassManageForcePassInfoCount(reqVo);
+        if(cnt > 0) {
+            // 정보가 하나라도 있다면 일단 통과
+            return;
+        }
+
         ClassManageVO classManageVO = learningDAO.selectClassManage(reqVo);
 
         if(classManageVO == null || StringUtil.isBlank(classManageVO.getClassManageId())) {

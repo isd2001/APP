@@ -375,8 +375,8 @@
     </select>
 
     <!-- 정회원 인증 정보 조회 -->
-    <select id="selecttUserSubjectCount" resultType="int">
-        SELECT /* selecttUserSubjectCount */
+    <select id="selectUserSubjectCount" resultType="int">
+        SELECT /* selectUserSubjectCount */
             COUNT(*)
         FROM user_subject
         WHERE edu_cntr_oid = #{eduCntrOid}
@@ -621,34 +621,35 @@
     <select id="selectScheduleInfo" resultType="ScheduleInfoVO">
         SELECT /* selectScheduleInfo */
             user_manage.USER_ID
-             , user_manage.user_manage_id
-             , user_manage.BIRTH
-             , user_auth.USER_STATUS_CODE
-             , auth.PRODUCT_ID
-             , auth.AUTH_CODE
-             , svc_mh_edu_cntr_cp.EDU_STAT_CD
-             , svc_mh_edu_cntr_cp.EDU_STAT_CD_NM
-             , svc_mh_edu_cntr_cp.NO_CLASS_CHAG_DT
-             , IFNULL(schedule_interval.`value`, 0) AS `value`
+            , user_manage.user_manage_id
+            , user_manage.BIRTH
+            , user_auth.USER_STATUS_CODE
+            , auth.PRODUCT_ID
+            , auth.AUTH_CODE
+            , svc_mh_edu_cntr_cp.EDU_STAT_CD
+            , svc_mh_edu_cntr_cp.EDU_STAT_CD_NM
+            , svc_mh_edu_cntr_cp.NO_CLASS_CHAG_DT
+            , IFNULL(schedule_interval.`value`, 0) AS `value`
+            , user_subject.SAP_SUBJ_ID
         FROM user_manage
         INNER JOIN user_auth
-                ON user_manage.USER_MANAGE_ID = user_auth.USER_MANAGE_ID
-                    AND user_manage.DELETE_ORNOT = 'N'
-                    AND user_auth.DELETE_ORNOT = 'N'
+            ON user_manage.USER_MANAGE_ID = user_auth.USER_MANAGE_ID
+            AND user_manage.DELETE_ORNOT = 'N'
+            AND user_auth.DELETE_ORNOT = 'N'
         LEFT JOIN auth
-               ON user_auth.AUTH_ID = auth.AUTH_ID
+            ON user_auth.AUTH_ID = auth.AUTH_ID
         LEFT JOIN user_subject
-               ON user_manage.USER_MANAGE_ID = user_subject.USER_MANAGE_ID
-                   AND user_subject.DELETE_ORNOT = 'N'
+            ON user_manage.USER_MANAGE_ID = user_subject.USER_MANAGE_ID
+            AND user_subject.DELETE_ORNOT = 'N'
         LEFT JOIN svc_mh_edu_cntr_cp
-               ON svc_mh_edu_cntr_cp.edu_cntr_oid = user_subject.edu_cntr_oid
-                   AND svc_mh_edu_cntr_cp.DELETE_ORNOT = 'N'
+            ON svc_mh_edu_cntr_cp.edu_cntr_oid = user_subject.edu_cntr_oid
+            AND svc_mh_edu_cntr_cp.DELETE_ORNOT = 'N'
         LEFT JOIN schedule_interval
-               ON user_manage.USER_MANAGE_ID = schedule_interval.user_manage_id
-                   AND schedule_interval.delete_ornot = 'N'
-                   AND schedule_interval.product_id = #{productId}
+            ON user_manage.USER_MANAGE_ID = schedule_interval.user_manage_id
+            AND schedule_interval.delete_ornot = 'N'
+            AND schedule_interval.product_id = #{productId}
         WHERE auth.PRODUCT_ID = #{productId}
-          AND user_manage.user_manage_id = #{userManageId}
-          AND auth.AUTH_CODE = '01'
+            AND user_manage.user_manage_id = #{userManageId}
+            AND auth.AUTH_CODE = '01'
     </select>
 </mapper>
