@@ -267,9 +267,6 @@ public class AuthService implements UserDetailsService {
                 case "3학년" :
                     selectGrade = 10;
                     break;
-                case "4학년" :
-                    selectGrade = 11;
-                    break;
             }
 
             // 잘못된 요청
@@ -531,6 +528,12 @@ public class AuthService implements UserDetailsService {
 
             if(cnt < 1) {
                 authDAO.insertUserSubject(vp);
+
+                // 마지막에 등록한 것을 유효 체크로 해준다.
+                ResContractInfoElemVO req = new ResContractInfoElemVO();
+                req.setEduCntrOid(vo.getEduCntrOid());
+                req.setUserManageId(userManageId);
+                authDAO.updateUserSubjectActive(req);
             }
         }
 

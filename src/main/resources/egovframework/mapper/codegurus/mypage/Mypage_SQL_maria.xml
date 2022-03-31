@@ -357,8 +357,8 @@
         SELECT /* selectParentInfo */
             c.intg_parent_cust_id,
             c.parent_sap_cust_id,
-            c.parent_cust_nm ,
-            c.parent_birthdt ,
+            c.parent_cust_nm,
+            c.parent_birthdt,
             c.parent_handphone
         FROM user_manage a, user_subject b, svc_mh_edu_cntr_cp c
         WHERE a.user_manage_id = #{userManageId}
