@@ -1,5 +1,6 @@
 package codegurus.mypage.vo;
 
+import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.vo.req.ReqBaseVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -20,4 +21,7 @@ public class ReqPortfolioListVO extends ReqBaseVO {
 
     @ApiModelProperty(hidden = true)
     private String userManageId;
+
+    @ApiModelProperty(notes = "상품ID", example = "1")
+    protected String productId = ProductEnum.상품_스마트독서.getProductId();
 }
