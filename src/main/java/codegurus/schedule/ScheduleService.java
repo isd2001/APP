@@ -7,14 +7,18 @@ import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.constants.EduStatCdEnum;
 import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.jwt.TokenProvider;
+import codegurus.cmm.util.StringUtil;
 import codegurus.cmm.util.SystemUtil;
 import codegurus.schedule.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -103,6 +107,7 @@ public class ScheduleService {
         } else {
             nowMonth = "" + monthValue;
         }
+        boolean isReview = false;
 
         UserVO userVO = cacheService.getTokenUser(reqVo.getProductId());
         log.debug("## getUsername:", userVO.getUsername());
@@ -169,10 +174,33 @@ public class ScheduleService {
                 }
                 // 휴회라면 복습처리를 해야한다. 휴회일이 포함된 달동안 진행되고 -1일의 학습월의 학습들을 복습하도록 한다.
                 else if(info.getEduStatCd() != null && info.getEduStatCd().equals(EduStatCdEnum.휴회.getCode())) {
-                    isSet = true;
-                    birth = info.getBirth();
-                    scheduleIntervalValue = info.getValue();
-                    sapSubjId = info.getSapSubjId();
+                    if(StringUtil.isNotBlank(info.getNoClassChagDt())) {
+                        Calendar nowCal = Calendar.getInstance();
+                        Calendar checkCal = Calendar.getInstance();
+                        Date checkDate = null;
+                        try {
+                            checkDate = new SimpleDateFormat("yyyyMMdd").parse(info.getNoClassChagDt());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if(checkDate != null) {
+                            checkCal.setTime(checkDate);
+                            // 같은 달까지만 복습기간
+                            if(nowCal.get(Calendar.MONTH) == checkCal.get(Calendar.MONTH)) {
+                                isSet = true;
+                                isReview = true;
+                                birth = info.getBirth();
+                                scheduleIntervalValue = info.getValue();
+
+                                // 1일이면 지난달것을 복습
+                                if(checkCal.get(Calendar.DAY_OF_MONTH) == 1) {
+                                    scheduleIntervalValue -= 1;
+                                }
+                                sapSubjId = info.getSapSubjId();
+                            }
+
+                        }
+                    }
                 }
             }
 
@@ -200,6 +228,8 @@ public class ScheduleService {
                 } else if(reqVo.getProductId().equals(ProductEnum.상품_플라톤.getProductId())) {
                     if(totalMonth > 12) {
                         totalMonth -= 12;
+                    } else if(totalMonth < 1) {
+                        totalMonth += 12;
                     }
                 }
 
@@ -263,7 +293,16 @@ public class ScheduleService {
         reqVo.setMonth(month);
         //------------------- 오프라인 진도를 반영한 온라인과목/월 조회 - end ---------------------
 
-        resVo.setList(scheduleDAO.selectThisMonthBookList(reqVo));
+        List<ResScheduleVO> thisMonthBookList = scheduleDAO.selectThisMonthBookList(reqVo);
+
+        // 복습일 경우 학습을 했다고 값을 수정
+        if(isReview && thisMonthBookList != null && thisMonthBookList.size() > 0) {
+            for(ResScheduleVO vo : thisMonthBookList) {
+                vo.setResultYn("Y");
+            }
+        }
+
+        resVo.setList(thisMonthBookList);
 
         return resVo;
     }
