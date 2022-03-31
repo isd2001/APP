@@ -153,15 +153,22 @@ public class ScheduleService {
             String sapSubjId = null;
 
             for(ScheduleInfoVO info : scheduleInfoList) {
-                // DW에 정보가 없어도 강제 인증한것으로 인식
+                // DW에 정보가 없어도 강제 인증한 것으로 인식
                 if(info.getUserStatusCode() != null && info.getUserStatusCode().equals("01")) {
                     isSet = true;
                     birth = info.getBirth();
                     scheduleIntervalValue = info.getValue();
                     sapSubjId = info.getSapSubjId();
                 }
-                // 하나라도 수업중이면 인증한것으로 인식
+                // 수업중이면 인증한것으로 인식
                 else if(info.getEduStatCd() != null && info.getEduStatCd().equals(EduStatCdEnum.수업중.getCode())) {
+                    isSet = true;
+                    birth = info.getBirth();
+                    scheduleIntervalValue = info.getValue();
+                    sapSubjId = info.getSapSubjId();
+                }
+                // 휴회라면 복습처리를 해야한다. 휴회일이 포함된 달동안 진행되고 -1일의 학습월의 학습들을 복습하도록 한다.
+                else if(info.getEduStatCd() != null && info.getEduStatCd().equals(EduStatCdEnum.휴회.getCode())) {
                     isSet = true;
                     birth = info.getBirth();
                     scheduleIntervalValue = info.getValue();

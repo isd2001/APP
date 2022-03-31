@@ -628,7 +628,7 @@
             , auth.AUTH_CODE
             , svc_mh_edu_cntr_cp.EDU_STAT_CD
             , svc_mh_edu_cntr_cp.EDU_STAT_CD_NM
-            , svc_mh_edu_cntr_cp.NO_CLASS_CHAG_DT
+            , ADDDATE(STR_TO_DATE(svc_mh_edu_cntr_cp.NO_CLASS_CHAG_DT, '%Y%m%d'), -1) AS NO_CLASS_CHAG_DT
             , IFNULL(schedule_interval.`value`, 0) AS `value`
             , user_subject.SAP_SUBJ_ID
         FROM user_manage
@@ -641,6 +641,7 @@
         LEFT JOIN user_subject
             ON user_manage.USER_MANAGE_ID = user_subject.USER_MANAGE_ID
             AND user_subject.DELETE_ORNOT = 'N'
+            AND user_subject.ACTIVE_ORNOT = 'Y'
         LEFT JOIN svc_mh_edu_cntr_cp
             ON svc_mh_edu_cntr_cp.edu_cntr_oid = user_subject.edu_cntr_oid
             AND svc_mh_edu_cntr_cp.DELETE_ORNOT = 'N'
@@ -652,4 +653,34 @@
             AND user_manage.user_manage_id = #{userManageId}
             AND auth.AUTH_CODE = '01'
     </select>
+
+    <!-- 사용자 과목 유효 수정 -->
+    <update id="updateUserSubjectActive">
+        UPDATE
+            user_subject
+        SET
+            user_subject.ACTIVE_ORNOT = if(user_subject.edu_cntr_oid = #{eduCntrOid}, 'Y', 'N')
+          , modify_id = #{userManageId}
+          , modify_date = CURRENT_TIMESTAMP
+        WHERE
+                user_subject.edu_cntr_oid IN (
+                SELECT user_subject.edu_cntr_oid
+                FROM user_subject, online_subject_sap_mapping, online_subject
+                   , (
+                    SELECT user_subject.user_manage_id, online_subject.PRODUCT_ID
+                    FROM user_subject, online_subject_sap_mapping, online_subject
+                    WHERE user_subject.edu_cntr_oid = #{eduCntrOid}
+                      AND user_subject.delete_ornot = 'N'
+                      AND user_subject.SAP_SUBJ_ID = online_subject_sap_mapping.SAP_SUBJECT_ID
+                      AND online_subject_sap_mapping.ONLINE_SUBJECT_ID = online_subject.ONLINE_SUBJECT_ID
+                    GROUP BY user_subject.edu_cntr_oid
+                ) A
+                WHERE user_subject.user_manage_id = A.user_manage_id
+                  AND user_subject.delete_ornot = 'N'
+                  AND user_subject.SAP_SUBJ_ID = online_subject_sap_mapping.SAP_SUBJECT_ID
+                  AND online_subject_sap_mapping.ONLINE_SUBJECT_ID = online_subject.ONLINE_SUBJECT_ID
+                  AND online_subject.PRODUCT_ID = A.PRODUCT_ID
+                GROUP BY user_subject.edu_cntr_oid
+            )
+    </update>
 </mapper>

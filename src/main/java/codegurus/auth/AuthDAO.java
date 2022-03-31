@@ -43,4 +43,6 @@ public interface AuthDAO {
 
     List<Map<String, Object>> selectOnlineSubjectSapMappingList(Map<String, String> map);
     void insertEduCntrCp(Map<String, String> map);
+
+    int updateUserSubjectActive(ResContractInfoElemVO reqVo);
 }

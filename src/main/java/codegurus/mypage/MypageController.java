@@ -50,9 +50,6 @@ public class MypageController extends BaseController {
     @Autowired
     private LearningService learningService;
 
-    @Autowired
-    private BoardService boardService;
-
 
     /**
      * 나의 진도
