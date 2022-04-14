@@ -115,6 +115,20 @@ public class LearningService {
     }
 
     /**
+     * 학습 콘텐츠 이력 수정
+     *
+     * @param reqVo
+     * @param resVo
+     * @return
+     */
+    public void updateLearningContentsHistory(ReqLearningContentsHistoryUpdateVO reqVo, ResBaseVO resVo) {
+
+        learningDAO.updateLearningContentsHistory(reqVo);
+        resVo.setResMsg("학습 콘텐츠 이력 수정");
+
+    }
+
+    /**
      * 학습 결과 조회
      *
      * @param reqVo

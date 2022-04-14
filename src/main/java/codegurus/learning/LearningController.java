@@ -104,6 +104,23 @@ public class LearningController extends BaseController {
     }
 
     /**
+     * 학습 콘텐츠 이력 수정
+     *
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("/update")
+    @ApiOperation(value = "학습 콘텐츠 이력 수정")
+    public Res<ResBaseVO> update(@RequestBody @Valid ReqLearningContentsHistoryUpdateVO reqVo) {
+
+        ResBaseVO resVo= new ResBaseVO();
+        reqVo.setUserManageId(cacheService.getUserManageId());
+        learningService.updateLearningContentsHistory(reqVo, resVo);
+
+        return new Res<ResBaseVO>(resVo);
+    }
+
+    /**
      * 학습 결과
      *
      * @param reqVo
