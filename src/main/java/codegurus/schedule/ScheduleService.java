@@ -266,21 +266,74 @@ public class ScheduleService {
                         case "802450":
                         case "802459":
                         case "802468":
+
+                        // 플라톤 off 추가
+                        case "801177":
+                        case "800097":
+                        case "801025":
+                        case "802263":
+                        case "800145":
+                        case "801188":
+                        case "801028":
+                        case "801130":
+                        case "801124":
+                        case "801379":
+
                             onlineSubjectId = 5;
                             break;
                         case "802451":
                         case "802460":
                         case "802469":
+
+                        // 플라톤 off 추가
+                        case "801178":
+                        case "800098":
+                        case "801026":
+                        case "802264":
+                        case "800146":
+                        case "801189":
+                        case "801029":
+                        case "801131":
+                        case "801125":
+                        case "801380":
+
                             onlineSubjectId = 6;
                             break;
                         case "802452":
                         case "802461":
                         case "802470":
+
+                        // 플라톤 off 추가
+                        case "801179":
+                        case "800099":
+                        case "801027":
+                        case "801942":
+                        case "802265":
+                        case "800147":
+                        case "801190":
+                        case "801030":
+                        case "801132":
+                        case "801126":
+                        case "801381":
+
                             onlineSubjectId = 7;
                             break;
                         case "802453":
                         case "802462":
                         case "802471":
+
+                        // 플라톤 off 추가
+                        case "801173":
+                        case "801180":
+                        case "800100":
+                        case "802266":
+                        case "800148":
+                        case "801184":
+                        case "801191":
+                        case "801375":
+                        case "801127":
+                        case "801382":
+
                             onlineSubjectId = 8;
                             break;
                     }
