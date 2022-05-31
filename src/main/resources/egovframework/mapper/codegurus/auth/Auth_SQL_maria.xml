@@ -650,7 +650,7 @@
         INNER JOIN online_subject
             ON online_subject.ONLINE_SUBJECT_ID = online_subject_sap_mapping.ONLINE_SUBJECT_ID
             AND online_subject.PRODUCT_ID = #{productId}
-        INNER JOIN svc_mh_edu_cntr_cp
+        LEFT JOIN svc_mh_edu_cntr_cp
             ON svc_mh_edu_cntr_cp.edu_cntr_oid = user_subject.edu_cntr_oid
             AND svc_mh_edu_cntr_cp.DELETE_ORNOT = 'N'
         LEFT JOIN schedule_interval
