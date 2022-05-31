@@ -636,22 +636,28 @@
             ON user_manage.USER_MANAGE_ID = user_auth.USER_MANAGE_ID
             AND user_manage.DELETE_ORNOT = 'N'
             AND user_auth.DELETE_ORNOT = 'N'
-        LEFT JOIN auth
+            AND user_manage.user_manage_id = #{userManageId}
+        INNER JOIN auth
             ON user_auth.AUTH_ID = auth.AUTH_ID
-        LEFT JOIN user_subject
+            AND auth.PRODUCT_ID = #{productId}
+            AND auth.AUTH_CODE = '01'
+        INNER JOIN user_subject
             ON user_manage.USER_MANAGE_ID = user_subject.USER_MANAGE_ID
             AND user_subject.DELETE_ORNOT = 'N'
             AND user_subject.ACTIVE_ORNOT = 'Y'
-        LEFT JOIN svc_mh_edu_cntr_cp
+        INNER JOIN online_subject_sap_mapping
+            ON online_subject_sap_mapping.SAP_SUBJECT_ID = user_subject.SAP_SUBJ_ID
+        INNER JOIN online_subject
+            ON online_subject.ONLINE_SUBJECT_ID = online_subject_sap_mapping.ONLINE_SUBJECT_ID
+            AND online_subject.PRODUCT_ID = #{productId}
+        INNER JOIN svc_mh_edu_cntr_cp
             ON svc_mh_edu_cntr_cp.edu_cntr_oid = user_subject.edu_cntr_oid
             AND svc_mh_edu_cntr_cp.DELETE_ORNOT = 'N'
         LEFT JOIN schedule_interval
             ON user_manage.USER_MANAGE_ID = schedule_interval.user_manage_id
             AND schedule_interval.delete_ornot = 'N'
             AND schedule_interval.product_id = #{productId}
-        WHERE auth.PRODUCT_ID = #{productId}
-            AND user_manage.user_manage_id = #{userManageId}
-            AND auth.AUTH_CODE = '01'
+        GROUP BY user_subject.SAP_SUBJ_ID
     </select>
 
     <!-- 사용자 과목 유효 수정 -->
