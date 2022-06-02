@@ -113,6 +113,12 @@ public class AuthService implements UserDetailsService {
 
         log.debug("## reqVo:[{}]", reqVo);
 
+        // 부모회원 오류로 보냄
+        UserVO check = cacheService.getTokenUser(ProductEnum.상품_스마트독서.getProductId());
+        if(check.getAuthCode().equals(AuthEnum.스마트독서_학부모.getAuthCode())) {
+            throw new CustomException(ResCodeEnum.INFO_0019);
+        }
+
 		String paramPWEnc = passwordEncoder.encode(StringUtil.trim(reqVo.getPassword()));
 		log.debug("## paramPWEnc:[{}]", paramPWEnc);
 
