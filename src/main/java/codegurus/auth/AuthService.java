@@ -113,12 +113,6 @@ public class AuthService implements UserDetailsService {
 
         log.debug("## reqVo:[{}]", reqVo);
 
-        // 부모회원 오류로 보냄
-        UserVO check = cacheService.getTokenUser(ProductEnum.상품_스마트독서.getProductId());
-        if(check.getAuthCode().equals(AuthEnum.스마트독서_학부모.getAuthCode())) {
-            throw new CustomException(ResCodeEnum.INFO_0019);
-        }
-
 		String paramPWEnc = passwordEncoder.encode(StringUtil.trim(reqVo.getPassword()));
 		log.debug("## paramPWEnc:[{}]", paramPWEnc);
 
@@ -156,13 +150,20 @@ public class AuthService implements UserDetailsService {
 //                .build();
 //        refreshTokenRepository.save(refreshToken);
 
+
+        Map<String, String> params = new HashMap<>();
+        params.put("userId", reqVo.getUsername());
+        params.put("productId", ProductEnum.상품_스마트독서.getProductId());
+
+        UserVO vo = commonDAO.selectUserByUserId(params);
+
+        // 부모회원 오류로 보냄
+        if(vo.getAuthCode().equals(AuthEnum.스마트독서_학부모.getAuthCode())) {
+            throw new CustomException(ResCodeEnum.INFO_0019);
+        }
+
         // 앱 푸시 토큰 저장
         if(reqVo.getPushToken() != null && reqVo.getClientType() != null) {
-            Map<String, String> params = new HashMap<>();
-            params.put("userId", reqVo.getUsername());
-            params.put("productId", ProductEnum.상품_스마트독서.getProductId());
-
-            UserVO vo = commonDAO.selectUserByUserId(params);
             reqVo.setUserManageId(vo.getUserManageId());
 
             authDAO.deleteAppPushToken(reqVo);
