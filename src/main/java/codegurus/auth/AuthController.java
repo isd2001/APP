@@ -41,10 +41,10 @@ public class AuthController extends BaseController {
 	 */
 	@ApiOperation(value = "로그인")
 	@PostMapping("/login")
-	public Res<ResAuthVO> login(@RequestBody @Valid ReqAuthVO reqVo) {
+	public Res<ResLoginVO> login(@RequestBody @Valid ReqAuthVO reqVo) {
 
-		ResAuthVO resVo = authService.login(reqVo);
-		return new Res<ResAuthVO>(resVo);
+		ResLoginVO resVo = authService.login(reqVo);
+		return new Res<ResLoginVO>(resVo);
 	}
 
 	/**

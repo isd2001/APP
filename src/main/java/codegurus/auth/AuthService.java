@@ -109,7 +109,7 @@ public class AuthService implements UserDetailsService {
      * @param reqVo
      * @return
      */
-    public ResAuthVO login(ReqAuthVO reqVo){
+    public ResLoginVO login(ReqAuthVO reqVo){
 
         log.debug("## reqVo:[{}]", reqVo);
 
