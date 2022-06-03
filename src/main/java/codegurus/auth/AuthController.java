@@ -1,12 +1,14 @@
 package codegurus.auth;
 
 import codegurus.auth.vo.*;
-import codegurus.cmm.cache.CacheService;
 import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.exception.CustomException;
-import codegurus.cmm.vo.req.*;
-import codegurus.cmm.vo.res.*;
+import codegurus.cmm.vo.req.ReqAuthVO;
+import codegurus.cmm.vo.req.ReqBaseVO;
+import codegurus.cmm.vo.res.Res;
+import codegurus.cmm.vo.res.ResAuthVO;
+import codegurus.cmm.vo.res.ResBaseVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -41,10 +43,10 @@ public class AuthController extends BaseController {
 	 */
 	@ApiOperation(value = "로그인")
 	@PostMapping("/login")
-	public Res<ResLoginVO> login(@RequestBody @Valid ReqAuthVO reqVo) {
+	public Res<ResAuthVO> login(@RequestBody @Valid ReqAuthVO reqVo) {
 
-		ResLoginVO resVo = authService.login(reqVo);
-		return new Res<ResLoginVO>(resVo);
+		ResAuthVO resVo = authService.login(reqVo);
+		return new Res<ResAuthVO>(resVo);
 	}
 
 	/**

@@ -109,7 +109,7 @@ public class AuthService implements UserDetailsService {
      * @param reqVo
      * @return
      */
-    public ResLoginVO login(ReqAuthVO reqVo){
+    public ResAuthVO login(ReqAuthVO reqVo){
 
         log.debug("## reqVo:[{}]", reqVo);
 
@@ -125,16 +125,7 @@ public class AuthService implements UserDetailsService {
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        ResAuthVO tokenVo = tokenProvider.generateTokenDto(authentication);
-
-        ResLoginVO resVo = new ResLoginVO();
-        if(tokenVo != null) {
-            resVo.setAccessToken(tokenVo.getAccessToken());
-            resVo.setExpireDate(tokenVo.getExpireDate());
-            resVo.setGrantType(tokenVo.getGrantType());
-        } else {
-            resVo = null;
-        }
+        ResAuthVO resVo = tokenProvider.generateTokenDto(authentication);
 
         // 체험회원 토큰이 넘어왔다면 업데이트 쳐준다.
         if(StringUtil.isNotBlank(reqVo.getTrialToken())) {
@@ -166,11 +157,11 @@ public class AuthService implements UserDetailsService {
 
         UserVO vo = commonDAO.selectUserByUserId(params);
 
-        // 부모회원 오류로 보냄
-        if(vo.getAuthCode().equals(AuthEnum.스마트독서_학부모.getAuthCode())) {
-//            throw new CustomException(ResCodeEnum.INFO_0019); 북터러시에서 login Api를 계속 쓴단다..
-            resVo.setParentCheck("Y");
-            resVo.setParentMsg(ResCodeEnum.INFO_0019.getResMsg());
+        // 부모회원 오류로 보냄.. 북터러시 수정이 안되서 요청 파라메터에서 체크하기로..
+        if(reqVo.getLoginType() != null
+                && reqVo.getLoginType().equals("app")
+                && vo.getAuthCode().equals(AuthEnum.스마트독서_학부모.getAuthCode())) {
+            throw new CustomException(ResCodeEnum.INFO_0019);
         }
 
         // 앱 푸시 토큰 저장
