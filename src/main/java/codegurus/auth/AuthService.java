@@ -125,7 +125,16 @@ public class AuthService implements UserDetailsService {
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        ResLoginVO resVo = (ResLoginVO) tokenProvider.generateTokenDto(authentication);
+        ResAuthVO tokenVo = tokenProvider.generateTokenDto(authentication);
+
+        ResLoginVO resVo = new ResLoginVO();
+        if(tokenVo != null) {
+            resVo.setAccessToken(tokenVo.getAccessToken());
+            resVo.setExpireDate(tokenVo.getExpireDate());
+            resVo.setGrantType(tokenVo.getGrantType());
+        } else {
+            resVo = null;
+        }
 
         // 체험회원 토큰이 넘어왔다면 업데이트 쳐준다.
         if(StringUtil.isNotBlank(reqVo.getTrialToken())) {
