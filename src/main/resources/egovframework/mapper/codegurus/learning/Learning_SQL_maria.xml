@@ -325,6 +325,22 @@
 			#{writingTopicPhotoFileId4},
 			'N'
 		)
+		ON DUPLICATE KEY UPDATE
+		 online_subject_schedule_id = #{onlineSubjectScheduleId},
+		 user_manage_id = #{userManageId},
+		 start_date = #{startDate},
+		 end_date = CURRENT_TIMESTAMP,
+		 summary_doing_drawing_file_id = #{summaryDoingDrawingFileId},
+		 summary_doing_voice_file_id = #{summaryDoingVoiceFileId},
+		 debate_topic_photo_file_id_1 = #{debateTopicPhotoFileId1},
+		 debate_topic_photo_file_id_2 = #{debateTopicPhotoFileId2},
+		 debate_topic_photo_file_id_3 = #{debateTopicPhotoFileId3},
+		 debate_topic_photo_file_id_4 = #{debateTopicPhotoFileId4},
+		 writing_topic_photo_file_id_1 = #{writingTopicPhotoFileId1},
+		 writing_topic_photo_file_id_2 = #{writingTopicPhotoFileId2},
+		 writing_topic_photo_file_id_3 = #{writingTopicPhotoFileId3},
+		 writing_topic_photo_file_id_4 = #{writingTopicPhotoFileId4},
+		 delete_ornot = 'N'
 	</insert>
 
 	<!-- 학습 콘텐츠 이력 수정 -->
@@ -368,6 +384,17 @@
 			)
 		</foreach>
 	</insert>
+
+	<!-- 학습 콘텐츠 템플릿 인스턴스 이력 등록 -->
+	<update id="deleteTemplateInstHistory" parameterType="java.util.List">
+		UPDATE
+		 template_inst_history
+		SET delete_ornot = 'Y'
+		WHERE 1=1
+		<foreach collection="list" item="item" index="index" open="AND (" separator="OR" close=")">
+			contents_history_id = #{item.contentsHistoryId}
+		</foreach>
+	</update>
 
 	<!-- 학습 결과 조회(콘텐츠 이력) -->
 	<resultMap id="ContentsHistoryMap" type="ContentsHistoryVO" autoMapping="true">
