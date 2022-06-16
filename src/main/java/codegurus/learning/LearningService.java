@@ -96,6 +96,7 @@ public class LearningService {
             }
 
             if(insertTemplateInstHistoryList.size() > 0) {
+                learningDAO.deleteTemplateInstHistory(insertTemplateInstHistoryList);
                 learningDAO.insertTemplateInstHistory(insertTemplateInstHistoryList);
                 resVo.setResMsg("템플릿 인스턴스 이력 리스트 등록 완료");
             }
