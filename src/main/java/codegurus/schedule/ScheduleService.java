@@ -111,7 +111,8 @@ public class ScheduleService {
 
         UserVO userVO = cacheService.getTokenUser(reqVo.getProductId());
         log.debug("## getUsername:", userVO.getUsername());
-        if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)) {
+        if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)
+            || StringUtil.isNotBlank(userVO.getTrialEndDate())) {
             // 체험회원 룰 적용
             int yearValue = localDate.getYear(); // 현재 년도
             int birthYear = Integer.parseInt(userVO.getBirthYear());
@@ -143,7 +144,6 @@ public class ScheduleService {
             month = nowMonth;
         }
         // 실제 정회원, 수업중이 하나라도 있으면 해당
-        // TODO 플라톤 스케줄 관련해서 수정해야함
         else {
             ScheduleInfoVO scheduleInfoVO = new ScheduleInfoVO();
             scheduleInfoVO.setProductId(reqVo.getProductId());
