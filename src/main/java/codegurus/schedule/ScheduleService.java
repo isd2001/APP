@@ -4,6 +4,7 @@ import codegurus.auth.AuthDAO;
 import codegurus.auth.vo.ScheduleInfoVO;
 import codegurus.auth.vo.UserVO;
 import codegurus.cmm.cache.CacheService;
+import codegurus.cmm.constants.AuthEnum;
 import codegurus.cmm.constants.EduStatCdEnum;
 import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.jwt.TokenProvider;
@@ -112,7 +113,7 @@ public class ScheduleService {
         UserVO userVO = cacheService.getTokenUser(reqVo.getProductId());
         log.debug("## getUsername:", userVO.getUsername());
         if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)
-            || StringUtil.isNotBlank(userVO.getTrialEndDate())) {
+            || (!userVO.getAuthCode().equals(AuthEnum.스마트독서_학생정회원.getAuthCode()) && StringUtil.isNotBlank(userVO.getTrialEndDate()))) {
             // 체험회원 룰 적용
             int yearValue = localDate.getYear(); // 현재 년도
             int birthYear = Integer.parseInt(userVO.getBirthYear());
