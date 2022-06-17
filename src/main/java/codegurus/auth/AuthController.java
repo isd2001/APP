@@ -253,4 +253,33 @@ public class AuthController extends BaseController {
 		return new Res<ResAvailProdsVO>(resVo);
 	}
 
+	/**
+	 * 서버 데이터 저장
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@PostMapping("/serverDataSave")
+	@ApiOperation(value = "서버 데이터 저장")
+	public Res<ResBaseVO> serverDataSave(@RequestBody @Valid ReqServerDataSaveVO reqVo) {
+
+		ResBaseVO resVo = authService.saveServerData(reqVo);
+
+		return new Res<ResBaseVO>(resVo);
+	}
+
+	/**
+	 * 서버 데이터 조회
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@PostMapping("/serverData")
+	@ApiOperation(value = "서버 데이터 조회")
+	public Res<ResServerDataVO> serverData(@RequestBody @Valid ReqServerDataVO reqVo) {
+
+		ResServerDataVO resVo = authService.selectServerData(reqVo);
+
+		return new Res<ResServerDataVO>(resVo);
+	}
 }

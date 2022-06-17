@@ -45,4 +45,8 @@ public interface AuthDAO {
     void insertEduCntrCp(Map<String, String> map);
 
     int updateUserSubjectActive(ResContractInfoElemVO reqVo);
+
+    int deleteServerData(ReqServerDataSaveVO reqVo);
+    void insertServerData(ReqServerDataSaveVO reqVo);
+    ServerDataVO selectServerData(ReqServerDataVO reqVo);
 }

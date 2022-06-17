@@ -226,7 +226,7 @@ public class CmmController extends BaseController {
 	 */
 	@PostMapping("/clientVersionCheck")
 	@ApiOperation(value = "클라이언트 버전 체크")
-	public Res<ResClientVersionCheckVO> clientVersionCheck (@RequestBody @Valid ReqClientVersionCheckVO reqVo) {
+	public Res<ResClientVersionCheckVO> clientVersionCheck(@RequestBody @Valid ReqClientVersionCheckVO reqVo) {
 
 		ResClientVersionCheckVO resVo = new ResClientVersionCheckVO();
 

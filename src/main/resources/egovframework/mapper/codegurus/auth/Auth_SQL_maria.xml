@@ -662,7 +662,7 @@
 
     <!-- 사용자 과목 유효 수정 -->
     <update id="updateUserSubjectActive">
-        UPDATE
+        UPDATE /* updateUserSubjectActive */
             user_subject
         SET
             user_subject.ACTIVE_ORNOT = if(user_subject.edu_cntr_oid = #{eduCntrOid}, 'Y', 'N')
@@ -689,4 +689,51 @@
                 GROUP BY user_subject.edu_cntr_oid
             )
     </update>
+
+    <!-- 서버 데이터 삭제 -->
+    <update id="deleteServerData">
+        UPDATE /* deleteServerData */
+            server_data
+        SET
+            delete_ornot = 'Y'
+          , modify_id = #{userManageId}
+          , modify_date = CURRENT_TIMESTAMP
+        WHERE
+              `key` = #{key}
+          AND user_manage_id = #{userManageId}
+    </update>
+
+    <!-- 서버 데이터 등록 -->
+    <insert id="insertServerData">
+        INSERT /* insertServerData */
+        INTO server_data
+        (
+            user_manage_id,
+            `key`,
+            `value`,
+            reg_id,
+            modify_id
+        )
+        VALUES
+        (
+            #{userManageId},
+            #{key},
+            #{value},
+            #{userManageId},
+            #{userManageId}
+        )
+    </insert>
+
+    <!-- 서버 데이터 조회 -->
+    <select id="selectServerData" resultType="ServerDataVO">
+        SELECT /* selectServerData */
+            `key`
+            , `value`
+        FROM server_data
+        WHERE
+            `key` = #{key}
+          AND user_manage_id = #{userManageId}
+        ORDER BY reg_date DESC
+        LIMIT 1
+    </select>
 </mapper>

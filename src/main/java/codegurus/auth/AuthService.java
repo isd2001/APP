@@ -12,6 +12,9 @@ import codegurus.cmm.vo.req.ReqBaseVO;
 import codegurus.cmm.vo.res.ResAuthVO;
 import codegurus.cmm.vo.res.ResBaseVO;
 import codegurus.mypage.MypageDAO;
+import codegurus.oneline.vo.ReqOnelineSaveVO;
+import codegurus.oneline.vo.ResOnelineSaveVO;
+import codegurus.oneline.vo.ResOnelineVO;
 import codegurus_ext.voc.VocDAO;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -20,6 +23,7 @@ import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
+import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -999,4 +1003,43 @@ public class AuthService implements UserDetailsService {
         }
     }
 
+    /**
+     * 서버 데이터 저장
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBaseVO saveServerData(ReqServerDataSaveVO reqVo) {
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
+
+        authDAO.deleteServerData(reqVo);
+        authDAO.insertServerData(reqVo);
+
+        return new ResBaseVO();
+    }
+
+    /**
+     * 서버 데이터 조회
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResServerDataVO selectServerData(ReqServerDataVO reqVo) {
+
+        ResServerDataVO resVo = new ResServerDataVO();
+
+        reqVo.setUserManageId(cacheService.getUserManageId());
+
+        ServerDataVO res = authDAO.selectServerData(reqVo);
+
+        if(res == null) {
+            res = new ServerDataVO();
+            res.setKey(reqVo.getKey());
+            res.setValue("");
+        }
+        resVo.setItem(res);
+
+        return resVo;
+    }
 }
