@@ -20,7 +20,6 @@ public class ReqServerDataSaveVO extends ReqBaseVO {
     private String key;
 
     @ApiModelProperty(notes = "값", example = "값")
-    @NotBlank
     private String value;
 
     @JsonIgnore
