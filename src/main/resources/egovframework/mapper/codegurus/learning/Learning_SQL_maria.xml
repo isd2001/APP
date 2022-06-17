@@ -325,22 +325,6 @@
 			#{writingTopicPhotoFileId4},
 			'N'
 		)
-		ON DUPLICATE KEY UPDATE
-		 online_subject_schedule_id = #{onlineSubjectScheduleId},
-		 user_manage_id = #{userManageId},
-		 start_date = #{startDate},
-		 end_date = CURRENT_TIMESTAMP,
-		 summary_doing_drawing_file_id = #{summaryDoingDrawingFileId},
-		 summary_doing_voice_file_id = #{summaryDoingVoiceFileId},
-		 debate_topic_photo_file_id_1 = #{debateTopicPhotoFileId1},
-		 debate_topic_photo_file_id_2 = #{debateTopicPhotoFileId2},
-		 debate_topic_photo_file_id_3 = #{debateTopicPhotoFileId3},
-		 debate_topic_photo_file_id_4 = #{debateTopicPhotoFileId4},
-		 writing_topic_photo_file_id_1 = #{writingTopicPhotoFileId1},
-		 writing_topic_photo_file_id_2 = #{writingTopicPhotoFileId2},
-		 writing_topic_photo_file_id_3 = #{writingTopicPhotoFileId3},
-		 writing_topic_photo_file_id_4 = #{writingTopicPhotoFileId4},
-		 delete_ornot = 'N'
 	</insert>
 
 	<!-- 학습 콘텐츠 이력 수정 -->
