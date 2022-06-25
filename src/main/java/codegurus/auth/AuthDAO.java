@@ -49,4 +49,6 @@ public interface AuthDAO {
     int deleteServerData(ReqServerDataSaveVO reqVo);
     void insertServerData(ReqServerDataSaveVO reqVo);
     ServerDataVO selectServerData(ReqServerDataVO reqVo);
+
+    int updateAgree(ReqAgreeVO reqVo);
 }

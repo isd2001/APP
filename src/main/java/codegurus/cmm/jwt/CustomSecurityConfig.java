@@ -70,6 +70,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     public static final String[] ANT_MATCHERS_HTTP_PERMIT_ALL = {
             "/auth/login"
+            , "/auth/agree"
             , "/auth/checkUserDup"
             , "/auth/register*"
             , "/auth/trialRegister"

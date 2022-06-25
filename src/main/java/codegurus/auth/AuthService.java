@@ -1042,4 +1042,21 @@ public class AuthService implements UserDetailsService {
 
         return resVo;
     }
+
+    /**
+     * 개인정보 동의
+     *
+     * @param reqVo
+     * @return
+     */
+    public ResBaseVO updateAgree(ReqAgreeVO reqVo) {
+
+        ResBaseVO resVo = new ResBaseVO();
+
+        int updated = authDAO.updateAgree(reqVo);
+        SystemUtil.checkUpdatedCount(updated, 1);
+        resVo.setResMsg("개인정보 동의 완료");
+        
+        return resVo;
+    }
 }

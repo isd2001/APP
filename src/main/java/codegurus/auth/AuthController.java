@@ -282,4 +282,27 @@ public class AuthController extends BaseController {
 
 		return new Res<ResServerDataVO>(resVo);
 	}
+
+	/**
+	 * 개인정보 동의
+	 *
+	 * @param reqVo
+	 * @return
+	 */
+	@PostMapping("/agree")
+	@ApiOperation(value = "개인정보 동의")
+	public Res<ResBaseVO> agree(@RequestBody @Valid ReqAgreeVO reqVo) {
+
+		// 약관동의 여부 확인
+		if(! "Y".equals(reqVo.getTermofuseAgreeOrnot())){
+			throw new CustomException(ResCodeEnum.INFO_0004.name(), "서비스 이용 약관 동의가 필요합니다.");
+		}
+		if(! "Y".equals(reqVo.getPersonalinfoAgreeOrnot())){
+			throw new CustomException(ResCodeEnum.INFO_0004.name(), "개인정보 수집 및 이용에 대한 동의가 필요합니다.");
+		}
+
+		ResBaseVO resVo = authService.updateAgree(reqVo);
+
+		return new Res<ResBaseVO>(resVo);
+	}
 }
