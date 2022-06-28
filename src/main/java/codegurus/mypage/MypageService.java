@@ -157,11 +157,14 @@ public class MypageService {
         resVo.setBirth(userVO.getBirth());
         resVo.setAuthCode(userVO.getAuthCode());
         resVo.setTrialEndDate(userVO.getTrialEndDate());
+        resVo.setTermofuseAgreeOrnot(userVO.getTermofuseAgreeOrnot());
+        resVo.setPersonalinfoAgreeOrnot(userVO.getPersonalinfoAgreeOrnot());
         resVo.setPromotionAgreeOrnot(userVO.getPromotionAgreeOrnot());
         resVo.setAppPushAgreeOrnot(userVO.getAppPushAgreeOrnot());
         resVo.setSoundtrackPlayOrnot(userVO.getSoundtrackPlayOrnot());
         resVo.setGuideActivateOrnot(userVO.getGuideActivateOrnot());
         resVo.setThemeMode(userVO.getThemeMode());
+        resVo.setSignupMethod(userVO.getSignupMethod());
 
         if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)) {
             // 체험회원 정보 조회

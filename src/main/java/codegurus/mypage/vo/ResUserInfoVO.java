@@ -40,6 +40,12 @@ public class ResUserInfoVO extends ResBaseVO {
     @ApiModelProperty(example = "20210929101010", notes = "체험회원 만료일, 체험회원 혹은 일반회원이 체험회원토큰을 받은 경우 이 값이 날라감 만료후에는 null")
     private String trialEndDate;
 
+    @ApiModelProperty(example = "Y", notes = "이용약관 동의 여부 (서비스 이용 약관)(Y, N)")
+    private String termofuseAgreeOrnot;
+
+    @ApiModelProperty(example = "Y", notes = "개인정보 동의 여부 (개인정보 수집 및 이용에 대한 동의)(Y, N)")
+    private String personalinfoAgreeOrnot;
+
     @ApiModelProperty(example = "Y", notes = "마케팅 정보 동의 여부(Y, N)")
     private String promotionAgreeOrnot;
 
@@ -60,4 +66,7 @@ public class ResUserInfoVO extends ResBaseVO {
 
     @ApiModelProperty(notes = "월(1~12), 정회원 조회시에만 리턴됨", position = 19)
     protected String month;
+
+    @ApiModelProperty(example = "APP", notes = "회원가입 방법(앱 회원가입-APP, SAP자동등록-SAP)")
+    protected String signupMethod;
 }

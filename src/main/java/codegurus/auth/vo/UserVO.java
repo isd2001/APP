@@ -131,4 +131,7 @@ public class UserVO extends BaseVO {
 	@JsonIgnore
 	private String trialEndDate;
 
+	@JsonIgnore
+	private String signupMethod;
+
 }

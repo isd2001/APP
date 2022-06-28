@@ -41,6 +41,7 @@
 		DF14(a.login_fail_date) as login_fail_date,
 		a.lock_ornot,
 		a.trial_manage_id,
+		a.signup_method,
 		DF14(a.reg_date) as reg_date,
 		DF14(a.modify_date) as modify_date,
 		a.delete_ornot,
