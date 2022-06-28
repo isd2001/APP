@@ -69,4 +69,7 @@ public class ResUserInfoVO extends ResBaseVO {
 
     @ApiModelProperty(example = "APP", notes = "회원가입 방법(앱 회원가입-APP, SAP자동등록-SAP)")
     protected String signupMethod;
+
+    @ApiModelProperty(example = "APP", notes = "지난 비밀변호 날짜")
+    protected String lastPasswordDate;
 }

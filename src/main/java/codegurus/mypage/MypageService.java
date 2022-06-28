@@ -165,6 +165,7 @@ public class MypageService {
         resVo.setGuideActivateOrnot(userVO.getGuideActivateOrnot());
         resVo.setThemeMode(userVO.getThemeMode());
         resVo.setSignupMethod(userVO.getSignupMethod());
+        resVo.setLastPasswordDate(userVO.getLastPasswordDate());
 
         if(userVO.getUsername().equals(TokenProvider.TRIAL_USER)) {
             // 체험회원 정보 조회

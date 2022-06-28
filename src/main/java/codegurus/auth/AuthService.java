@@ -1055,7 +1055,7 @@ public class AuthService implements UserDetailsService {
 
         int updated = authDAO.updateAgree(reqVo);
         SystemUtil.checkUpdatedCount(updated, 1);
-        resVo.setResMsg("개인정보 동의 완료");
+        resVo.setResMsg("개인정보/이용약관 동의 완료");
         
         return resVo;
     }

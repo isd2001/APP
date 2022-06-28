@@ -97,6 +97,9 @@ public class UserVO extends BaseVO {
 	private String lastPassword;
 
 	@JsonIgnore
+	private String lastPasswordDate;
+
+	@JsonIgnore
 	private String lastLoginDate;
 
 	@JsonIgnore

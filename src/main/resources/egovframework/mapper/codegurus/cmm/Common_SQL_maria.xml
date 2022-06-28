@@ -36,6 +36,7 @@
 		DF14(a.app_push_agree_date) as app_push_agree_date,
 		DF14(a.locationinfo_agree_date) as locationinfo_agree_date,
 		a.last_password,
+		DF14(a.last_password_date) as last_password_date,
 		DF14(a.last_login_date) as last_login_date,
 		a.login_fail_count,
 		DF14(a.login_fail_date) as login_fail_date,

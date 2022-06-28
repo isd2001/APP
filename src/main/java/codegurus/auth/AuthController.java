@@ -1,6 +1,8 @@
 package codegurus.auth;
 
 import codegurus.auth.vo.*;
+import codegurus.cmm.CommonDAO;
+import codegurus.cmm.constants.ProductEnum;
 import codegurus.cmm.constants.ResCodeEnum;
 import codegurus.cmm.controller.BaseController;
 import codegurus.cmm.exception.CustomException;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 인증 처리 관련 controller
@@ -34,6 +38,9 @@ public class AuthController extends BaseController {
 
 	@Autowired
 	private AuthService authService;
+
+	@Autowired
+	private CommonDAO commonDAO;
 
 	/**
 	 * 로그인 처리
@@ -292,6 +299,12 @@ public class AuthController extends BaseController {
 	@PostMapping("/agree")
 	@ApiOperation(value = "개인정보 동의")
 	public Res<ResBaseVO> agree(@RequestBody @Valid ReqAgreeVO reqVo) {
+
+		// product ID를 받아야 함으로 일단 패스
+//		Map<String, String> params = new HashMap<>();
+//		params.put("userId", reqVo.getUsername());
+//		params.put("productId", ProductEnum.상품_스마트독서.getProductId());
+//		UserVO vo = commonDAO.selectUserByUserId(params);
 
 		// 약관동의 여부 확인
 		if(! "Y".equals(reqVo.getTermofuseAgreeOrnot())){

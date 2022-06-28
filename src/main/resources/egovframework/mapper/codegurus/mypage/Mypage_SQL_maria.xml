@@ -391,7 +391,9 @@
             password = #{password},
             password_mask = #{passwordMask},
             modify_id = #{userManageId},
-            modify_date = CURRENT_TIMESTAMP
+            modify_date = CURRENT_TIMESTAMP,
+            last_password = (SELECT password FROM user_manage WHERE user_manage_id = #{userManageId} ),
+            last_password_date = CURRENT_TIMESTAMP
         WHERE user_manage_id = #{userManageId}
     </update>
 
