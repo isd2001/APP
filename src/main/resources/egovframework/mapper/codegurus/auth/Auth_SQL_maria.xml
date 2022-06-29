@@ -743,21 +743,18 @@
         UPDATE /* updateAgree */
             user_manage
         SET
-            termofuse_agree_ornot = #{termofuseAgreeOrnot},
-            personalinfo_agree_ornot = #{personalinfoAgreeOrnot},
-            promotion_agree_ornot = #{promotionAgreeOrnot},
             <choose>
                 <when test='termofuseAgreeOrnot != null and termofuseAgreeOrnot != "" and termofuseAgreeOrnot == "Y"'>termofuse_agree_date = CURRENT_TIMESTAMP,</when>
-                <otherwise>null,</otherwise>
             </choose>
             <choose>
                 <when test='personalinfoAgreeOrnot != null and personalinfoAgreeOrnot != "" and personalinfoAgreeOrnot == "Y"'>personalinfo_agree_date = CURRENT_TIMESTAMP,</when>
-                <otherwise>null,</otherwise>
             </choose>
             <choose>
-                <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>promotion_agree_date = CURRENT_TIMESTAMP</when>
-                <otherwise>null,</otherwise>
+                <when test='promotionAgreeOrnot != null and promotionAgreeOrnot != "" and promotionAgreeOrnot == "Y"'>promotion_agree_date = CURRENT_TIMESTAMP,</when>
             </choose>
+            termofuse_agree_ornot = #{termofuseAgreeOrnot},
+            personalinfo_agree_ornot = #{personalinfoAgreeOrnot},
+            promotion_agree_ornot = #{promotionAgreeOrnot}
         WHERE user_id = #{username}
     </update>
 
