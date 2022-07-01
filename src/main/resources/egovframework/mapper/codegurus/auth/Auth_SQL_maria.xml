@@ -701,6 +701,7 @@
         WHERE
               `key` = #{key}
           AND user_manage_id = #{userManageId}
+          AND delete_ornot = 'N'
     </update>
 
     <!-- 서버 데이터 등록 -->
