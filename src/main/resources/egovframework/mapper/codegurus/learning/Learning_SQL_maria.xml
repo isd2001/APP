@@ -332,8 +332,7 @@
 		UPDATE /* updateLearningContentsHistory */
 		    contents_history
 		SET
-		    end_date = CURRENT_TIMESTAMP
-			, debate_topic_photo_file_id_1 = #{debateTopicPhotoFileId1}
+			debate_topic_photo_file_id_1 = #{debateTopicPhotoFileId1}
 			, debate_topic_photo_file_id_2 = #{debateTopicPhotoFileId2}
 			, debate_topic_photo_file_id_3 = #{debateTopicPhotoFileId3}
 			, debate_topic_photo_file_id_4 = #{debateTopicPhotoFileId4}
@@ -341,6 +340,9 @@
 			, writing_topic_photo_file_id_2 = #{writingTopicPhotoFileId2}
 			, writing_topic_photo_file_id_3 = #{writingTopicPhotoFileId3}
 			, writing_topic_photo_file_id_4 = #{writingTopicPhotoFileId4}
+			<if test='endDateUpdateOrNot != "N"'>
+				, end_date = CURRENT_TIMESTAMP
+			</if>
 		WHERE contents_history_id = #{contentsHistoryId}
 	</update>
 

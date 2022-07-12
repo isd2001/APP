@@ -33,6 +33,9 @@ public class ReqLearningContentsHistoryUpdateVO extends ReqBaseVO {
     @ApiModelProperty(notes = "쓰기 주제 사진 파일 ID 4", required = false, example = "FILE_000000000000011")
     private String writingTopicPhotoFileId4;
 
+    @ApiModelProperty(notes = "죵료일 업데이트 여부(N:업데이트안함, Y:업데이트, 디폴트 Y)", required = false, example = "Y")
+    private String endDateUpdateOrNot = "Y";
+
     @ApiModelProperty(hidden = true)
     private String userManageId;
 }
