@@ -631,6 +631,7 @@
             , ADDDATE(STR_TO_DATE(svc_mh_edu_cntr_cp.NO_CLASS_CHAG_DT, '%Y%m%d'), -1) AS NO_CLASS_CHAG_DT
             , IFNULL(schedule_interval.`value`, 0) AS `value`
             , user_subject.SAP_SUBJ_ID
+            , online_subject_sap_mapping.ONLINE_SUBJECT_ID
         FROM user_manage
         INNER JOIN user_auth
             ON user_manage.USER_MANAGE_ID = user_auth.USER_MANAGE_ID

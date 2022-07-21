@@ -165,6 +165,7 @@ public class ScheduleService {
                     birth = info.getBirth();
                     scheduleIntervalValue = info.getValue();
                     sapSubjId = info.getSapSubjId();
+                    onlineSubjectId = info.getOnlineSubjectId();
                 }
                 // 수업중이면 인증한것으로 인식
                 else if(info.getEduStatCd() != null && info.getEduStatCd().equals(EduStatCdEnum.수업중.getCode())) {
@@ -172,6 +173,7 @@ public class ScheduleService {
                     birth = info.getBirth();
                     scheduleIntervalValue = info.getValue();
                     sapSubjId = info.getSapSubjId();
+                    onlineSubjectId = info.getOnlineSubjectId();
                 }
                 // 휴회라면 복습처리를 해야한다. 휴회일이 포함된 달동안 진행되고 -1일의 학습월의 학습들을 복습하도록 한다.
                 else if(info.getEduStatCd() != null && info.getEduStatCd().equals(EduStatCdEnum.휴회.getCode())) {
@@ -198,6 +200,7 @@ public class ScheduleService {
                                     scheduleIntervalValue -= 1;
                                 }
                                 sapSubjId = info.getSapSubjId();
+                                onlineSubjectId = info.getOnlineSubjectId();
                             }
 
                         }
@@ -261,7 +264,9 @@ public class ScheduleService {
                             onlineSubjectId = 4;
                             break;
                     }
-                } else if(reqVo.getProductId().equals(ProductEnum.상품_플라톤.getProductId())) {
+                }
+                /*
+                else if(reqVo.getProductId().equals(ProductEnum.상품_플라톤.getProductId())) {
                     // 플라톤은 상품코드에 따라 다르다.
                     switch (sapSubjId) {
                         case "802450":
@@ -338,7 +343,7 @@ public class ScheduleService {
                             onlineSubjectId = 8;
                             break;
                     }
-                }
+                }*/
             }
         }
 

@@ -22,4 +22,5 @@ public class ScheduleInfoVO extends BaseVO {
     private String NoClassChagDt;
     private int value;
     private String sapSubjId;
+    private int onlineSubjectId;
 }
