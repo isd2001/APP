@@ -1,14 +1,7 @@
 package egovframework.com.cmm.service;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,11 +17,13 @@ import egovframework.com.cmm.util.EgovResourceCloseHelper;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -127,7 +122,151 @@ public class EgovFileMngUtil {
 				filePath = storePathString + File.separator + newName;
 				file.transferTo(new File(EgovWebUtil.filePathBlackList(filePath)));
 			}
-			
+			LOGGER.info("## file:[{}]", file);
+			LOGGER.info("## file.getSize :[{}]", file.getSize());
+			LOGGER.info("## orginFileName:[{}]", orginFileName);
+
+			fvo = new FileVO();
+			fvo.setFileExtsn(fileExt);
+			fvo.setFileStreCours(storePathString);
+			fvo.setFileMg(size);
+			fvo.setOrignlFileNm(orginFileName);
+			fvo.setStreFileNm(newName);
+			fvo.setAtchFileId(atchFileIdString);
+//			fvo.setFileSn(fileKey);
+			fvo.setFileSn(String.valueOf(fileKey)); // 컴파일 오류 수정 (20210603 이프로)
+
+			result.add(fvo);
+
+			fileKey++;
+		}
+
+		return result;
+	}
+
+	/**
+	 * 첨부파일에 대한 목록 정보를 취득한다.
+	 *
+	 * @param files
+	 * @return
+	 * @throws Exception
+	 */
+	public List<FileVO> parseFileInf2(Map<String, MultipartFile> files, String KeyStr, int fileKeyParam, String atchFileId, String storePath) throws Exception {
+		int fileKey = fileKeyParam;
+
+		String storePathString = "";
+		String atchFileIdString = "";
+
+		if ("".equals(storePath) || storePath == null) {
+			storePathString = EgovProperties.getProperty("Globals.fileStorePath");
+		} else {
+			storePathString = EgovProperties.getProperty(storePath);
+		}
+
+		if ("".equals(atchFileId) || atchFileId == null) {
+			atchFileIdString = idgenService.getNextStringId();
+		} else {
+			atchFileIdString = atchFileId;
+		}
+
+
+		File saveFolder = new File(EgovWebUtil.filePathBlackList(storePathString));
+
+		if (!saveFolder.exists() || saveFolder.isFile()) {
+			//2017.03.03 	조성원 	시큐어코딩(ES)-부적절한 예외 처리[CWE-253, CWE-440, CWE-754]
+			if (saveFolder.mkdirs()){
+				LOGGER.debug("[file.mkdirs] saveFolder : Creation Success ");
+			}else{
+				LOGGER.error("[file.mkdirs] saveFolder : Creation Fail ");
+			}
+		}
+
+		Iterator<Entry<String, MultipartFile>> itr = files.entrySet().iterator();
+		MultipartFile file;
+		MultipartFile file2;
+		String filePath = "";
+		List<FileVO> result = new ArrayList<FileVO>();
+		FileVO fvo;
+
+		while (itr.hasNext()) {
+			Entry<String, MultipartFile> entry = itr.next();
+
+			file = entry.getValue();
+			file2 = entry.getValue();
+			BufferedImage img;
+			BufferedImage bufimg = null;
+			try {
+				img = ImageIO.read( file.getInputStream());
+				LOGGER.info("## img:[{}]", img);
+
+				int Width = img.getWidth();
+				int Height = img.getHeight();
+
+				LOGGER.info("## Width :[{}]", Width);
+				LOGGER.info("## Height :[{}]", Height);
+
+				for(int i=1;i<14;i++){
+					if (i == 11) {
+						bufimg = new BufferedImage(Width, Height, i);
+//						String outfileURL = "D:/test/test_"+i+".gif";
+//						File Outfile = new File(outfileURL);
+						for(int j=0;j<Width;j++){
+							for(int k=0;k<Height;k++){
+								bufimg.setRGB(j, k, img.getRGB(j, k));
+							}
+						}
+						// ImageIO.write(bufimg, "gif", Outfile);
+					}
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println(e);
+			}
+			LOGGER.info("## bufimg :[{}]", bufimg);
+			LOGGER.info("## bufimg.Width :[{}]", bufimg.getWidth());
+			LOGGER.info("## bufimg.Height :[{}]", bufimg.getHeight());
+
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//			ImageIO.write( bufimg, "png", baos );
+			ImageIO.write( bufimg, "jpg", baos );
+			baos.flush();
+			LOGGER.info("## baos.size :[{}]", baos.size());
+
+			file = new MockMultipartFile(file.getOriginalFilename(), baos.toByteArray());
+
+
+			LOGGER.info("## file :[{}]", file);
+			LOGGER.info("## file.getSize :[{}]", file.getSize());
+
+
+//			String orginFileName = new String(file.getOriginalFilename().getBytes("8859_1"), "UTF-8");
+			String orginFileName = file.getOriginalFilename();
+			String orginFileName2 = file2.getOriginalFilename();
+
+			LOGGER.info("## orginFileName :[{}]", orginFileName);
+			LOGGER.info("## orginFileName2 :[{}]", orginFileName2);
+
+			//--------------------------------------
+			// 원 파일명이 없는 경우 처리
+			// (첨부가 되지 않은 input file type)
+			//--------------------------------------
+			if ("".equals(orginFileName2)) {
+				continue;
+			}
+			////------------------------------------
+
+			int index = orginFileName.lastIndexOf(".");
+			//String fileName = orginFileName.substring(0, index);
+			String fileExt = orginFileName.substring(index + 1);
+			String newName = KeyStr + getTimeStamp() + fileKey;
+			long size = file.getSize();
+
+			if (!"".equals(orginFileName2)) {
+				filePath = storePathString + File.separator + newName;
+				file.transferTo(new File(EgovWebUtil.filePathBlackList(filePath)));
+			}
+
 			fvo = new FileVO();
 			fvo.setFileExtsn(fileExt);
 			fvo.setFileStreCours(storePathString);
